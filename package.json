@@ -5,6 +5,7 @@
   "type": "module",
   "main": "geo/index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "parse": "node scripts/parse.js",
