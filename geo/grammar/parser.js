@@ -88,6 +88,9 @@ export class Parser {
       return this.parseActionStatement();
     } else if (this.check("STEP")) {
       return this.parseStepStatement();
+    } else if (this.check("METRIC")) {
+      // Metric: acts as a labeled step (same semantics as Step:)
+      return this.parseStepStatement();
     }
 
     // Skip unknown tokens
@@ -131,8 +134,13 @@ export class Parser {
     this.expect("LPAREN");
 
     const duality = this.parseOperator(); // ⊗
-    this.expect("COMMA");
-    const octahedron = this.parseOperator(); // ⧉
+
+    // Second operator (⧉) is optional — single-arg detect is valid
+    let octahedron = null;
+    if (this.check("COMMA")) {
+      this.advance(); // consume COMMA
+      octahedron = this.parseOperator(); // ⧉
+    }
 
     this.expect("RPAREN");
     this.expect("SEMICOLON");
@@ -183,8 +191,21 @@ export class Parser {
   parseTriggerStatement() {
     const token = this.advance(); // TRIGGER
     this.expect("COLON");
-    const condition = this.advance().value;
 
+    // Consume the full condition up to semicolon, ACTION, or RBRACE
+    // e.g. "Compliance.Fail(SyntaxValidation)" — read all tokens as condition text
+    let conditionParts = [];
+    while (
+      !this.isAtEnd() &&
+      !this.check("SEMICOLON") &&
+      !this.check("ACTION") &&
+      !this.check("RBRACE")
+    ) {
+      conditionParts.push(this.advance().value ?? "");
+    }
+    if (this.check("SEMICOLON")) this.advance(); // consume trailing semicolon
+
+    const condition = conditionParts.join("");
     const trigger = new TriggerStatement(condition, token.line, token.column);
 
     while (this.check("ACTION")) {
@@ -197,9 +218,23 @@ export class Parser {
   parseActionStatement() {
     const token = this.advance(); // ACTION
     this.expect("COLON");
-    const action = this.advance().value;
-    this.expect("SEMICOLON");
 
+    // Consume the full action body until semicolon or block end.
+    // Handles: Alert("msg"), Node.retest(Δ[amber], Φ[1]), GenerateHash(SHA256), etc.
+    const actionParts = [];
+    while (
+      !this.isAtEnd() &&
+      !this.check("SEMICOLON") &&
+      !this.check("RBRACE") &&
+      !this.check("TRIGGER") &&
+      !this.check("ACTION")
+    ) {
+      const t = this.advance();
+      if (t.value !== null && t.value !== undefined) actionParts.push(t.value);
+    }
+    if (this.check("SEMICOLON")) this.advance(); // consume semicolon
+
+    const action = actionParts[0] || ""; // first token = action name
     return new ActionStatement(action, token.line, token.column);
   }
 
