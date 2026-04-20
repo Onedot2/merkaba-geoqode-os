@@ -1,0 +1,39 @@
+{
+  "name": "@s4ai/merkaba-geoqode-os",
+  "version": "1.0.0",
+  "description": "MERKABA_geoqode: Dedicated AI Operating System with GeoQode Language + 44-Dimension MERKABA Lattice",
+  "type": "module",
+  "main": "geo/index.js",
+  "scripts": {
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "parse": "node scripts/parse.js",
+    "run": "node scripts/run.js",
+    "compliance-check": "node scripts/compliance-check.js",
+    "status-report": "node scripts/generate-status-report.js",
+    "build": "echo 'GeoQode is interpreted — no build step required'",
+    "lint": "eslint geo/ tests/",
+    "docs:build": "echo 'Documentation is markdown-based'"
+  },
+  "keywords": [
+    "geoqode",
+    "merkaba",
+    "ai-os",
+    "resonance",
+    "geometry",
+    "quantum",
+    "compliance"
+  ],
+  "author": "Bradley Levitan <bradleylevitan@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "crypto": "^1.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0",
+    "eslint": "^8.0.0"
+  }
+}
