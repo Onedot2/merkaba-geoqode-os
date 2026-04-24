@@ -47,9 +47,9 @@ export const COHERENCE_TOLERANCE = 0.002;
  */
 export class MerkabaTransform420 {
   constructor() {
-    this.visualLattice = VISUAL_LATTICE_NODES;    // DreamProjector fidelity layer
+    this.visualLattice = VISUAL_LATTICE_NODES; // DreamProjector fidelity layer
     this.operationalLattice = OPERATIONAL_LATTICE_NODES; // GeoQode efficiency layer
-    this.bridgeLayer = null;    // Golden Bridge Layer midpoint
+    this.bridgeLayer = null; // Golden Bridge Layer midpoint
     this.coherenceIndex = 0.0;
     this.log = [];
     this.status = "idle";
@@ -232,7 +232,9 @@ export class DiagnosticOverlay {
    */
   mapNodes() {
     const mappings = [];
-    this.log.push(`[Overlay] Mapping ${this.visualNodes} visual nodes → ${this.operationalNodes} operational nodes...`);
+    this.log.push(
+      `[Overlay] Mapping ${this.visualNodes} visual nodes → ${this.operationalNodes} operational nodes...`,
+    );
 
     for (let i = 0; i < this.visualNodes; i += 8) {
       const target = Math.floor(i * (7 / 8));
@@ -254,7 +256,9 @@ export class DiagnosticOverlay {
    */
   resonancePulse(cycles = 5) {
     const pulses = [];
-    this.log.push(`[Overlay] Initiating resonance pulse stream (${cycles} cycles at ${this.frequencyLock}Hz)...`);
+    this.log.push(
+      `[Overlay] Initiating resonance pulse stream (${cycles} cycles at ${this.frequencyLock}Hz)...`,
+    );
 
     for (let cycle = 0; cycle < cycles; cycle++) {
       const amplitude = Math.sin(2 * Math.PI * (cycle / this.frequencyLock));
@@ -272,7 +276,9 @@ export class DiagnosticOverlay {
    * @returns {{ stable: boolean, averageAmplitude: number }}
    */
   monitorCoherence(pulses) {
-    const avg = pulses.reduce((sum, p) => sum + Math.abs(p.amplitude), 0) / (pulses.length || 1);
+    const avg =
+      pulses.reduce((sum, p) => sum + Math.abs(p.amplitude), 0) /
+      (pulses.length || 1);
     this.coherenceIndex = avg;
     const stable = avg <= 0.5; // amplitudes within half-range = stable
     const msg = stable
@@ -322,15 +328,31 @@ export class AnchorHierarchy {
       nodes: VISUAL_LATTICE_NODES,
       phi: PHI,
       role: "DreamProjector — Φ-rooted cosmological fidelity",
-      strengths: ["maximal harmonic coverage", "symbolic legitimacy", "infinite recursion"],
-      idealFor: ["visualization", "theoretical modeling", "investor storytelling"],
+      strengths: [
+        "maximal harmonic coverage",
+        "symbolic legitimacy",
+        "infinite recursion",
+      ],
+      idealFor: [
+        "visualization",
+        "theoretical modeling",
+        "investor storytelling",
+      ],
     };
     this.operationalAnchor = {
       nodes: OPERATIONAL_LATTICE_NODES,
       psi: PSI,
       role: "GeoQode — Ψ-proximal operational efficiency",
-      strengths: ["golden stability", "lower drift risk", "lean coherence cycles"],
-      idealFor: ["live deployment", "resonance governance", "compute-efficient runtime"],
+      strengths: [
+        "golden stability",
+        "lower drift risk",
+        "lean coherence cycles",
+      ],
+      idealFor: [
+        "live deployment",
+        "resonance governance",
+        "compute-efficient runtime",
+      ],
     };
     this.bridgeLayer = {
       midpoint: (PHI + PSI) / 2,
