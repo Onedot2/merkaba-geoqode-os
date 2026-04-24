@@ -155,10 +155,19 @@ export class MerkabaBridge extends EventEmitter {
   }
 
   async _forwardToStorm(record) {
+    const controller = typeof AbortController !== "undefined"
+      ? new AbortController()
+      : null;
+    const timeoutMs = Number(this.options.timeout) || 30_000;
+    const timeoutId = controller
+      ? setTimeout(() => controller.abort(), timeoutMs)
+      : null;
+
     try {
-      const { default: fetch } = await import("node-fetch").catch(() => ({
-        default: globalThis.fetch,
-      }));
+      const fetchImpl =
+        globalThis.fetch ||
+        (await import("node-fetch").then((mod) => mod.default).catch(() => null));
+      const fetch = fetchImpl;
       if (!fetch) return;
 
       await fetch(`${this.options.stormBrainUrl}/api/geoqode/execution`, {
@@ -168,10 +177,15 @@ export class MerkabaBridge extends EventEmitter {
           Authorization: `Bearer ${this.options.apiKey}`,
         },
         body: JSON.stringify(record),
+        signal: controller?.signal,
       });
     } catch (error) {
       console.error("[MerkabaBridge] Storm forward failed:", error.message);
       // non-fatal: Storm forwarding is best-effort
+    } finally {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     }
   }
 }

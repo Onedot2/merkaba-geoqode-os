@@ -192,7 +192,8 @@ describe("Phase 6: QBITSValidator", () => {
   });
 
   it("should know all sacred frequencies", () => {
-    expect(Object.keys(SACRED_FREQUENCIES).length).toBe(10);
+    expect(Object.keys(SACRED_FREQUENCIES).length).toBe(11);
+    expect(SACRED_FREQUENCIES[420]).toBeDefined();
     expect(SACRED_FREQUENCIES[528]).toBeDefined();
     expect(SACRED_FREQUENCIES[432]).toBeDefined();
   });
