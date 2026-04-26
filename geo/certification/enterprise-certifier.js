@@ -1,13 +1,13 @@
 // geo/certification/enterprise-certifier.js
 // Phase 7: Enterprise Certification Framework
-// Full 44-dimension MERKABA lattice certification with audit trail and compliance reports.
+// Full 48-dimension canonical MERKABA lattice certification with audit trail and compliance reports.
 
 import crypto from "crypto";
 import { QBITSValidator } from "../validation/qbits-validator.js";
 
-// Complete 44-dimension MERKABA lattice definition
+// Complete 48-dimension canonical MERKABA lattice definition
 export const MERKABA_LATTICE = {
-  // Tier 1: Core Foundations (1-11)
+  // Tier 1: Core Foundations (1-12)
   1: { tier: 1, name: "Syntax Compliance", required: true },
   2: { tier: 1, name: "Token Integrity", required: true },
   3: { tier: 1, name: "AST Validity", required: true },
@@ -15,49 +15,53 @@ export const MERKABA_LATTICE = {
   5: { tier: 1, name: "Scope Resolution", required: true },
   6: { tier: 1, name: "Type Coherence", required: false },
   7: { tier: 1, name: "Literal Integrity", required: false },
-  8: { tier: 1, name: "Null Safety", required: false },
+  8: { tier: 1, name: "Foundation Anchor", required: true },
   9: { tier: 1, name: "Encoding Compliance", required: false },
   10: { tier: 1, name: "Comment Preservation", required: false },
   11: { tier: 1, name: "EOF Handling", required: false },
+  12: { tier: 1, name: "Foundation Redundancy", required: false },
 
-  // Tier 2: Operational Systems (12-22)
-  12: { tier: 2, name: "Node Emission", required: true },
-  13: { tier: 2, name: "Spectral Binding", required: false },
-  14: { tier: 2, name: "Detection Field", required: true },
-  15: { tier: 2, name: "Duality Resolution", required: false },
-  16: { tier: 2, name: "Octahedron Field", required: true },
-  17: { tier: 2, name: "Harmonic Coupling", required: false },
-  18: { tier: 2, name: "Execution Logging", required: true },
-  19: { tier: 2, name: "Error Propagation", required: false },
-  20: { tier: 2, name: "Resource Cleanup", required: true },
-  21: { tier: 2, name: "State Persistence", required: false },
-  22: { tier: 2, name: "Event Emission", required: false },
+  // Tier 2: Operational Systems (13-24)
+  13: { tier: 2, name: "Node Emission", required: true },
+  14: { tier: 2, name: "Spectral Binding", required: false },
+  15: { tier: 2, name: "Detection Field", required: true },
+  16: { tier: 2, name: "Duality Resolution", required: false },
+  17: { tier: 2, name: "Octahedron Field", required: true },
+  18: { tier: 2, name: "Harmonic Coupling", required: false },
+  19: { tier: 2, name: "Execution Logging", required: true },
+  20: { tier: 2, name: "Error Propagation", required: false },
+  21: { tier: 2, name: "Resource Cleanup", required: true },
+  22: { tier: 2, name: "State Persistence", required: false },
+  23: { tier: 2, name: "Event Emission", required: false },
+  24: { tier: 2, name: "Bridge Telemetry", required: false },
 
-  // Tier 3: Knowledge Dimensions (23-33)
-  23: { tier: 3, name: "Playbook Execution", required: true },
-  24: { tier: 3, name: "Step Sequencing", required: false },
-  25: { tier: 3, name: "Trigger Binding", required: true },
-  26: { tier: 3, name: "Action Dispatch", required: false },
-  27: { tier: 3, name: "Metric Recording", required: true },
-  28: { tier: 3, name: "Pattern Matching", required: false },
-  29: { tier: 3, name: "Condition Evaluation", required: true },
-  30: { tier: 3, name: "Loop Integrity", required: false },
-  31: { tier: 3, name: "Playbook Chaining", required: true },
-  32: { tier: 3, name: "Context Propagation", required: false },
-  33: { tier: 3, name: "Knowledge Persistence", required: false },
+  // Tier 3: Knowledge Dimensions (25-36)
+  25: { tier: 3, name: "Playbook Execution", required: true },
+  26: { tier: 3, name: "Bosonic Anchor", required: true },
+  27: { tier: 3, name: "Trigger Binding", required: true },
+  28: { tier: 3, name: "Action Dispatch", required: false },
+  29: { tier: 3, name: "Metric Recording", required: true },
+  30: { tier: 3, name: "Pattern Matching", required: false },
+  31: { tier: 3, name: "Condition Evaluation", required: true },
+  32: { tier: 3, name: "Loop Integrity", required: false },
+  33: { tier: 3, name: "Playbook Chaining", required: true },
+  34: { tier: 3, name: "Context Propagation", required: false },
+  35: { tier: 3, name: "Knowledge Persistence", required: false },
+  36: { tier: 3, name: "Subsystem Collapse Ledger", required: false },
 
-  // Tier 4: Emergent Dimensions (34-44)
-  34: { tier: 4, name: "QBITS Materialization", required: true },
-  35: { tier: 4, name: "Frequency Validation", required: true },
-  36: { tier: 4, name: "Harmonic Series", required: false },
-  37: { tier: 4, name: "Crystallization", required: true },
-  38: { tier: 4, name: "Cymatic Pattern", required: false },
-  39: { tier: 4, name: "Water Memory", required: false },
-  40: { tier: 4, name: "Sonic Driver", required: true },
-  41: { tier: 4, name: "Quantum Resonance", required: true },
-  42: { tier: 4, name: "Field Coherence", required: false },
-  43: { tier: 4, name: "Emergence Detection", required: false },
-  44: { tier: 4, name: "Crown Certification", required: true },
+  // Tier 4: Emergent Dimensions (37-48)
+  37: { tier: 4, name: "QBITS Materialization", required: true },
+  38: { tier: 4, name: "Frequency Validation", required: true },
+  39: { tier: 4, name: "Harmonic Series", required: false },
+  40: { tier: 4, name: "Crystallization", required: true },
+  41: { tier: 4, name: "Cymatic Pattern", required: false },
+  42: { tier: 4, name: "Water Memory", required: false },
+  43: { tier: 4, name: "Sonic Driver", required: true },
+  44: { tier: 4, name: "Quantum Resonance", required: true },
+  45: { tier: 4, name: "Golden Bridge Layer", required: true },
+  46: { tier: 4, name: "Interference Mitigation", required: true },
+  47: { tier: 4, name: "Business Overlay Integration", required: false },
+  48: { tier: 4, name: "Resonance Certificate v3", required: true },
 };
 
 const REQUIRED_DIMENSIONS = Object.entries(MERKABA_LATTICE)
@@ -65,7 +69,7 @@ const REQUIRED_DIMENSIONS = Object.entries(MERKABA_LATTICE)
   .map(([k]) => Number(k));
 
 /**
- * EnterpriseCertifier — certifies GeoQode programs against the full 44-dimension lattice.
+ * EnterpriseCertifier — certifies GeoQode programs against the full 48-dimension canonical lattice.
  *
  * Usage:
  *   const certifier = new EnterpriseCertifier();
@@ -81,7 +85,7 @@ export class EnterpriseCertifier {
   }
 
   /**
-   * Certify a program execution against the 44-dimension MERKABA lattice.
+   * Certify a program execution against the 48-dimension canonical MERKABA lattice.
    * @param {object} executionResult - Result from ExecutionEngine.execute()
    * @param {object} complianceReport - Result from ComplianceValidator.getComplianceReport()
    * @param {object} meta - Optional program metadata
@@ -136,8 +140,8 @@ export class EnterpriseCertifier {
       programMeta: meta,
       dimensionSummary: {
         achieved: achievedDimensions.size,
-        total: 44,
-        coverage: `${((achievedDimensions.size / 44) * 100).toFixed(1)}%`,
+        total: 48,
+        coverage: `${((achievedDimensions.size / 48) * 100).toFixed(1)}%`,
         missingRequired,
         tiers: this._tierSummary(achievedDimensions),
       },
@@ -196,7 +200,7 @@ export class EnterpriseCertifier {
       issued: this.issuedCount,
       revoked: this.revokedCount,
       active: this.issuedCount - this.revokedCount,
-      latticeSize: 44,
+      latticeSize: 48,
       requiredDimensions: REQUIRED_DIMENSIONS.length,
     };
   }
@@ -238,14 +242,17 @@ export class EnterpriseCertifier {
       let pass = achieved.has(dim);
 
       // Fine-grained checks for key dimensions
-      if (dim === 18) pass = Boolean(state.executionLogging);
+      if (dim === 19) pass = Boolean(state.executionLogging);
       if (dim === 1) pass = Boolean(state.syntaxValidation);
-      if (dim === 12) pass = (exec.result?.emissions || 0) > 0;
-      if (dim === 14) pass = (exec.result?.detections || 0) > 0;
-      if (dim === 34 || dim === 37 || dim === 40) {
+      if (dim === 13) pass = (exec.result?.emissions || 0) > 0;
+      if (dim === 15) pass = (exec.result?.detections || 0) > 0;
+      if (dim === 26) pass = achieved.has(26) || Boolean(state.auditability);
+      if (dim === 37 || dim === 40 || dim === 43) {
         pass = (exec.result?.qbits || 0) > 0;
       }
-      if (dim === 44) {
+      if (dim === 45) pass = Boolean(state.auditability);
+      if (dim === 46) pass = state.incidentResponse !== undefined;
+      if (dim === 48) {
         pass =
           Boolean(state.certifiability) ||
           complianceReport?.allCompliant === true;
@@ -278,19 +285,19 @@ export class EnterpriseCertifier {
 
   _certificationLevel(score, requiredSatisfied, achievedCount) {
     if (!requiredSatisfied || score < 40) return "FAILED";
-    if (score >= 95 && achievedCount >= 40) return "CROWN"; // All 4 tiers activated
-    if (score >= 80 && achievedCount >= 33) return "ENTERPRISE";
-    if (score >= 60 && achievedCount >= 22) return "PROFESSIONAL";
+    if (score >= 95 && achievedCount >= 44) return "CROWN";
+    if (score >= 85 && achievedCount >= 36) return "ENTERPRISE";
+    if (score >= 65 && achievedCount >= 24) return "PROFESSIONAL";
     if (score >= 40) return "BASIC";
     return "FAILED";
   }
 
   _tierSummary(achieved) {
     const tiers = {
-      1: { achieved: 0, total: 11 },
-      2: { achieved: 0, total: 11 },
-      3: { achieved: 0, total: 11 },
-      4: { achieved: 0, total: 11 },
+      1: { achieved: 0, total: 12 },
+      2: { achieved: 0, total: 12 },
+      3: { achieved: 0, total: 12 },
+      4: { achieved: 0, total: 12 },
     };
     for (const dim of achieved) {
       const info = MERKABA_LATTICE[dim];

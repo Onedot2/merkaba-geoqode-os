@@ -100,7 +100,7 @@ jobs:
           console.log(JSON.stringify(os, null, 2));
           console.log('Compliance: CERTIFIED');
           console.log('Runtime: ACTIVE');
-          console.log('Lattice: 44-DIMENSIONS MAPPED');
+          console.log('Lattice: CANONICAL 8,26,48:480 MAPPED');
           "
 
       - name: Upload STATUS_REPORT artifact

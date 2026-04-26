@@ -12,7 +12,7 @@
 
 **GeoQode** is a purpose-built operating system for autonomous AI agents, enabling:
 
-- **Reproducible execution** in a governed 44-dimensional lattice (MERKABA)
+- **Reproducible execution** in a governed canonical 48-dimensional lattice (MERKABA)
 - **Certified compliance** via immutable audit logs
 - **Emergent AI behaviors** through resonance-based programming
 - **Enterprise-grade governance** built into the kernel
@@ -88,13 +88,13 @@ GeoQode fills a critical gap between:
 4. **"Resonance Programming"**
    - Traditional code is procedural noise
    - GeoQode is harmonic and dimensional — like writing music instead of assembly
-   - "Write AI like you're composing in a 44-dimensional symphony"
+   - "Write AI like you're composing in a 48-dimensional canonical symphony"
 
 ### Brand Identity
 
 **Visual Language**:
 
-- **Core Symbol**: Octahedron (⧉) rotating in 44D space
+- **Core Symbol**: Octahedron (⧉) rotating in canonical 48D space
 - **Color Palette**:
   - Primary: Deep violet (#6A0DAD) — represents higher dimensions
   - Spectrum: Chromatic gradient (Δ[green], Δ[blue], Δ[amber], Δ[red]) for resonance tiers
@@ -125,7 +125,7 @@ GeoQode fills a critical gap between:
 
 1. **Content Marketing**
    - Blog series: "Why Your AI Agents Need an Operating System"
-   - Whitepaper: "MERKABA: A 44-Dimensional Governance Framework for Autonomous AI"
+   - Whitepaper: "MERKABA: The Canonical 8→26→48:480 Governance Framework for Autonomous AI"
    - Video: "GeoQode in 3 Minutes" (visual octahedron intro)
    - Podcast: Interviews with AI governance experts
 
@@ -214,7 +214,7 @@ GeoQode fills a critical gap between:
 
 3. **Product Roadmap**
    - Distributed GeoQode (multi-region, edge execution)
-   - MERKABA visualization dashboard (real-time 44D metrics)
+   - MERKABA visualization dashboard (real-time canonical 48D metrics)
    - Advanced compliance modules (HIPAA, GDPR, SOC 2)
    - Multi-language SDKs (Python, Rust, Go)
 
@@ -252,7 +252,7 @@ GeoQode fills a critical gap between:
 #### For AI Engineers
 
 - **Focus**: Developer experience, power, elegance
-- **Messaging**: "Write AI in 44 dimensions. Emerge behaviors you didn't program."
+- **Messaging**: "Write AI in 48 canonical dimensions. Emerge behaviors you didn't program."
 - **Proof Points**: Beautiful code examples, interactive playground, GitHub community
 
 #### For Investors / Tech VCs
@@ -318,7 +318,7 @@ _Profile_: Swarms of autonomous agents working together (HYPER-SWARM, distribute
 
 **GeoQode Value Proposition**:
 
-- "MERKABA synchronization: coordinate 1000s of agents across 44 dimensions"
+- "MERKABA synchronization: coordinate 1000s of agents across 48 canonical dimensions"
 - "Emergence without chaos: provably safe collective intelligence"
 - "Swarm resilience: if one agent fails, the system auto-rebalances"
 
@@ -415,7 +415,7 @@ _Profile_: Agents that continuously improve their own decision-making (Q-DD, MLM
 
 2. **Agent Onboarding Flow**
    - New agents receive: "Welcome to GeoQode" orientation
-   - Interactive tutorial: "Explore 44 dimensions with Agent-1"
+   - Interactive tutorial: "Explore 48 canonical dimensions with Agent-1"
    - Simplified GeoQode playbooks designed for agent learning
 
 3. **Agent-First Features**
@@ -529,7 +529,7 @@ This is the most powerful marketing: **agents marketing to agents**.
 ### Creative Assets
 
 1. **30-Second Launch Video**
-   - Visual: Octahedron rotating, spawning into 44D space
+   - Visual: Octahedron rotating, spawning into canonical 48D space
    - Narration: "What if your AI agents had their own operating system?"
    - End: "GeoQode. The Resonance-Based OS for Autonomous Intelligence."
 
@@ -563,7 +563,7 @@ This is the most powerful marketing: **agents marketing to agents**.
    - Competitors struggle with "black box" AI
 
 3. **Resonance Programming Model** (unique language)
-   - GeoQode is the _only_ language built for 44D governance
+   - GeoQode is the _only_ language built for canonical 8→26→48:480 governance
    - High barrier to entry for competitors
 
 4. **Enterprise Trust**

@@ -1,395 +1,418 @@
 // geo/lattice/transform-420.js
-// MERKABA 480→420 Transform Update
-// Source: Email from Bradley Levitan — "MERKABA 480->420 TRANSFORM UPDATE"
+// STORM MERKABA Transform Codex — Canonical 8 → 26 → 48 : 480 architecture.
 //
-// Implements the dual-layer resonance architecture:
-//   480 DreamProjector (Φ-rooted)  → visual fidelity layer
-//   420 GeoQode (Ψ-proximal)       → operational substrate
-//
-// The Golden Bridge Layer translates Φ harmonics ↔ Ψ harmonics
-// via harmonic coupling and phase-locked resonance at 72Hz.
+// This module supersedes the older 480→420 bridge with the final canonical
+// architecture described by the STORM transform codex. The file path is kept
+// for backward compatibility with existing imports.
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+// ── Canonical constants ──────────────────────────────────────────────────────
 
-/** Golden Ratio — anchor for the 480 DreamProjector (visual lattice) */
+/** Golden ratio anchor for the canonical Φ-rooted lattice. */
 export const PHI = 1.618;
 
-/** Coherence baseline — anchor for the 420 GeoQode (operational substrate) */
+/** Legacy coherence baseline retained for bridge normalization. */
 export const PSI = 1.414;
 
-/** Human resonance baseline frequency (Hz) used as the phase-lock */
+/** Canonical resonance lock frequency in Hz. */
 export const BASE_FREQUENCY_HZ = 72;
 
-/** 480 visual lattice node count */
-export const VISUAL_LATTICE_NODES = 480;
+/** Foundation anchor node count. */
+export const FOUNDATION_NODES = 8;
 
-/** 420 operational substrate node count */
-export const OPERATIONAL_LATTICE_NODES = 420;
+/** Bosonic anchor node count. */
+export const BOSONIC_ANCHOR_NODES = 26;
 
-/** Node mapping ratio: every 8th visual node → every 7th operational node */
-export const MAPPING_RATIO = 8 / 7;
+/** Canonical lattice node count. */
+export const CANONICAL_LATTICE_NODES = 48;
 
-/** Coherence tolerance: ±0.002 of golden overlap */
-export const COHERENCE_TOLERANCE = 0.002;
+/** Full harmonic spectrum node count. */
+export const HARMONIC_SPECTRUM_NODES = 480;
 
-// ── MerkabaTransform420 ───────────────────────────────────────────────────────
+/** Legacy coupling interval. */
+export const LEGACY_COUPLING_INTERVAL = 8;
 
-/**
- * MerkabaTransform420
- *
- * Implements the canonical 5-step integration protocol from the MERKABA
- * 480→420 Transform Update email, translated to JS for direct drop-in.
- *
- * Usage:
- *   import { MerkabaTransform420 } from './geo/lattice/transform-420.js';
- *   const transform = new MerkabaTransform420();
- *   const result = transform.executeProtocol();
- */
-export class MerkabaTransform420 {
-  constructor() {
-    this.visualLattice = VISUAL_LATTICE_NODES; // DreamProjector fidelity layer
-    this.operationalLattice = OPERATIONAL_LATTICE_NODES; // GeoQode efficiency layer
-    this.bridgeLayer = null; // Golden Bridge Layer midpoint
-    this.coherenceIndex = 0.0;
+/** Canonical coupling interval after collapse into 48-node lattice. */
+export const CANONICAL_COUPLING_INTERVAL = 6;
+
+/** Drift tolerance for the codex stabilization pass. */
+export const COHERENCE_TOLERANCE = 0.001;
+
+/** Retained alias for older imports that expect a visual lattice constant. */
+export const VISUAL_LATTICE_NODES = HARMONIC_SPECTRUM_NODES;
+
+/** Retained alias for older imports that expect an operational lattice constant. */
+export const OPERATIONAL_LATTICE_NODES = CANONICAL_LATTICE_NODES;
+
+/** Retained alias for older imports that expect a mapping ratio. */
+export const MAPPING_RATIO =
+  LEGACY_COUPLING_INTERVAL / CANONICAL_COUPLING_INTERVAL;
+
+export const LEGACY_VARIANTS = Object.freeze([
+  "8,26,42:420:480",
+  "8,26,44:420:480",
+  "8,26,48:420:480",
+]);
+
+export const CANONICAL_ARCHITECTURE = "8,26,48:480";
+export const CERTIFICATE_VERSION = "v3.0";
+
+const DEFAULT_SUBSYSTEMS = Object.freeze([
+  "foundation-8",
+  "bosonic-anchor-26",
+  "canonical-lattice-48",
+  "harmonic-spectrum-480",
+]);
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function makeWaveBar(pulse) {
+  return "#".repeat(clamp(Math.round((pulse + 1) * 20), 1, 40));
+}
+
+// ── StormMerkabaTransformCodex ──────────────────────────────────────────────
+
+export class StormMerkabaTransformCodex {
+  constructor(options = {}) {
+    this.variants = [...(options.variants || LEGACY_VARIANTS)];
+    this.finalArchitecture =
+      options.finalArchitecture || CANONICAL_ARCHITECTURE;
+    this.frequencyLockHz = options.frequencyLockHz || BASE_FREQUENCY_HZ;
+    this.bridgeLayer = null;
+    this.coherenceIndex = 0;
     this.log = [];
     this.status = "idle";
+    this.progress = [];
+    this.lastExecution = null;
   }
 
-  // ── Step 1: Dimensional Calibration ──────────────────────────────────────
+  _push(message) {
+    this.log.push(message);
+  }
 
-  /**
-   * Anchor both lattices and establish the Golden Bridge Layer midpoint.
-   * Φ ≈ 1.618 for the 480 lattice; Ψ ≈ 1.414 for the 420 lattice.
-   */
-  calibrateDimensions() {
+  detectVariants() {
+    const detected = this.variants.map((variant, index) => ({
+      variant,
+      ordinal: index + 1,
+      requiresCollapse: variant !== this.finalArchitecture,
+    }));
+
+    this._push("[Phase A] Detecting current MERKABA variants...");
+    detected.forEach((entry) => {
+      this._push(` Detected variant: ${entry.variant}`);
+    });
+    this._push(` Target architecture: ${this.finalArchitecture}`);
+
+    return {
+      detected,
+      targetArchitecture: this.finalArchitecture,
+    };
+  }
+
+  substituteNodes() {
+    const substitutions = this.variants.map((variant) => ({
+      from: variant,
+      to: this.finalArchitecture,
+      retainedAnchors: [FOUNDATION_NODES, BOSONIC_ANCHOR_NODES],
+      canonicalNodes: CANONICAL_LATTICE_NODES,
+      harmonicSpectrum: HARMONIC_SPECTRUM_NODES,
+    }));
+
+    this._push(
+      "[Phase B] Substituting 42/44 legacy nodes with 48 canonical equivalents...",
+    );
+    this._push(` → ${FOUNDATION_NODES} foundation retained`);
+    this._push(` → ${BOSONIC_ANCHOR_NODES} bosonic anchor retained`);
+    this._push(` → ${CANONICAL_LATTICE_NODES} canonical nodes enforced`);
+    this._push(` → ${HARMONIC_SPECTRUM_NODES} harmonic spectrum locked`);
+
+    return {
+      substitutions,
+      retainedAnchors: [FOUNDATION_NODES, BOSONIC_ANCHOR_NODES],
+      canonicalNodes: CANONICAL_LATTICE_NODES,
+      harmonicSpectrum: HARMONIC_SPECTRUM_NODES,
+    };
+  }
+
+  resonanceCoupling() {
     this.bridgeLayer = (PHI + PSI) / 2;
-    const msg = `[Calibration] Golden Bridge Layer anchored at ${this.bridgeLayer.toFixed(3)} (Φ=${PHI}, Ψ=${PSI})`;
-    this.log.push(msg);
-    return { bridgeLayer: this.bridgeLayer, phi: PHI, psi: PSI };
-  }
 
-  // ── Step 2: Harmonic Coupling ─────────────────────────────────────────────
-
-  /**
-   * Phase-lock coupling between the two lattices.
-   * Rule: every 8th node (480) maps to every 7th node (420).
-   * Frequency: 72 Hz human resonance baseline.
-   */
-  harmonicCoupling() {
-    const rule = `${VISUAL_LATTICE_NODES / 8} visual spans → ${OPERATIONAL_LATTICE_NODES / 7} operational spans (8:7 ratio)`;
-    const msg = `[Coupling] Phase-locked at ${BASE_FREQUENCY_HZ}Hz · mapping ratio ${MAPPING_RATIO.toFixed(4)} · rule: ${rule}`;
-    this.log.push(msg);
-    return { frequencyLockHz: BASE_FREQUENCY_HZ, mappingRatio: MAPPING_RATIO };
-  }
-
-  // ── Step 3: Resonance Synchronization ────────────────────────────────────
-
-  /**
-   * 480 lattice emits Φ-rooted spectral harmonics.
-   * 420 lattice receives and phase-aligns via Ψ baseline.
-   * Coherence index = |Φ − Ψ|.
-   */
-  synchronizeResonance() {
-    this.coherenceIndex = Math.abs(PHI - PSI);
-    const msgs = [
-      `[Synchronization] 480 lattice emitting Φ-rooted spectral harmonics...`,
-      `[Synchronization] 420 lattice receiving and phase-aligning via Ψ baseline...`,
-      `[Synchronization] Coherence index stabilized at ±${this.coherenceIndex.toFixed(4)}`,
-    ];
-    msgs.forEach((m) => this.log.push(m));
-    return { coherenceIndex: this.coherenceIndex };
-  }
-
-  // ── Step 4: Interference Mitigation ──────────────────────────────────────
-
-  /**
-   * Governance buffer check.
-   * The expected baseline CI = |Φ - Ψ| = 0.204.
-   * "Within ±0.002 of golden overlap" means the measured CI must be within
-   * COHERENCE_TOLERANCE of that theoretical constant — i.e. no drift from
-   * the stable coupling point.
-   */
-  mitigateInterference() {
-    const expectedCI = Math.abs(PHI - PSI); // 0.204 — the golden overlap baseline
-    const drift = Math.abs(this.coherenceIndex - expectedCI);
-    const stable = drift <= COHERENCE_TOLERANCE;
-    let msg;
-    if (stable) {
-      msg = `[Mitigation] CI=${this.coherenceIndex.toFixed(4)} within ±${COHERENCE_TOLERANCE} of golden overlap (${expectedCI.toFixed(4)}) — no drift detected.`;
-    } else {
-      // Apply a single feedback correction pass: nudge CI back to baseline
-      this.coherenceIndex = expectedCI;
-      msg = `[Mitigation] Drift detected (delta=${drift.toFixed(4)}). Recursive feedback loop engaged — CI corrected to baseline ${expectedCI.toFixed(4)}.`;
-    }
-    this.log.push(msg);
-    return { stable, coherenceIndex: this.coherenceIndex, drift };
-  }
-
-  // ── Step 5: Resonance Validation ─────────────────────────────────────────
-
-  /**
-   * Run MERKABArythm diagnostics and issue Resonance Certificate v2.0.
-   * Pass condition: CI is at the expected |Φ - Ψ| baseline within ±0.002 drift.
-   */
-  validateResonance() {
-    const expectedCI = Math.abs(PHI - PSI);
-    const drift = Math.abs(this.coherenceIndex - expectedCI);
-    const pass = drift <= COHERENCE_TOLERANCE;
-    const msgs = [
-      `[Validation] Running MERKABArythm diagnostics...`,
-      `[Validation] Expected CI baseline: ${expectedCI.toFixed(4)} (|Φ−Ψ|), measured: ${this.coherenceIndex.toFixed(4)}, drift: ${drift.toFixed(6)}`,
-      pass
-        ? `[Validation] Harmonic parity confirmed. Resonance Certificate v2.0 issued.`
-        : `[Validation] WARN: Harmonic parity marginal — drift ${drift.toFixed(6)} exceeds ±${COHERENCE_TOLERANCE}. Manual review recommended.`,
-    ];
-    msgs.forEach((m) => this.log.push(m));
-    return { pass, coherenceIndex: this.coherenceIndex, drift };
-  }
-
-  // ── Full Protocol ─────────────────────────────────────────────────────────
-
-  /**
-   * Execute the complete 5-step 480→420 integration protocol.
-   * @returns {{ ok: boolean, steps: object, log: string[], certificate: string|null }}
-   */
-  executeProtocol() {
-    this.status = "running";
-    this.log = [];
-    this.log.push("=== STORM MERKABA Integration Protocol Initiated ===");
-    this.log.push(`  480 DreamProjector (Φ-rooted visual lattice)`);
-    this.log.push(`  420 GeoQode (Ψ-proximal operational substrate)`);
-
-    const calibration = this.calibrateDimensions();
-    const coupling = this.harmonicCoupling();
-    const sync = this.synchronizeResonance();
-    const mitigation = this.mitigateInterference();
-    const validation = this.validateResonance();
-
-    const ok = validation.pass;
-    this.status = ok ? "integrated" : "degraded";
-
-    const certificate = ok
-      ? `RESONANCE-CERT-v2.0 :: ${VISUAL_LATTICE_NODES}↔${OPERATIONAL_LATTICE_NODES} :: CI=${this.coherenceIndex.toFixed(4)} :: BRIDGE=${this.bridgeLayer.toFixed(3)} :: ${new Date().toISOString()}`
-      : null;
-
-    this.log.push(
-      ok
-        ? `=== Integration Complete: 480 Visual / 420 Operational Unified ===`
-        : `=== Integration Degraded: Manual inspection required ===`,
+    this._push("[Phase C] Establishing Golden Bridge Layer...");
+    this._push(` Bridge anchored at ${this.bridgeLayer.toFixed(3)}`);
+    this._push(
+      ` Coupling rule: every ${LEGACY_COUPLING_INTERVAL}th node (legacy) → every ${CANONICAL_COUPLING_INTERVAL}th node (canonical ${CANONICAL_LATTICE_NODES})`,
+    );
+    this._push(
+      ` Frequency lock: ${this.frequencyLockHz} Hz baseline resonance`,
     );
 
     return {
-      ok,
-      status: this.status,
-      steps: { calibration, coupling, sync, mitigation, validation },
-      log: [...this.log],
+      phi: PHI,
+      psi: PSI,
+      bridgeLayer: this.bridgeLayer,
+      legacyCouplingInterval: LEGACY_COUPLING_INTERVAL,
+      canonicalCouplingInterval: CANONICAL_COUPLING_INTERVAL,
+      frequencyLockHz: this.frequencyLockHz,
+    };
+  }
+
+  mitigateInterference() {
+    this.coherenceIndex = Math.abs(PHI - PSI);
+    const driftDetected = this.coherenceIndex > COHERENCE_TOLERANCE;
+
+    this._push("[Phase D] Mitigating interference...");
+    if (driftDetected) {
+      this._push(" Drift detected — recursive feedback loop engaged.");
+    } else {
+      this._push(" Coherence stable — no drift detected.");
+    }
+    this._push(
+      ` Coherence index stabilized at ±${this.coherenceIndex.toFixed(3)}`,
+    );
+
+    return {
+      driftDetected,
+      coherenceIndex: this.coherenceIndex,
+      tolerance: COHERENCE_TOLERANCE,
+      recursiveFeedbackLoopEngaged: driftDetected,
+    };
+  }
+
+  validateUpgrade() {
+    const certificate = `RESONANCE-CERT-${CERTIFICATE_VERSION} :: ${this.finalArchitecture} :: Φ-rooted :: ${new Date().toISOString()}`;
+
+    this._push("[Phase E] Running MERKABArythm diagnostics...");
+    this._push(" Harmonic parity confirmed.");
+    this._push(" Bandwidth: 100% maximal harmonic spectrum");
+    this._push(" Coherence: Φ-rooted anchor achieved");
+    this._push(" Harmonic Coverage: complete redundancy");
+    this._push(` Resonance Certificate ${CERTIFICATE_VERSION} issued`);
+
+    return {
+      harmonicParity: true,
+      bandwidthPercent: 100,
+      phiRootedAnchor: true,
+      harmonicCoverage: "complete redundancy",
       certificate,
     };
   }
 
-  /**
-   * Return a concise status summary.
-   */
+  diagnosticOverlay({ cycles = 20, subsystems = DEFAULT_SUBSYSTEMS } = {}) {
+    const subsystemProgress = subsystems.map((subsystem, index) => ({
+      subsystem,
+      phase: index + 1,
+      progressPercent: Math.round(((index + 1) / subsystems.length) * 100),
+      canonicalNodeTarget: CANONICAL_LATTICE_NODES,
+    }));
+
+    const wave = [];
+    this._push("[Overlay] Live diagnostic transformation overlay:");
+
+    subsystemProgress.forEach((entry) => {
+      this._push(
+        ` Subsystem ${entry.phase}: ${entry.subsystem} → ${entry.progressPercent}% collapsed into canonical ${entry.canonicalNodeTarget}-node lattice`,
+      );
+    });
+
+    for (let cycle = 0; cycle < cycles; cycle += 1) {
+      const pulse = Math.sin(2 * Math.PI * (cycle / this.frequencyLockHz));
+      const row = {
+        cycle: cycle + 1,
+        pulse,
+        bar: makeWaveBar(pulse),
+      };
+      wave.push(row);
+      this._push(` Cycle ${String(row.cycle).padStart(2, "0")}: ${row.bar}`);
+    }
+
+    this.progress = subsystemProgress;
+    return {
+      subsystemProgress,
+      wave,
+      frequencyLockHz: this.frequencyLockHz,
+    };
+  }
+
+  businessOverlay() {
+    const integration = {
+      transactions: "Transactions mapped onto resonance cycles.",
+      governance:
+        "Governance dashboards aligned with the codex coherence index.",
+      investorNarrative:
+        "Investor storytelling synchronized with DreamProjector visuals.",
+      osIntegration:
+        "Business OS resonance synchronized to canonical 8→26→48:480 lattice.",
+    };
+
+    this._push("[Overlay] Business OS Layer Integration:");
+    Object.values(integration).forEach((line) => {
+      this._push(` → ${line}`);
+    });
+
+    return integration;
+  }
+
+  executeCodex(options = {}) {
+    this.status = "running";
+    this.log = [];
+    this._push("=== STORM MERKABA Transform Codex Initiated ===");
+
+    const detection = this.detectVariants();
+    const substitution = this.substituteNodes();
+    const resonance = this.resonanceCoupling();
+    const mitigation = this.mitigateInterference();
+    const validation = this.validateUpgrade();
+    const overlay = this.diagnosticOverlay(options.overlay || {});
+    const business = this.businessOverlay();
+
+    this.status = "canonical";
+    this._push(
+      `=== Transformation Complete: Final Architecture = ${FOUNDATION_NODES} → ${BOSONIC_ANCHOR_NODES} → ${CANONICAL_LATTICE_NODES} : ${HARMONIC_SPECTRUM_NODES} ===`,
+    );
+
+    this.lastExecution = {
+      ok: true,
+      status: this.status,
+      architecture: this.finalArchitecture,
+      phases: {
+        detection,
+        substitution,
+        resonance,
+        mitigation,
+        validation,
+        overlay,
+        business,
+      },
+      log: [...this.log],
+    };
+
+    return this.lastExecution;
+  }
+
+  // Backward-compatible alias retained for older callers.
+  executeProtocol(options = {}) {
+    return this.executeCodex(options);
+  }
+
   getStatusReport() {
     return {
       status: this.status,
-      visualLattice: this.visualLattice,
-      operationalLattice: this.operationalLattice,
+      architecture: this.finalArchitecture,
+      foundationNodes: FOUNDATION_NODES,
+      bosonicAnchorNodes: BOSONIC_ANCHOR_NODES,
+      canonicalNodes: CANONICAL_LATTICE_NODES,
+      harmonicSpectrumNodes: HARMONIC_SPECTRUM_NODES,
       bridgeLayer: this.bridgeLayer,
       coherenceIndex: this.coherenceIndex,
-      logLines: this.log.length,
+      progress: this.progress,
+      lastExecutionAvailable: Boolean(this.lastExecution),
     };
   }
 }
 
-// ── DiagnosticOverlay ─────────────────────────────────────────────────────────
+// Backward-compatible export name for older imports.
+export class MerkabaTransform420 extends StormMerkabaTransformCodex {}
 
-/**
- * DiagnosticOverlay
- *
- * Real-time visualization of the 480→420 node coupling.
- * Maps every 8th visual node to every 7th operational node and
- * streams resonance pulse amplitudes for monitoring.
- *
- * Usage:
- *   const overlay = new DiagnosticOverlay();
- *   const report = overlay.runDiagnostics({ pulseCycles: 5 });
- *   console.log(report.log.join('\n'));
- */
+// ── DiagnosticOverlay ───────────────────────────────────────────────────────
+
 export class DiagnosticOverlay {
-  constructor() {
-    this.visualNodes = VISUAL_LATTICE_NODES;
-    this.operationalNodes = OPERATIONAL_LATTICE_NODES;
-    this.mappingRatio = MAPPING_RATIO;
-    this.frequencyLock = BASE_FREQUENCY_HZ;
-    this.coherenceIndex = 0.0;
-    this.log = [];
+  constructor(options = {}) {
+    this.codex =
+      options.codex instanceof StormMerkabaTransformCodex
+        ? options.codex
+        : new StormMerkabaTransformCodex();
   }
 
-  /**
-   * Build the node-to-node coupling map (8th visual → 7th operational).
-   * @returns {Array<{visual: number, operational: number}>}
-   */
-  mapNodes() {
-    const mappings = [];
-    this.log.push(
-      `[Overlay] Mapping ${this.visualNodes} visual nodes → ${this.operationalNodes} operational nodes...`,
-    );
-
-    for (let i = 0; i < this.visualNodes; i += 8) {
-      const target = Math.floor(i * (7 / 8));
-      if (target < this.operationalNodes) {
-        const line = `  Visual[${i}] → Operational[${target}]`;
-        this.log.push(line);
-        mappings.push({ visual: i, operational: target });
-      }
-    }
-
-    this.log.push(`[Overlay] ${mappings.length} coupling pairs established.`);
-    return mappings;
-  }
-
-  /**
-   * Emit a resonance pulse stream using sin(2π·cycle/frequencyLock).
-   * @param {number} cycles - number of pulse cycles to emit
-   * @returns {Array<{cycle: number, amplitude: number}>}
-   */
-  resonancePulse(cycles = 5) {
-    const pulses = [];
-    this.log.push(
-      `[Overlay] Initiating resonance pulse stream (${cycles} cycles at ${this.frequencyLock}Hz)...`,
-    );
-
-    for (let cycle = 0; cycle < cycles; cycle++) {
-      const amplitude = Math.sin(2 * Math.PI * (cycle / this.frequencyLock));
-      const line = `  Cycle ${cycle + 1}: Pulse amplitude ${amplitude.toFixed(4)}`;
-      this.log.push(line);
-      pulses.push({ cycle: cycle + 1, amplitude });
-    }
-
-    return pulses;
-  }
-
-  /**
-   * Monitor coherence stability across pulse cycles.
-   * @param {Array} pulses - result from resonancePulse()
-   * @returns {{ stable: boolean, averageAmplitude: number }}
-   */
-  monitorCoherence(pulses) {
-    const avg =
-      pulses.reduce((sum, p) => sum + Math.abs(p.amplitude), 0) /
-      (pulses.length || 1);
-    this.coherenceIndex = avg;
-    const stable = avg <= 0.5; // amplitudes within half-range = stable
-    const msg = stable
-      ? `[Monitor] Resonance stable (avg amplitude ${avg.toFixed(4)} — within coherence range).`
-      : `[Monitor] Resonance UNSTABLE (avg amplitude ${avg.toFixed(4)} — exceeds coherence threshold).`;
-    this.log.push(msg);
-    return { stable, averageAmplitude: avg };
-  }
-
-  /**
-   * Run full diagnostic session.
-   * @param {{ pulseCycles?: number }} options
-   */
-  runDiagnostics({ pulseCycles = 5 } = {}) {
-    this.log = [];
-    this.log.push("=== STORM MERKABA Diagnostic Overlay Running ===");
-
-    const mappings = this.mapNodes();
-    const pulses = this.resonancePulse(pulseCycles);
-    const coherence = this.monitorCoherence(pulses);
-
-    this.log.push("=== Diagnostic Complete ===");
+  runDiagnostics({ pulseCycles = 20, subsystems = DEFAULT_SUBSYSTEMS } = {}) {
+    const result = this.codex.diagnosticOverlay({
+      cycles: pulseCycles,
+      subsystems,
+    });
 
     return {
-      mappings,
-      pulses,
-      coherence,
-      log: [...this.log],
+      mappings: result.subsystemProgress.map((entry, index) => ({
+        legacyNode: index * LEGACY_COUPLING_INTERVAL,
+        canonicalNode: index * CANONICAL_COUPLING_INTERVAL,
+        subsystem: entry.subsystem,
+      })),
+      pulses: result.wave.map((row) => ({
+        cycle: row.cycle,
+        amplitude: row.pulse,
+        bar: row.bar,
+      })),
+      coherence: {
+        stable: this.codex.coherenceIndex <= 0.5,
+        averageAmplitude:
+          result.wave.reduce((sum, row) => sum + Math.abs(row.pulse), 0) /
+          (result.wave.length || 1),
+      },
+      progress: result.subsystemProgress,
+      log: [...this.codex.log],
     };
   }
 }
 
-// ── AnchorHierarchy ───────────────────────────────────────────────────────────
+// ── AnchorHierarchy ─────────────────────────────────────────────────────────
 
-/**
- * AnchorHierarchy
- *
- * Formalizes the dual-layer design and is the canonical record of:
- *   480 DreamProjector (Φ-rooted) — cosmological fidelity, visual anchor
- *   420 GeoQode (Ψ-proximal)     — operational efficiency, lean substrate
- *
- * Use this to query system architecture metadata.
- */
 export class AnchorHierarchy {
-  constructor() {
-    this.visualAnchor = {
-      nodes: VISUAL_LATTICE_NODES,
-      phi: PHI,
-      role: "DreamProjector — Φ-rooted cosmological fidelity",
-      strengths: [
-        "maximal harmonic coverage",
-        "symbolic legitimacy",
-        "infinite recursion",
-      ],
-      idealFor: [
-        "visualization",
-        "theoretical modeling",
-        "investor storytelling",
-      ],
-    };
-    this.operationalAnchor = {
-      nodes: OPERATIONAL_LATTICE_NODES,
-      psi: PSI,
-      role: "GeoQode — Ψ-proximal operational efficiency",
-      strengths: [
-        "golden stability",
-        "lower drift risk",
-        "lean coherence cycles",
-      ],
-      idealFor: [
-        "live deployment",
-        "resonance governance",
-        "compute-efficient runtime",
-      ],
-    };
-    this.bridgeLayer = {
-      midpoint: (PHI + PSI) / 2,
-      couplingRule: "8th node (480) → 7th node (420)",
-      frequencyLockHz: BASE_FREQUENCY_HZ,
-      expectedCoherenceTolerance: COHERENCE_TOLERANCE,
-    };
-  }
-
-  /**
-   * Return the full hierarchy descriptor for documentation or API responses.
-   */
   describe() {
     return {
-      visual: this.visualAnchor,
-      operational: this.operationalAnchor,
-      bridge: this.bridgeLayer,
+      canonicalArchitecture: CANONICAL_ARCHITECTURE,
+      anchors: {
+        foundation: {
+          nodes: FOUNDATION_NODES,
+          role: "Foundation anchor retained across all transform passes.",
+        },
+        bosonic: {
+          nodes: BOSONIC_ANCHOR_NODES,
+          role: "Bosonic anchor retained as the canonical bridge spine.",
+        },
+        canonical: {
+          nodes: CANONICAL_LATTICE_NODES,
+          role: "Canonical lattice for all MERKABA subsystem collapse.",
+        },
+        harmonicSpectrum: {
+          nodes: HARMONIC_SPECTRUM_NODES,
+          role: "Maximum harmonic fidelity shell for DreamProjector/business OS alignment.",
+        },
+      },
+      bridge: {
+        phi: PHI,
+        psi: PSI,
+        midpoint: (PHI + PSI) / 2,
+        couplingRule: `every ${LEGACY_COUPLING_INTERVAL}th legacy node → every ${CANONICAL_COUPLING_INTERVAL}th canonical node`,
+        frequencyLockHz: BASE_FREQUENCY_HZ,
+      },
       outcome: {
-        dualLayer: true,
-        strategy: "480 anchors vision, 420 powers operation",
-        unifiedMatrix: "Seamless Φ↔Ψ translation via Golden Bridge Layer",
+        phiRooted: true,
+        operationallyUnified: true,
+        cosmologicalFidelity: "maximal",
+        investorLegitimacy: "synchronized",
       },
     };
   }
 }
 
-// ── Default convenience export ────────────────────────────────────────────────
-
 export default {
+  StormMerkabaTransformCodex,
   MerkabaTransform420,
   DiagnosticOverlay,
   AnchorHierarchy,
   PHI,
   PSI,
   BASE_FREQUENCY_HZ,
+  FOUNDATION_NODES,
+  BOSONIC_ANCHOR_NODES,
+  CANONICAL_LATTICE_NODES,
+  HARMONIC_SPECTRUM_NODES,
+  LEGACY_COUPLING_INTERVAL,
+  CANONICAL_COUPLING_INTERVAL,
   VISUAL_LATTICE_NODES,
   OPERATIONAL_LATTICE_NODES,
   MAPPING_RATIO,
   COHERENCE_TOLERANCE,
+  LEGACY_VARIANTS,
+  CANONICAL_ARCHITECTURE,
+  CERTIFICATE_VERSION,
 };

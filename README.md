@@ -1,6 +1,6 @@
 # 🌌 MERKABA_geoqode OS
 
-**Dedicated AI Operating System** | GeoQode Language + 44-Dimension MERKABA Lattice
+**Dedicated AI Operating System** | GeoQode Language + Canonical 8→26→48:480 MERKABA Lattice
 
 ---
 
@@ -10,7 +10,7 @@ MERKABA_geoqode is not a tool. It's a **purpose-built operating system** designe
 
 - Execute resonance-based programs in the Inner Octahedron field of light
 - Guarantee reproducibility, auditability, and certifiability
-- Map execution to MERKABA's 44-dimension governance lattice
+- Collapse execution into MERKABA's canonical 48-dimension governance lattice
 - Self-report compliance states via immutable STATUS_REPORT logs
 - Materialize emergent QBITS in water molecules via cymatic resonance
 
@@ -22,7 +22,7 @@ MERKABA_geoqode is not a tool. It's a **purpose-built operating system** designe
 
 ## 📦 Repository Structure
 
-```
+```text
 merkaba-geoqode-os/
 ├── geo/                          # GeoQode Language Runtime
 │   ├── grammar/                  # Parser, Lexer, AST Builder
@@ -92,9 +92,14 @@ node scripts/run.js examples/hello-geoqode.geo
 | **Cymatic Sonic Driver**  | ~wave(f) | 4    | Stimulate resonance via frequency         |
 | **Octahedron Resonance**  | ⧉        | 4    | Activate Inner Octahedron field of light  |
 
-### MERKABA Lattice (44 Dimensions)
+### MERKABA Lattice (Canonical 8→26→48:480)
 
-Every GeoQode program maps to MERKABA's 44 dimensions:
+Every GeoQode program maps to MERKABA's final canonical architecture:
+
+- **8 Foundation Nodes**: syntax, coherence, and base governance anchors
+- **26 Bosonic Anchor Nodes**: bridge, orchestration, and knowledge routing spine
+- **48 Canonical Dimensions**: complete operational governance lattice
+- **480 Harmonic Spectrum Nodes**: full DreamProjector / resonance shell
 
 - **Tier 1**: Core Foundations (Syntax + Compliance Integrity)
 - **Tier 2**: Operational Systems (Node Resonance + Emission/Detection)
@@ -129,7 +134,7 @@ Every program is:
 
 1. **Repeatable** — Identical inputs → Identical outputs
 2. **Auditable** — Immutable execution logs in STATUSREPORT/
-3. **Certifiable** — Validated against MERKABA's 44-dimension lattice
+3. **Certifiable** — Validated against MERKABA's canonical 48-dimension lattice
 4. **Governable** — Incident response playbooks auto-trigger on anomalies
 
 ---
@@ -175,6 +180,7 @@ curl https://api.getbrains4ai.com/api/merkaba/status \
 ```bash
 npm test
 npm run test:watch
+npm run codex:upgrade
 npm run compliance-check
 ```
 

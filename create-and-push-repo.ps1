@@ -46,7 +46,7 @@ $headers = @{
 
 $repoPayload = @{
     name        = $RepoName
-    description = "Dedicated AI Operating System with GeoQode Language & MERKABA 44-Dimension Lattice"
+    description = "Dedicated AI Operating System with GeoQode Language & MERKABA canonical 8→26→48:480 lattice"
     private     = $false
     auto_init   = $false
 } | ConvertTo-Json
@@ -54,7 +54,7 @@ $repoPayload = @{
 $repoPayload = $repoPayload -replace '&', '&amp;'
 $repoPayload = @{
     name        = $RepoName
-    description = "Dedicated AI Operating System with GeoQode Language and MERKABA 44-Dimension Lattice"
+    description = "Dedicated AI Operating System with GeoQode Language and MERKABA canonical 8→26→48:480 lattice"
     private     = $false
     auto_init   = $false
 } | ConvertTo-Json

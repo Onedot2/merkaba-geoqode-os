@@ -237,7 +237,7 @@ describe("Phase 7: EnterpriseCertifier", () => {
           auditability: true,
           certifiability: true,
         },
-        merkabaDimensions: [1, 2, 3, 4, 5, 12, 14, 16, 18, 20],
+        merkabaDimensions: [1, 2, 3, 4, 5, 8, 13, 15, 17, 19, 21, 26],
         allCompliant: true,
       },
     );
@@ -256,7 +256,7 @@ describe("Phase 7: EnterpriseCertifier", () => {
           auditability: true,
           certifiability: false,
         },
-        merkabaDimensions: [1, 2, 3, 4, 5, 12, 14, 16, 18, 20],
+        merkabaDimensions: [1, 2, 3, 4, 5, 8, 13, 15, 17, 19, 21, 26],
         allCompliant: false,
       },
     );
@@ -275,11 +275,11 @@ describe("Phase 7: EnterpriseCertifier", () => {
     expect(verification.reason).toBe("Certificate revoked");
   });
 
-  it("should have a full 44-dimension lattice", () => {
-    expect(Object.keys(MERKABA_LATTICE).length).toBe(44);
+  it("should have a full 48-dimension lattice", () => {
+    expect(Object.keys(MERKABA_LATTICE).length).toBe(48);
     expect(MERKABA_LATTICE[1].tier).toBe(1);
-    expect(MERKABA_LATTICE[44].tier).toBe(4);
-    expect(MERKABA_LATTICE[44].name).toBe("Crown Certification");
+    expect(MERKABA_LATTICE[48].tier).toBe(4);
+    expect(MERKABA_LATTICE[48].name).toBe("Resonance Certificate v3");
   });
 
   it("should generate a compliance report", () => {

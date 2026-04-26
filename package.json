@@ -1,7 +1,7 @@
 {
   "name": "@s4ai/merkaba-geoqode-os",
   "version": "1.0.0",
-  "description": "MERKABA_geoqode: Dedicated AI Operating System with GeoQode Language + 44-Dimension MERKABA Lattice",
+  "description": "MERKABA_geoqode: Dedicated AI Operating System with GeoQode Language + canonical 8→26→48:480 MERKABA lattice",
   "type": "module",
   "main": "geo/index.js",
   "scripts": {
@@ -10,6 +10,7 @@
     "test:watch": "vitest --watch",
     "parse": "node scripts/parse.js",
     "run": "node scripts/run.js",
+    "codex:upgrade": "node scripts/transform-codex.js",
     "compliance-check": "node scripts/compliance-check.js",
     "status-report": "node scripts/generate-status-report.js",
     "build": "echo 'GeoQode is interpreted — no build step required'",

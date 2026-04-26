@@ -317,7 +317,7 @@ describe("Integration: EnterpriseCertifier with real execution", () => {
     expect(cert.level).toBeDefined();
     expect(typeof cert.certified).toBe("boolean");
     expect(cert.dimensionSummary.achieved).toBeGreaterThan(0);
-    expect(cert.dimensionSummary.total).toBe(44);
+    expect(cert.dimensionSummary.total).toBe(48);
     expect(cert.fingerprint).toMatch(/^[a-f0-9]{64}$/);
     expect(cert.auditTrailHash).toMatch(/^[a-f0-9]{64}$/);
     expect(cert.programMeta.name).toBe("TestRun");
@@ -341,10 +341,10 @@ describe("Integration: EnterpriseCertifier with real execution", () => {
     expect(certifier.getRegistryStats().issued).toBe(1);
   });
 
-  it("should return PLATINUM or GOLD level when all required dimensions achieved", async () => {
+  it("should return a top-tier certification when all canonical dimensions are achieved", async () => {
     const { EnterpriseCertifier, MERKABA_LATTICE } =
       await import("../geo/certification/enterprise-certifier.js");
-    // Provide ALL 44 dimensions
+    // Provide ALL 48 dimensions
     const allDimensions = Object.keys(MERKABA_LATTICE).map(Number);
     const certifier = new EnterpriseCertifier();
     const cert = certifier.certify(
@@ -357,6 +357,8 @@ describe("Integration: EnterpriseCertifier with real execution", () => {
       { name: "FullCoverage" },
     );
     expect(cert.certified).toBe(true);
-    expect(["CROWN", "PLATINUM", "GOLD", "SILVER"]).toContain(cert.level);
+    expect(["CROWN", "ENTERPRISE", "PROFESSIONAL", "BASIC"]).toContain(
+      cert.level,
+    );
   });
 });

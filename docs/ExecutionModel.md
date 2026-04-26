@@ -21,7 +21,7 @@ Acts as both:
 
 ### MERKABA Integration
 
-Each execution cycle maps directly into MERKABA's 44 dimensions:
+Each execution cycle maps directly into MERKABA's canonical 48 dimensions within the 8→26→48:480 architecture:
 
 - **Tier 1** → Syntax validation + compliance logging
 - **Tier 2** → Node resonance + emission/detection
@@ -91,7 +91,7 @@ Each execution cycle tagged with MERKABA dimension IDs.
 
 ### Certifiability
 
-Programs validated against MERKABA's 44‑dimension lattice.
+Programs validated against MERKABA's canonical 48‑dimension lattice.
 Compliance playbooks ensure enterprise readiness.
 
 ---

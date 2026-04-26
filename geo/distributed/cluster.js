@@ -70,7 +70,7 @@ export class ExecutionCluster extends EventEmitter {
 
   /**
    * Broadcast: run the same GeoQode program on ALL nodes in parallel.
-   * Used for dimension consensus — all 44 dimensions must agree.
+   * Used for dimension consensus — all 48 canonical dimensions must agree.
    * @param {string} source
    */
   async broadcast(source, meta = {}) {

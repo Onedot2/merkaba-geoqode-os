@@ -12,7 +12,7 @@ The compliance framework ensures that GeoQode programs are:
 
 - **Repeatable** — Emergent geometries can be produced, reproduced, and verified
 - **Auditable** — Execution traces are immutable and transparent
-- **Certifiable** — Programs are validated against MERKABA's 44‑dimension governance lattice
+- **Certifiable** — Programs are validated against MERKABA's canonical 48‑dimension governance lattice
 
 ---
 
@@ -42,7 +42,7 @@ Immutable storage ensures compliance with enterprise audit standards.
 
 ### Certifiability
 
-Programs validated against MERKABA's 44 dimensions:
+Programs validated against MERKABA's canonical 48 dimensions:
 
 - **Tier 1** → Syntax + compliance integrity
 - **Tier 2** → Operational resonance

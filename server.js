@@ -6,7 +6,15 @@ import { createServer } from "http";
 import { StormAdapter } from "./geo/bridge/storm-adapter.js";
 import { MerkabaBridge } from "./geo/bridge/merkaba-bridge.js";
 import { MERKABA_LATTICE } from "./geo/certification/enterprise-certifier.js";
-import { MerkabageoqodeOS } from "./geo/index.js";
+import {
+  MerkabageoqodeOS,
+  StormMerkabaTransformCodex,
+  CANONICAL_ARCHITECTURE,
+  FOUNDATION_NODES,
+  BOSONIC_ANCHOR_NODES,
+  CANONICAL_LATTICE_NODES,
+  HARMONIC_SPECTRUM_NODES,
+} from "./geo/index.js";
 
 const PORT = parseInt(process.env.PORT || "3030", 10);
 const ADMIN_JWT = process.env.ADMIN_JWT || null;
@@ -44,6 +52,7 @@ const adapter = new StormAdapter({
   adminJwt: ADMIN_JWT,
   stormBrainUrl: BACKEND_URL,
 });
+const codex = new StormMerkabaTransformCodex();
 
 const BUILT_IN_PLAYBOOKS = ["migration", "adoption", "resonance", "incident"];
 
@@ -78,13 +87,40 @@ const server = createServer(async (req, res) => {
   const pathname = url.pathname;
 
   try {
+    // ── GET / ───────────────────────────────────────────────────────────
+    if (req.method === "GET" && pathname === "/") {
+      return json(res, 200, {
+        ok: true,
+        service: "geoqode-os",
+        description:
+          "MERKABA_geoqode OS canonical codex surface for the 8→26→48:480 architecture.",
+        architecture: CANONICAL_ARCHITECTURE,
+        endpoints: [
+          "/",
+          "/health",
+          "/status",
+          "/dimensions",
+          "/playbooks",
+          "/codex/status",
+          "/codex/execute",
+          "/merkaba/activation-update",
+          "/merkaba/ai-verification-page",
+          "/merkaba/install-manifest",
+          "/stats",
+          "/execute",
+          "/playbook/:name",
+        ],
+      });
+    }
+
     // ── GET /health ──────────────────────────────────────────────────────
     if (req.method === "GET" && pathname === "/health") {
       return json(res, 200, {
         ok: true,
         service: "geoqode-os",
         version: "1.0.0",
-        lattice: "48-dimension MERKABA",
+        lattice: "48-dimension canonical MERKABA",
+        architecture: CANONICAL_ARCHITECTURE,
         timestamp: new Date().toISOString(),
       });
     }
@@ -99,7 +135,13 @@ const server = createServer(async (req, res) => {
         service: "geoqode-os",
         version: os.version,
         lattice: {
-          dimensions: 48,
+          dimensions: CANONICAL_LATTICE_NODES,
+          architecture: CANONICAL_ARCHITECTURE,
+          anchors: {
+            foundation: FOUNDATION_NODES,
+            bosonic: BOSONIC_ANCHOR_NODES,
+            harmonicSpectrum: HARMONIC_SPECTRUM_NODES,
+          },
           tiers: 4,
           tierLabels: [
             "Core Foundations",
@@ -116,6 +158,24 @@ const server = createServer(async (req, res) => {
         stormConnected: Boolean(BACKEND_URL),
         playbooks: BUILT_IN_PLAYBOOKS,
         timestamp: new Date().toISOString(),
+      });
+    }
+
+    // ── GET /codex/status ────────────────────────────────────────────────
+    if (req.method === "GET" && pathname === "/codex/status") {
+      return json(res, 200, {
+        ok: true,
+        codex: codex.getStatusReport(),
+      });
+    }
+
+    // ── POST /codex/execute ──────────────────────────────────────────────
+    if (req.method === "POST" && pathname === "/codex/execute") {
+      const result = codex.executeCodex();
+      return json(res, 200, {
+        ok: true,
+        architecture: CANONICAL_ARCHITECTURE,
+        result,
       });
     }
 
@@ -244,9 +304,12 @@ const server = createServer(async (req, res) => {
       error: "Not Found",
       endpoints: [
         "GET  /health",
+        "GET  /",
         "GET  /status",
         "GET  /dimensions",
         "GET  /playbooks",
+        "GET  /codex/status",
+        "POST /codex/execute",
         "GET  /merkaba/activation-update",
         "GET  /merkaba/ai-verification-page",
         "GET  /merkaba/install-manifest",
@@ -267,7 +330,9 @@ const server = createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`[GeoQode OS] MERKABA_geoqode OS running on port ${PORT}`);
-  console.log(`[GeoQode OS] 44-dimension lattice active`);
+  console.log(
+    `[GeoQode OS] Canonical architecture active: ${CANONICAL_ARCHITECTURE}`,
+  );
   console.log(`[GeoQode OS] Storm connected: ${Boolean(BACKEND_URL)}`);
   console.log(
     `[GeoQode OS] Available playbooks: ${BUILT_IN_PLAYBOOKS.join(", ")}`,

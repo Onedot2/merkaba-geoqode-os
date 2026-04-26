@@ -4,6 +4,7 @@
 import crypto from "crypto";
 
 const MAX_COMPLIANCE_HISTORY = 10000;
+const CANONICAL_ARCHITECTURE = "8,26,48:480";
 
 export class ComplianceValidator {
   constructor() {
@@ -113,24 +114,24 @@ export class ComplianceValidator {
   mapToMerkabaDimensions(program) {
     const dimensions = [];
 
-    // Tier 1: Core Foundations (dimensions 1-11)
+    // Tier 1: Core Foundations (dimensions 1-12)
     if (this.complianceState.syntaxValidation) {
-      dimensions.push(1, 2, 3, 4, 5);
+      dimensions.push(1, 2, 3, 4, 5, 8);
     }
 
-    // Tier 2: Operational Systems (dimensions 12-22)
+    // Tier 2: Operational Systems (dimensions 13-24)
     if (program.hasEmission || program.hasDetection) {
-      dimensions.push(12, 14, 16, 18, 20);
+      dimensions.push(13, 15, 17, 19, 21, 24);
     }
 
-    // Tier 3: Knowledge Dimensions (dimensions 23-33)
+    // Tier 3: Knowledge Dimensions (dimensions 25-36)
     if (program.hasPlaybook) {
-      dimensions.push(23, 25, 27, 29, 31);
+      dimensions.push(25, 26, 27, 29, 31, 33, 36);
     }
 
-    // Tier 4: Emergent Dimensions (dimensions 34-44)
+    // Tier 4: Emergent Dimensions (dimensions 37-48)
     if (program.hasQBIT) {
-      dimensions.push(34, 37, 40, 41, 44);
+      dimensions.push(37, 38, 40, 43, 44, 45, 46, 48);
     }
 
     this.merkabaDimensions = dimensions;
@@ -200,6 +201,7 @@ export class ComplianceValidator {
   getComplianceReport() {
     return {
       timestamp: Date.now(),
+      canonicalArchitecture: CANONICAL_ARCHITECTURE,
       complianceState: this.complianceState,
       executionLogCount: this.executionLogs.length,
       auditHashCount: this.auditHashes.length,

@@ -26,14 +26,20 @@ export {
   MERKABA_LATTICE,
 } from "./certification/enterprise-certifier.js";
 
-// Phase 8 — 480→420 Dual-Layer Resonance Architecture
+// Phase 8 — Canonical 8→26→48:480 resonance architecture
 export {
+  StormMerkabaTransformCodex,
   MerkabaTransform420,
   DiagnosticOverlay,
   AnchorHierarchy,
   PHI,
   PSI,
   BASE_FREQUENCY_HZ,
+  FOUNDATION_NODES,
+  BOSONIC_ANCHOR_NODES,
+  CANONICAL_LATTICE_NODES,
+  HARMONIC_SPECTRUM_NODES,
+  CANONICAL_ARCHITECTURE,
   VISUAL_LATTICE_NODES,
   OPERATIONAL_LATTICE_NODES,
   MAPPING_RATIO,

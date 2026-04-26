@@ -20,7 +20,7 @@ const SACRED_FREQUENCIES = {
   639: { name: "Connection", color: "indigo", dimension: 27 },
   741: { name: "Awakening", color: "violet", dimension: 34 },
   852: { name: "Intuition", color: "white", dimension: 40 },
-  963: { name: "Crown / Pineal", color: "gold", dimension: 44 },
+  963: { name: "Crown / Pineal", color: "gold", dimension: 48 },
 };
 
 // Golden ratio / Fibonacci harmonic series (Φ^n approximations)

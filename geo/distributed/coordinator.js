@@ -92,7 +92,7 @@ export class DistributedCoordinator extends EventEmitter {
 
   /**
    * Run a consensus broadcast: all cluster nodes execute same program.
-   * Useful for validating 44-dimension agreement across distributed nodes.
+   * Useful for validating canonical 48-dimension agreement across distributed nodes.
    */
   async consensusBroadcast(source, meta = {}) {
     return this.cluster.broadcast(source, meta);
@@ -131,7 +131,7 @@ export class DistributedCoordinator extends EventEmitter {
       successes,
       failures: total - successes,
       activeDimensions: Array.from(allDims).sort((a, b) => a - b),
-      dimensionCoverage: `${allDims.size}/44`,
+      dimensionCoverage: `${allDims.size}/48`,
     };
   }
 
