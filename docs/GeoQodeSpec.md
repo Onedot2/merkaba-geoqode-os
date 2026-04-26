@@ -14,7 +14,7 @@ GeoQode programs:
 
 - Execute in a resonant medium (the Inner Octahedron)
 - Use dimensional operators (Φ, ⊗, Δ, ~wave, ⧉) as system calls
-- Map to MERKABA's 44-dimension governance lattice
+- Map to MERKABA's canonical 48-dimension governance lattice within the 8→26→48:480 architecture
 - Produce auditable, reproducible, certifiable outputs
 
 ---
@@ -64,7 +64,7 @@ Playbook PlaybookName {
 
 ## Reserved Keywords
 
-```
+```text
 Program, Playbook
 Node, Water
 Log, Emit, Detect, QBIT
@@ -76,7 +76,7 @@ Trigger, Action, Metric
 
 ## Complete Grammar
 
-```
+```text
 Document        → Statement*
 Statement       → Program | Playbook
 Program         → "Program" IDENTIFIER "{" Statement* "}"
