@@ -2,9 +2,12 @@
 // Compliance and governance engine for GeoQode
 
 import crypto from "crypto";
+import {
+  CANONICAL_ARCHITECTURE,
+  assertCanonicalArchitectureSignature,
+} from "../lattice/transform-420.js";
 
 const MAX_COMPLIANCE_HISTORY = 10000;
-const CANONICAL_ARCHITECTURE = "8,26,48:480";
 
 export class ComplianceValidator {
   constructor() {
@@ -199,9 +202,16 @@ export class ComplianceValidator {
    * Get full compliance report
    */
   getComplianceReport() {
+    const canonicalArchitecture = assertCanonicalArchitectureSignature(
+      CANONICAL_ARCHITECTURE,
+      {
+        source: "ComplianceValidator.getComplianceReport",
+      },
+    );
+
     return {
       timestamp: Date.now(),
-      canonicalArchitecture: CANONICAL_ARCHITECTURE,
+      canonicalArchitecture,
       complianceState: this.complianceState,
       executionLogCount: this.executionLogs.length,
       auditHashCount: this.auditHashes.length,

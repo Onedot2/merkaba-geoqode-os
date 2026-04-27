@@ -47,7 +47,7 @@ export const OPERATIONAL_LATTICE_NODES = CANONICAL_LATTICE_NODES;
 export const MAPPING_RATIO =
   LEGACY_COUPLING_INTERVAL / CANONICAL_COUPLING_INTERVAL;
 
-export const LEGACY_VARIANTS = Object.freeze([
+export const DEPRECATED_ARCHITECTURE_SIGNATURES = Object.freeze([
   "8,26,42:420:480",
   "8,26,44:420:480",
   "8,26,48:420:480",
@@ -55,6 +55,31 @@ export const LEGACY_VARIANTS = Object.freeze([
 
 export const CANONICAL_ARCHITECTURE = "8,26,48:480";
 export const CERTIFICATE_VERSION = "v3.0";
+
+// Backward-compatible export retained for older imports.
+// Pure mode enforces canonical architecture only.
+export const LEGACY_VARIANTS = Object.freeze([CANONICAL_ARCHITECTURE]);
+
+export function isCanonicalArchitectureSignature(signature) {
+  return String(signature || "").trim() === CANONICAL_ARCHITECTURE;
+}
+
+export function normalizeArchitectureSignature(_signature) {
+  return CANONICAL_ARCHITECTURE;
+}
+
+export function assertCanonicalArchitectureSignature(
+  signature,
+  { source = "unknown" } = {},
+) {
+  if (!isCanonicalArchitectureSignature(signature)) {
+    throw new Error(
+      `[MERKABA] Non-canonical architecture signature rejected in ${source}. Expected "${CANONICAL_ARCHITECTURE}".`,
+    );
+  }
+
+  return CANONICAL_ARCHITECTURE;
+}
 
 const DEFAULT_SUBSYSTEMS = Object.freeze([
   "foundation-8",
@@ -75,9 +100,22 @@ function makeWaveBar(pulse) {
 
 export class StormMerkabaTransformCodex {
   constructor(options = {}) {
-    this.variants = [...(options.variants || LEGACY_VARIANTS)];
-    this.finalArchitecture =
-      options.finalArchitecture || CANONICAL_ARCHITECTURE;
+    const incomingVariants = [...(options.variants || LEGACY_VARIANTS)];
+    this.variants = [
+      ...new Set(
+        incomingVariants.map((variant) =>
+          normalizeArchitectureSignature(variant),
+        ),
+      ),
+    ];
+
+    if (options.finalArchitecture) {
+      assertCanonicalArchitectureSignature(options.finalArchitecture, {
+        source: "StormMerkabaTransformCodex.constructor",
+      });
+    }
+
+    this.finalArchitecture = CANONICAL_ARCHITECTURE;
     this.frequencyLockHz = options.frequencyLockHz || BASE_FREQUENCY_HZ;
     this.bridgeLayer = null;
     this.coherenceIndex = 0;
@@ -120,7 +158,7 @@ export class StormMerkabaTransformCodex {
     }));
 
     this._push(
-      "[Phase B] Substituting 42/44 legacy nodes with 48 canonical equivalents...",
+      "[Phase B] Enforcing pure canonical 8→26→48:480 architecture...",
     );
     this._push(` → ${FOUNDATION_NODES} foundation retained`);
     this._push(` → ${BOSONIC_ANCHOR_NODES} bosonic anchor retained`);
@@ -412,7 +450,11 @@ export default {
   OPERATIONAL_LATTICE_NODES,
   MAPPING_RATIO,
   COHERENCE_TOLERANCE,
+  DEPRECATED_ARCHITECTURE_SIGNATURES,
   LEGACY_VARIANTS,
   CANONICAL_ARCHITECTURE,
   CERTIFICATE_VERSION,
+  isCanonicalArchitectureSignature,
+  normalizeArchitectureSignature,
+  assertCanonicalArchitectureSignature,
 };

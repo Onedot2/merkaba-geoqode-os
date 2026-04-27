@@ -10,6 +10,7 @@ import {
   MerkabageoqodeOS,
   StormMerkabaTransformCodex,
   CANONICAL_ARCHITECTURE,
+  assertCanonicalArchitectureSignature,
   FOUNDATION_NODES,
   BOSONIC_ANCHOR_NODES,
   CANONICAL_LATTICE_NODES,
@@ -58,11 +59,20 @@ const BUILT_IN_PLAYBOOKS = ["migration", "adoption", "resonance", "incident"];
 
 // ─── Minimal HTTP server — no external framework dependency needed ────────
 function json(res, status, data) {
+  const canonicalArchitecture = assertCanonicalArchitectureSignature(
+    CANONICAL_ARCHITECTURE,
+    {
+      source: "server.json",
+    },
+  );
+
   const body = JSON.stringify(data);
   res.writeHead(status, {
     "Content-Type": "application/json",
     "X-Service": "geoqode-os",
     "X-MERKABA-Dimensions": "48",
+    "X-MERKABA-Architecture": canonicalArchitecture,
+    "X-MERKABA-Spectrum-Nodes": String(HARMONIC_SPECTRUM_NODES),
   });
   res.end(body);
 }
@@ -135,6 +145,12 @@ const server = createServer(async (req, res) => {
         service: "geoqode-os",
         version: os.version,
         lattice: {
+          strictCanonicalArchitecture: assertCanonicalArchitectureSignature(
+            CANONICAL_ARCHITECTURE,
+            {
+              source: "GET /status",
+            },
+          ),
           dimensions: CANONICAL_LATTICE_NODES,
           architecture: CANONICAL_ARCHITECTURE,
           anchors: {
