@@ -1,0 +1,298 @@
+{
+  "startedAt": "2026-04-28T03:05:24.277Z",
+  "finishedAt": "2026-04-28T03:05:25.768Z",
+  "host": {
+    "platform": "win32",
+    "node": "v24.14.1"
+  },
+  "config": {
+    "iterations": 8,
+    "statementCount": 120,
+    "sampleEveryN": 8,
+    "shadowEveryN": 5,
+    "includeReal": true
+  },
+  "results": [
+    {
+      "schedulerMode": "legacy",
+      "integrationMode": "off",
+      "iterations": 8,
+      "statementCount": 120,
+      "totals": {
+        "totalMs": 130.311,
+        "statementsExecuted": 3128,
+        "decisions": 3128,
+        "throughputStatementsPerSec": 24004.168,
+        "adapterCalls": {
+          "qdd": 0,
+          "governance": 0,
+          "swarm": 0,
+          "sampledSyncCalls": 0,
+          "cachedDecisions": 0,
+          "shadowScheduled": 0,
+          "shadowCompleted": 0,
+          "shadowSkippedBusy": 0
+        }
+      },
+      "latencyMs": {
+        "avgRunMs": 16.289,
+        "p95RunMs": 34.38,
+        "avgDecisionMs": 0.001555
+      },
+      "adapterMetrics": {
+        "sampledSyncCalls": 0,
+        "cachedDecisions": 0,
+        "shadowScheduled": 0,
+        "shadowCompleted": 0,
+        "shadowSkippedBusy": 0
+      },
+      "adapterDiagnostics": {
+        "mode": "off",
+        "notes": "No-op adapters active"
+      }
+    },
+    {
+      "schedulerMode": "lattice",
+      "integrationMode": "off",
+      "iterations": 8,
+      "statementCount": 120,
+      "totals": {
+        "totalMs": 71.831,
+        "statementsExecuted": 3128,
+        "decisions": 3128,
+        "throughputStatementsPerSec": 43546.779,
+        "adapterCalls": {
+          "qdd": 0,
+          "governance": 0,
+          "swarm": 0,
+          "sampledSyncCalls": 0,
+          "cachedDecisions": 0,
+          "shadowScheduled": 0,
+          "shadowCompleted": 0,
+          "shadowSkippedBusy": 0
+        }
+      },
+      "latencyMs": {
+        "avgRunMs": 8.979,
+        "p95RunMs": 15.254,
+        "avgDecisionMs": 0.004872
+      },
+      "adapterMetrics": {
+        "sampledSyncCalls": 0,
+        "cachedDecisions": 0,
+        "shadowScheduled": 0,
+        "shadowCompleted": 0,
+        "shadowSkippedBusy": 0
+      },
+      "adapterDiagnostics": {
+        "mode": "off",
+        "notes": "No-op adapters active"
+      }
+    },
+    {
+      "schedulerMode": "lattice",
+      "integrationMode": "simulated",
+      "iterations": 8,
+      "statementCount": 120,
+      "totals": {
+        "totalMs": 85.056,
+        "statementsExecuted": 3128,
+        "decisions": 3128,
+        "throughputStatementsPerSec": 36775.944,
+        "adapterCalls": {
+          "qdd": 3128,
+          "governance": 3128,
+          "swarm": 3128,
+          "sampledSyncCalls": 0,
+          "cachedDecisions": 0,
+          "shadowScheduled": 0,
+          "shadowCompleted": 0,
+          "shadowSkippedBusy": 0
+        }
+      },
+      "latencyMs": {
+        "avgRunMs": 10.632,
+        "p95RunMs": 23.817,
+        "avgDecisionMs": 0.011593
+      },
+      "adapterMetrics": {
+        "sampledSyncCalls": 0,
+        "cachedDecisions": 0,
+        "shadowScheduled": 0,
+        "shadowCompleted": 0,
+        "shadowSkippedBusy": 0
+      },
+      "adapterDiagnostics": {
+        "mode": "simulated",
+        "qddAvgScore": 0.5028,
+        "governanceAvgThrottle": 0.9545,
+        "swarmAvgWorkers": 2.4066
+      }
+    },
+    {
+      "schedulerMode": "lattice",
+      "integrationMode": "low-overhead-simulated",
+      "lowOverheadBaseMode": "simulated",
+      "adapterSampleEveryN": 8,
+      "adapterShadowEveryN": 5,
+      "iterations": 8,
+      "statementCount": 120,
+      "totals": {
+        "totalMs": 67.357,
+        "statementsExecuted": 3128,
+        "decisions": 3128,
+        "throughputStatementsPerSec": 46439.261,
+        "adapterCalls": {
+          "qdd": 936,
+          "governance": 936,
+          "swarm": 936,
+          "sampledSyncCalls": 384,
+          "cachedDecisions": 2738,
+          "shadowScheduled": 552,
+          "shadowCompleted": 552,
+          "shadowSkippedBusy": 0
+        }
+      },
+      "latencyMs": {
+        "avgRunMs": 8.42,
+        "p95RunMs": 14.76,
+        "avgDecisionMs": 0.004921
+      },
+      "adapterMetrics": {
+        "sampledSyncCalls": 384,
+        "cachedDecisions": 2738,
+        "shadowScheduled": 552,
+        "shadowCompleted": 552,
+        "shadowSkippedBusy": 0
+      },
+      "adapterDiagnostics": {
+        "mode": "simulated",
+        "qddAvgScore": 0,
+        "governanceAvgThrottle": 0,
+        "swarmAvgWorkers": 0
+      }
+    },
+    {
+      "schedulerMode": "lattice",
+      "integrationMode": "low-overhead",
+      "lowOverheadBaseMode": "real",
+      "adapterSampleEveryN": 8,
+      "adapterShadowEveryN": 5,
+      "iterations": 8,
+      "statementCount": 120,
+      "totals": {
+        "totalMs": 172.972,
+        "statementsExecuted": 3128,
+        "decisions": 3128,
+        "throughputStatementsPerSec": 18083.852,
+        "adapterCalls": {
+          "qdd": 776,
+          "governance": 776,
+          "swarm": 776,
+          "sampledSyncCalls": 384,
+          "cachedDecisions": 2737,
+          "shadowScheduled": 392,
+          "shadowCompleted": 392,
+          "shadowSkippedBusy": 160
+        }
+      },
+      "latencyMs": {
+        "avgRunMs": 21.621,
+        "p95RunMs": 27.615,
+        "avgDecisionMs": 0.014981
+      },
+      "adapterMetrics": {
+        "sampledSyncCalls": 384,
+        "cachedDecisions": 2737,
+        "shadowScheduled": 392,
+        "shadowCompleted": 392,
+        "shadowSkippedBusy": 160
+      },
+      "adapterDiagnostics": {
+        "mode": "real",
+        "qdd": "loaded",
+        "governance": "loaded",
+        "swarm": "loaded",
+        "warnings": []
+      }
+    },
+    {
+      "schedulerMode": "lattice",
+      "integrationMode": "real",
+      "iterations": 8,
+      "statementCount": 120,
+      "totals": {
+        "totalMs": 119.776,
+        "statementsExecuted": 3128,
+        "decisions": 3128,
+        "throughputStatementsPerSec": 26115.394,
+        "adapterCalls": {
+          "qdd": 3128,
+          "governance": 3128,
+          "swarm": 3128,
+          "sampledSyncCalls": 0,
+          "cachedDecisions": 0,
+          "shadowScheduled": 0,
+          "shadowCompleted": 0,
+          "shadowSkippedBusy": 0
+        }
+      },
+      "latencyMs": {
+        "avgRunMs": 14.972,
+        "p95RunMs": 19.187,
+        "avgDecisionMs": 0.023392
+      },
+      "adapterMetrics": {
+        "sampledSyncCalls": 0,
+        "cachedDecisions": 0,
+        "shadowScheduled": 0,
+        "shadowCompleted": 0,
+        "shadowSkippedBusy": 0
+      },
+      "adapterDiagnostics": {
+        "mode": "real",
+        "qdd": "loaded",
+        "governance": "loaded",
+        "swarm": "loaded",
+        "warnings": []
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "baseline": "legacy/off",
+      "candidate": "lattice/off",
+      "avgRunDeltaMs": -7.31,
+      "avgRunDeltaPct": -44.877,
+      "throughputDeltaPct": 81.413
+    },
+    {
+      "baseline": "legacy/off",
+      "candidate": "lattice/simulated",
+      "avgRunDeltaMs": -5.657,
+      "avgRunDeltaPct": -34.729,
+      "throughputDeltaPct": 53.206
+    },
+    {
+      "baseline": "legacy/off",
+      "candidate": "lattice/low-overhead-simulated",
+      "avgRunDeltaMs": -7.869,
+      "avgRunDeltaPct": -48.309,
+      "throughputDeltaPct": 93.463
+    },
+    {
+      "baseline": "legacy/off",
+      "candidate": "lattice/low-overhead",
+      "avgRunDeltaMs": 5.332,
+      "avgRunDeltaPct": 32.734,
+      "throughputDeltaPct": -24.664
+    },
+    {
+      "baseline": "legacy/off",
+      "candidate": "lattice/real",
+      "avgRunDeltaMs": -1.317,
+      "avgRunDeltaPct": -8.085,
+      "throughputDeltaPct": 8.795
+    }
+  ]
+}

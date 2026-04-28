@@ -47,6 +47,9 @@ function buildProgram(statementCount = 240) {
 async function runCase({
   schedulerMode,
   integrationMode,
+  lowOverheadBaseMode,
+  adapterSampleEveryN,
+  adapterShadowEveryN,
   iterations,
   statementCount,
 }) {
@@ -59,7 +62,10 @@ async function runCase({
     engine: {
       schedulerMode,
       integrationMode: resolvedIntegrationMode,
+      lowOverheadBaseMode,
       integrationAdapters: adapters,
+      adapterSampleEveryN,
+      adapterShadowEveryN,
       silent: true,
     },
   });
@@ -76,6 +82,11 @@ async function runCase({
     qdd: 0,
     governance: 0,
     swarm: 0,
+    sampledSyncCalls: 0,
+    cachedDecisions: 0,
+    shadowScheduled: 0,
+    shadowCompleted: 0,
+    shadowSkippedBusy: 0,
   };
 
   let statementsExecuted = 0;
@@ -87,6 +98,9 @@ async function runCase({
       const output = await os.run(program, {
         schedulerMode,
         integrationMode: resolvedIntegrationMode,
+        lowOverheadBaseMode,
+        adapterSampleEveryN,
+        adapterShadowEveryN,
         silent: true,
       });
       const elapsed = performance.now() - start;
@@ -110,6 +124,12 @@ async function runCase({
       adapterCalls.qdd += scheduler.adapter?.qddCalls || 0;
       adapterCalls.governance += scheduler.adapter?.governanceCalls || 0;
       adapterCalls.swarm += scheduler.adapter?.swarmCalls || 0;
+      adapterCalls.sampledSyncCalls += scheduler.adapter?.sampledSyncCalls || 0;
+      adapterCalls.cachedDecisions += scheduler.adapter?.cachedDecisions || 0;
+      adapterCalls.shadowScheduled += scheduler.adapter?.shadowScheduled || 0;
+      adapterCalls.shadowCompleted += scheduler.adapter?.shadowCompleted || 0;
+      adapterCalls.shadowSkippedBusy +=
+        scheduler.adapter?.shadowSkippedBusy || 0;
     }
   } finally {
     console.log = originalLog;
@@ -123,6 +143,9 @@ async function runCase({
   return {
     schedulerMode,
     integrationMode: resolvedIntegrationMode,
+    lowOverheadBaseMode,
+    adapterSampleEveryN,
+    adapterShadowEveryN,
     iterations,
     statementCount,
     totals: {
@@ -141,6 +164,13 @@ async function runCase({
           Math.max(1, schedulerLatency.length)
         ).toFixed(6),
       ),
+    },
+    adapterMetrics: {
+      sampledSyncCalls: adapterCalls.sampledSyncCalls,
+      cachedDecisions: adapterCalls.cachedDecisions,
+      shadowScheduled: adapterCalls.shadowScheduled,
+      shadowCompleted: adapterCalls.shadowCompleted,
+      shadowSkippedBusy: adapterCalls.shadowSkippedBusy,
     },
     adapterDiagnostics: adapters.diagnostics?.() || null,
   };
@@ -180,6 +210,14 @@ async function main() {
   const includeReal =
     process.env.MERKABA_BENCH_REAL === "true" ||
     process.argv.includes("--real");
+  const sampleEveryN = Number.parseInt(
+    process.env.MERKABA_ADAPTER_SAMPLE_EVERY_N || "16",
+    10,
+  );
+  const shadowEveryN = Number.parseInt(
+    process.env.MERKABA_ADAPTER_SHADOW_EVERY_N || "32",
+    10,
+  );
 
   const cases = [
     {
@@ -200,9 +238,28 @@ async function main() {
       iterations,
       statementCount,
     },
+    {
+      schedulerMode: "lattice",
+      integrationMode: "low-overhead-simulated",
+      adapterSampleEveryN: sampleEveryN,
+      adapterShadowEveryN: shadowEveryN,
+      lowOverheadBaseMode: "simulated",
+      iterations,
+      statementCount,
+    },
   ];
 
   if (includeReal) {
+    cases.push({
+      schedulerMode: "lattice",
+      integrationMode: "low-overhead",
+      adapterSampleEveryN: sampleEveryN,
+      adapterShadowEveryN: shadowEveryN,
+      lowOverheadBaseMode: "real",
+      iterations,
+      statementCount,
+    });
+
     cases.push({
       schedulerMode: "lattice",
       integrationMode: "real",
@@ -237,6 +294,8 @@ async function main() {
     config: {
       iterations,
       statementCount,
+      sampleEveryN,
+      shadowEveryN,
       includeReal,
     },
     results,

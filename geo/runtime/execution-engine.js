@@ -20,6 +20,15 @@ export class ExecutionEngine {
     const integrationMode = resolveAdapterMode(
       options.integrationMode || process.env.MERKABA_INTEGRATION_MODE || "off",
     );
+    const lowOverheadBaseMode = resolveAdapterMode(
+      options.lowOverheadBaseMode ||
+        process.env.MERKABA_LOW_OVERHEAD_BASE_MODE ||
+        "real",
+    );
+    const adapterProviderMode = this.resolveAdapterProviderMode(
+      integrationMode,
+      lowOverheadBaseMode,
+    );
 
     this.octahedron = new InnerOctahedron();
     this.nodePool = new NodePool(10);
@@ -27,15 +36,41 @@ export class ExecutionEngine {
     this.compliance = new ComplianceValidator();
     this.schedulerMode = schedulerMode;
     this.integrationMode = integrationMode;
+    this.lowOverheadBaseMode = lowOverheadBaseMode;
+    this.adapterProviderMode = adapterProviderMode;
     this.integrationAdapters = options.integrationAdapters || null;
     this.scheduler = new LatticeScheduler({
       mode: this.schedulerMode,
       integrationMode: this.integrationMode,
       adapters: this.integrationAdapters,
+      adapterSampleEveryN:
+        options.adapterSampleEveryN ||
+        process.env.MERKABA_ADAPTER_SAMPLE_EVERY_N ||
+        "16",
+      adapterShadowEveryN:
+        options.adapterShadowEveryN ||
+        process.env.MERKABA_ADAPTER_SHADOW_EVERY_N ||
+        "32",
     });
     this.silent = options.silent === true;
     this.executionResult = null;
     this.statusReport = null;
+  }
+
+  resolveAdapterProviderMode(integrationMode, lowOverheadBaseMode) {
+    if (integrationMode === "low-overhead") {
+      return lowOverheadBaseMode;
+    }
+
+    if (integrationMode === "low-overhead-real") {
+      return "real";
+    }
+
+    if (integrationMode === "low-overhead-simulated") {
+      return "simulated";
+    }
+
+    return integrationMode;
   }
 
   async initializeIntegrations(force = false) {
@@ -44,10 +79,10 @@ export class ExecutionEngine {
     }
 
     this.integrationAdapters = await createUnifiedIntegrationAdapters({
-      mode: this.integrationMode,
+      mode: this.adapterProviderMode,
     });
     this.scheduler.adapters = this.integrationAdapters;
-    this.scheduler.integrationMode = this.integrationMode;
+    this.scheduler.setIntegrationMode(this.integrationMode);
     return this.integrationAdapters;
   }
 
@@ -58,7 +93,19 @@ export class ExecutionEngine {
 
   setIntegrationMode(mode) {
     this.integrationMode = resolveAdapterMode(mode);
-    this.scheduler.integrationMode = this.integrationMode;
+    this.adapterProviderMode = this.resolveAdapterProviderMode(
+      this.integrationMode,
+      this.lowOverheadBaseMode,
+    );
+    this.scheduler.setIntegrationMode(this.integrationMode);
+  }
+
+  setLowOverheadBaseMode(mode) {
+    this.lowOverheadBaseMode = resolveAdapterMode(mode || "real");
+    this.adapterProviderMode = this.resolveAdapterProviderMode(
+      this.integrationMode,
+      this.lowOverheadBaseMode,
+    );
   }
 
   log(...args) {
@@ -72,19 +119,32 @@ export class ExecutionEngine {
    */
   async execute(source, options = {}) {
     try {
+      let modeChanged = false;
+
       if (options.schedulerMode) {
         this.setSchedulerMode(options.schedulerMode);
       }
 
       if (options.integrationMode) {
+        modeChanged = options.integrationMode !== this.integrationMode;
         this.setIntegrationMode(options.integrationMode);
       }
+
+      if (options.lowOverheadBaseMode) {
+        this.setLowOverheadBaseMode(options.lowOverheadBaseMode);
+        modeChanged = true;
+      }
+
+      this.scheduler.setSamplingConfig({
+        sampleEveryN: options.adapterSampleEveryN,
+        shadowEveryN: options.adapterShadowEveryN,
+      });
 
       if (options.silent !== undefined) {
         this.silent = options.silent === true;
       }
 
-      await this.initializeIntegrations();
+      await this.initializeIntegrations(modeChanged);
       this.scheduler.resetMetrics();
 
       // 1. Parse

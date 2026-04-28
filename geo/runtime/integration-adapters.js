@@ -108,15 +108,22 @@ function createSimulatedAdapters() {
 export async function createUnifiedIntegrationAdapters(options = {}) {
   const mode = String(options.mode || "off").toLowerCase();
 
-  if (mode === "off") {
+  const lowOverheadAliasMap = {
+    "low-overhead": "real",
+    "low-overhead-real": "real",
+    "low-overhead-simulated": "simulated",
+  };
+  const resolvedMode = lowOverheadAliasMap[mode] || mode;
+
+  if (resolvedMode === "off") {
     return createNoopAdapters("off");
   }
 
-  if (mode === "simulated") {
+  if (resolvedMode === "simulated") {
     return createSimulatedAdapters();
   }
 
-  if (mode !== "real") {
+  if (resolvedMode !== "real") {
     return createNoopAdapters("off");
   }
 
@@ -246,7 +253,14 @@ export async function createUnifiedIntegrationAdapters(options = {}) {
 
 export function resolveAdapterMode(input) {
   const mode = String(input || "off").toLowerCase();
-  if (mode === "off" || mode === "simulated" || mode === "real") {
+  if (
+    mode === "off" ||
+    mode === "simulated" ||
+    mode === "real" ||
+    mode === "low-overhead" ||
+    mode === "low-overhead-real" ||
+    mode === "low-overhead-simulated"
+  ) {
     return mode;
   }
   return "off";

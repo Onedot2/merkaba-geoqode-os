@@ -60,4 +60,41 @@ describe("ExecutionEngine scheduler toggle", () => {
 
     await adapters.teardown();
   });
+
+  it("runs low-overhead mode with sampled sync + shadow decisions", async () => {
+    const adapters = await createUnifiedIntegrationAdapters({
+      mode: "simulated",
+    });
+
+    const engine = new ExecutionEngine({
+      schedulerMode: "lattice",
+      integrationMode: "low-overhead-simulated",
+      integrationAdapters: adapters,
+      adapterSampleEveryN: 3,
+      adapterShadowEveryN: 2,
+      silent: true,
+    });
+
+    const output = await engine.execute(PROGRAM, {
+      schedulerMode: "lattice",
+      integrationMode: "low-overhead-simulated",
+      adapterSampleEveryN: 3,
+      adapterShadowEveryN: 2,
+      silent: true,
+    });
+
+    expect(output.success).toBe(true);
+    expect(output.result.scheduler.mode).toBe("lattice");
+    expect(output.result.scheduler.integrationMode).toBe(
+      "low-overhead-simulated",
+    );
+    expect(output.result.scheduler.adapter.sampledSyncCalls).toBeGreaterThan(0);
+    expect(output.result.scheduler.adapter.sampledSyncCalls).toBeLessThan(
+      output.result.scheduler.decisions,
+    );
+    expect(output.result.scheduler.adapter.cachedDecisions).toBeGreaterThan(0);
+    expect(output.result.scheduler.adapter.shadowScheduled).toBeGreaterThan(0);
+
+    await adapters.teardown();
+  });
 });

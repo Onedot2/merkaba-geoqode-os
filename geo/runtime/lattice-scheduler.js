@@ -28,13 +28,45 @@ function safeAverage(total, count) {
   return count > 0 ? total / count : 0;
 }
 
+function normalizeIntegrationMode(mode) {
+  return String(mode || "off")
+    .trim()
+    .toLowerCase();
+}
+
+function isLowOverheadMode(mode) {
+  return normalizeIntegrationMode(mode).startsWith("low-overhead");
+}
+
+function parsePositiveInt(value, fallback) {
+  const parsed = Number.parseInt(String(value), 10);
+  if (Number.isNaN(parsed) || parsed < 1) {
+    return fallback;
+  }
+  return parsed;
+}
+
 export class LatticeScheduler {
   constructor(options = {}) {
     this.mode = normalizeMode(options.mode);
-    this.integrationMode = String(
+    this.integrationMode = normalizeIntegrationMode(
       options.integrationMode || "off",
-    ).toLowerCase();
+    );
     this.adapters = options.adapters || null;
+    this.sampleEveryN = parsePositiveInt(
+      options.adapterSampleEveryN ||
+        process.env.MERKABA_ADAPTER_SAMPLE_EVERY_N ||
+        "16",
+      16,
+    );
+    this.shadowEveryN = parsePositiveInt(
+      options.adapterShadowEveryN ||
+        process.env.MERKABA_ADAPTER_SHADOW_EVERY_N ||
+        "32",
+      32,
+    );
+    this.shadowInFlight = false;
+    this.lastAdapterSnapshot = null;
     this.typeToDimension = {
       ...DEFAULT_TYPE_TO_DIMENSION,
       ...(options.typeToDimension || {}),
@@ -46,10 +78,29 @@ export class LatticeScheduler {
     this.mode = normalizeMode(mode);
   }
 
+  setIntegrationMode(mode) {
+    this.integrationMode = normalizeIntegrationMode(mode);
+    this.metrics.integrationMode = this.integrationMode;
+  }
+
+  setSamplingConfig({ sampleEveryN, shadowEveryN } = {}) {
+    if (sampleEveryN !== undefined) {
+      this.sampleEveryN = parsePositiveInt(sampleEveryN, this.sampleEveryN);
+    }
+
+    if (shadowEveryN !== undefined) {
+      this.shadowEveryN = parsePositiveInt(shadowEveryN, this.shadowEveryN);
+    }
+  }
+
   resetMetrics() {
     this.metrics = {
       mode: this.mode,
       integrationMode: this.integrationMode,
+      sampling: {
+        sampleEveryN: this.sampleEveryN,
+        shadowEveryN: this.shadowEveryN,
+      },
       decisions: 0,
       decisionsByType: {},
       decisionLatencyMsTotal: 0,
@@ -66,6 +117,13 @@ export class LatticeScheduler {
         governanceLatencyMsTotal: 0,
         swarmCalls: 0,
         swarmLatencyMsTotal: 0,
+        sampledSyncCalls: 0,
+        cachedDecisions: 0,
+        shadowScheduled: 0,
+        shadowCompleted: 0,
+        shadowFailed: 0,
+        shadowSkippedBusy: 0,
+        shadowLatencyMsTotal: 0,
       },
     };
   }
@@ -77,6 +135,8 @@ export class LatticeScheduler {
       this.metrics.decisionLatencyMsTotal,
       this.metrics.decisions,
     );
+    snapshot.shadowInFlight = this.shadowInFlight;
+    snapshot.lastAdapterSnapshotAvailable = Boolean(this.lastAdapterSnapshot);
     snapshot.adapter.qddAvgLatencyMs = safeAverage(
       this.metrics.adapter.qddLatencyMsTotal,
       this.metrics.adapter.qddCalls,
@@ -88,6 +148,10 @@ export class LatticeScheduler {
     snapshot.adapter.swarmAvgLatencyMs = safeAverage(
       this.metrics.adapter.swarmLatencyMsTotal,
       this.metrics.adapter.swarmCalls,
+    );
+    snapshot.adapter.shadowAvgLatencyMs = safeAverage(
+      this.metrics.adapter.shadowLatencyMsTotal,
+      this.metrics.adapter.shadowCompleted,
     );
     return snapshot;
   }
@@ -109,7 +173,8 @@ export class LatticeScheduler {
     return ((seed - 1) % CANONICAL_LATTICE_NODES) + 1;
   }
 
-  async maybeRunUnifiedAdapters(decision, context) {
+  async maybeRunUnifiedAdapters(decision, context, options = {}) {
+    const callPath = options.callPath || "sync";
     const output = {
       qdd: null,
       governance: null,
@@ -149,7 +214,42 @@ export class LatticeScheduler {
         performance.now() - swarmStart;
     }
 
+    if (callPath === "sampled-sync") {
+      this.metrics.adapter.sampledSyncCalls += 1;
+    }
+
     return output;
+  }
+
+  maybeScheduleShadowAdapters(decision, context) {
+    if (!this.adapters || this.integrationMode === "off") {
+      return;
+    }
+
+    if (this.shadowInFlight) {
+      this.metrics.adapter.shadowSkippedBusy += 1;
+      return;
+    }
+
+    this.shadowInFlight = true;
+    this.metrics.adapter.shadowScheduled += 1;
+
+    const shadowStart = performance.now();
+    this.maybeRunUnifiedAdapters(decision, context, {
+      callPath: "shadow",
+    })
+      .then((snapshot) => {
+        this.lastAdapterSnapshot = snapshot;
+        this.metrics.adapter.shadowCompleted += 1;
+        this.metrics.adapter.shadowLatencyMsTotal +=
+          performance.now() - shadowStart;
+      })
+      .catch(() => {
+        this.metrics.adapter.shadowFailed += 1;
+      })
+      .finally(() => {
+        this.shadowInFlight = false;
+      });
   }
 
   async decide(statement, context) {
@@ -196,10 +296,42 @@ export class LatticeScheduler {
           (dimension * 2 + safeContext.stepIndex) % safeContext.waterPoolSize,
       };
 
-      const adapterResults = await this.maybeRunUnifiedAdapters(
-        decision,
-        safeContext,
-      );
+      const nextDecisionOrdinal = this.metrics.decisions + 1;
+      let adapterResults = {
+        qdd: null,
+        governance: null,
+        swarm: null,
+      };
+
+      if (isLowOverheadMode(this.integrationMode)) {
+        const shouldSample = nextDecisionOrdinal % this.sampleEveryN === 0;
+        const shouldShadow = nextDecisionOrdinal % this.shadowEveryN === 0;
+
+        if (shouldSample) {
+          adapterResults = await this.maybeRunUnifiedAdapters(
+            decision,
+            safeContext,
+            { callPath: "sampled-sync" },
+          );
+          this.lastAdapterSnapshot = adapterResults;
+        } else {
+          if (this.lastAdapterSnapshot) {
+            adapterResults = this.lastAdapterSnapshot;
+            this.metrics.adapter.cachedDecisions += 1;
+          }
+
+          if (shouldShadow) {
+            this.maybeScheduleShadowAdapters(decision, safeContext);
+          }
+        }
+      } else {
+        adapterResults = await this.maybeRunUnifiedAdapters(
+          decision,
+          safeContext,
+          { callPath: "sync" },
+        );
+      }
+
       decision.adapter = adapterResults;
 
       // Optional adapter influence over routing.
