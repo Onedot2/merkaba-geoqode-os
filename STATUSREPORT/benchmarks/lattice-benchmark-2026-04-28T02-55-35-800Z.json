@@ -1,0 +1,111 @@
+{
+  "startedAt": "2026-04-28T02:55:35.448Z",
+  "finishedAt": "2026-04-28T02:55:35.798Z",
+  "host": {
+    "platform": "win32",
+    "node": "v24.14.1"
+  },
+  "config": {
+    "iterations": 8,
+    "statementCount": 120,
+    "includeReal": false
+  },
+  "results": [
+    {
+      "schedulerMode": "legacy",
+      "integrationMode": "off",
+      "iterations": 8,
+      "statementCount": 120,
+      "totals": {
+        "totalMs": 131.871,
+        "statementsExecuted": 3128,
+        "decisions": 3128,
+        "throughputStatementsPerSec": 23720.133,
+        "adapterCalls": {
+          "qdd": 0,
+          "governance": 0,
+          "swarm": 0
+        }
+      },
+      "latencyMs": {
+        "avgRunMs": 16.484,
+        "p95RunMs": 27.824,
+        "avgDecisionMs": 0.002694
+      },
+      "adapterDiagnostics": {
+        "mode": "off",
+        "notes": "No-op adapters active"
+      }
+    },
+    {
+      "schedulerMode": "lattice",
+      "integrationMode": "off",
+      "iterations": 8,
+      "statementCount": 120,
+      "totals": {
+        "totalMs": 125.024,
+        "statementsExecuted": 3128,
+        "decisions": 3128,
+        "throughputStatementsPerSec": 25019.196,
+        "adapterCalls": {
+          "qdd": 0,
+          "governance": 0,
+          "swarm": 0
+        }
+      },
+      "latencyMs": {
+        "avgRunMs": 15.628,
+        "p95RunMs": 42.356,
+        "avgDecisionMs": 0.008411
+      },
+      "adapterDiagnostics": {
+        "mode": "off",
+        "notes": "No-op adapters active"
+      }
+    },
+    {
+      "schedulerMode": "lattice",
+      "integrationMode": "simulated",
+      "iterations": 8,
+      "statementCount": 120,
+      "totals": {
+        "totalMs": 79.482,
+        "statementsExecuted": 3128,
+        "decisions": 3128,
+        "throughputStatementsPerSec": 39355.021,
+        "adapterCalls": {
+          "qdd": 3128,
+          "governance": 3128,
+          "swarm": 3128
+        }
+      },
+      "latencyMs": {
+        "avgRunMs": 9.935,
+        "p95RunMs": 16.134,
+        "avgDecisionMs": 0.009356
+      },
+      "adapterDiagnostics": {
+        "mode": "simulated",
+        "qddAvgScore": 0.5028,
+        "governanceAvgThrottle": 0.9545,
+        "swarmAvgWorkers": 2.4066
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "baseline": "legacy/off",
+      "candidate": "lattice/off",
+      "avgRunDeltaMs": -0.856,
+      "avgRunDeltaPct": -5.193,
+      "throughputDeltaPct": 5.477
+    },
+    {
+      "baseline": "legacy/off",
+      "candidate": "lattice/simulated",
+      "avgRunDeltaMs": -6.549,
+      "avgRunDeltaPct": -39.729,
+      "throughputDeltaPct": 65.914
+    }
+  ]
+}

@@ -5,4 +5,9 @@ export { InnerOctahedron } from "./octahedron.js";
 export { Node, NodePool } from "./node.js";
 export { WaterMolecule, WaterPool } from "./water.js";
 export { ComplianceValidator } from "./compliance.js";
+export { LatticeScheduler } from "./lattice-scheduler.js";
+export {
+  createUnifiedIntegrationAdapters,
+  resolveAdapterMode,
+} from "./integration-adapters.js";
 export { ExecutionEngine } from "./execution-engine.js";

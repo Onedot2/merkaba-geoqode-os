@@ -59,8 +59,8 @@ export {
  * Dedicated AI OS for GeoQode program execution
  */
 export class MerkabageoqodeOS {
-  constructor() {
-    this.engine = new ExecutionEngine();
+  constructor(options = {}) {
+    this.engine = new ExecutionEngine(options.engine || {});
     this.version = "1.0.0";
     this.name = "MERKABA_geoqode OS";
   }
@@ -76,8 +76,8 @@ export class MerkabageoqodeOS {
   /**
    * Execute GeoQode program
    */
-  async run(source) {
-    return await this.engine.execute(source);
+  async run(source, options = {}) {
+    return await this.engine.execute(source, options);
   }
 
   /**
@@ -109,6 +109,8 @@ export class MerkabageoqodeOS {
       name: this.name,
       version: this.version,
       engineReady: !!this.engine,
+      schedulerMode: this.engine.schedulerMode,
+      integrationMode: this.engine.integrationMode,
       lastStatusReport: this.engine.getStatusReport(),
     };
   }

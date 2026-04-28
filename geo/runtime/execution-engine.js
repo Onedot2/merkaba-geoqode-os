@@ -6,22 +6,87 @@ import { InnerOctahedron } from "./octahedron.js";
 import { NodePool } from "./node.js";
 import { WaterPool } from "./water.js";
 import { ComplianceValidator } from "./compliance.js";
+import { LatticeScheduler } from "./lattice-scheduler.js";
+import {
+  createUnifiedIntegrationAdapters,
+  resolveAdapterMode,
+} from "./integration-adapters.js";
 
 export class ExecutionEngine {
-  constructor() {
+  constructor(options = {}) {
+    const schedulerMode = String(
+      options.schedulerMode || process.env.MERKABA_SCHEDULER_MODE || "legacy",
+    ).toLowerCase();
+    const integrationMode = resolveAdapterMode(
+      options.integrationMode || process.env.MERKABA_INTEGRATION_MODE || "off",
+    );
+
     this.octahedron = new InnerOctahedron();
     this.nodePool = new NodePool(10);
     this.waterPool = new WaterPool(1000);
     this.compliance = new ComplianceValidator();
+    this.schedulerMode = schedulerMode;
+    this.integrationMode = integrationMode;
+    this.integrationAdapters = options.integrationAdapters || null;
+    this.scheduler = new LatticeScheduler({
+      mode: this.schedulerMode,
+      integrationMode: this.integrationMode,
+      adapters: this.integrationAdapters,
+    });
+    this.silent = options.silent === true;
     this.executionResult = null;
     this.statusReport = null;
+  }
+
+  async initializeIntegrations(force = false) {
+    if (this.integrationAdapters && !force) {
+      return this.integrationAdapters;
+    }
+
+    this.integrationAdapters = await createUnifiedIntegrationAdapters({
+      mode: this.integrationMode,
+    });
+    this.scheduler.adapters = this.integrationAdapters;
+    this.scheduler.integrationMode = this.integrationMode;
+    return this.integrationAdapters;
+  }
+
+  setSchedulerMode(mode) {
+    this.schedulerMode = String(mode || "legacy").toLowerCase();
+    this.scheduler.setMode(this.schedulerMode);
+  }
+
+  setIntegrationMode(mode) {
+    this.integrationMode = resolveAdapterMode(mode);
+    this.scheduler.integrationMode = this.integrationMode;
+  }
+
+  log(...args) {
+    if (!this.silent) {
+      console.log(...args);
+    }
   }
 
   /**
    * Execute a GeoQode program
    */
-  async execute(source) {
+  async execute(source, options = {}) {
     try {
+      if (options.schedulerMode) {
+        this.setSchedulerMode(options.schedulerMode);
+      }
+
+      if (options.integrationMode) {
+        this.setIntegrationMode(options.integrationMode);
+      }
+
+      if (options.silent !== undefined) {
+        this.silent = options.silent === true;
+      }
+
+      await this.initializeIntegrations();
+      this.scheduler.resetMetrics();
+
       // 1. Parse
       const parser = new Parser(source);
       const ast = parser.parse();
@@ -63,6 +128,11 @@ export class ExecutionEngine {
         dimensions,
       );
 
+      result.scheduler = this.scheduler.getMetrics();
+      result.integration = this.integrationAdapters?.diagnostics?.() || {
+        mode: this.integrationMode,
+      };
+
       // 7. Generate status report
       this.generateStatusReport(result, certification);
 
@@ -89,6 +159,7 @@ export class ExecutionEngine {
    * Execute AST nodes
    */
   async executeAST(ast) {
+    const statements = ast.statements || [];
     const result = {
       timestamp: Date.now(),
       emissions: 0,
@@ -98,19 +169,36 @@ export class ExecutionEngine {
       logs: [],
     };
 
-    for (const statement of ast.statements || []) {
+    let stepIndex = 0;
+    for (const statement of statements) {
       if (statement.type === "PROGRAM") {
         result.logs.push(`Executing program: ${statement.value}`);
 
         for (const stmt of statement.statements) {
-          await this.executeStatement(stmt, result);
+          const decision = await this.scheduler.decide(stmt, {
+            stepIndex,
+            cycle: result.timestamp,
+            nodePoolSize: this.nodePool.nodes.length,
+            waterPoolSize: this.waterPool.molecules.length,
+            programSize: statement.statements.length,
+          });
+          await this.executeStatement(stmt, result, decision);
+          stepIndex += 1;
         }
       } else if (statement.type === "PLAYBOOK") {
         result.playbooks++;
         result.logs.push(`Executing playbook: ${statement.value}`);
 
         for (const step of statement.steps) {
-          await this.executeStatement(step, result);
+          const decision = await this.scheduler.decide(step, {
+            stepIndex,
+            cycle: result.timestamp,
+            nodePoolSize: this.nodePool.nodes.length,
+            waterPoolSize: this.waterPool.molecules.length,
+            programSize: statement.steps.length,
+          });
+          await this.executeStatement(step, result, decision);
+          stepIndex += 1;
         }
       }
     }
@@ -121,10 +209,14 @@ export class ExecutionEngine {
   /**
    * Execute individual statement
    */
-  async executeStatement(stmt, result) {
+  async executeStatement(stmt, result, decision = null) {
     if (!stmt) return;
 
     if (stmt.type === "EMIT_STMT") {
+      if (decision?.nodeIndex !== undefined) {
+        this.nodePool.switchNode(decision.nodeIndex);
+      }
+
       const node = this.nodePool.getActiveNode();
       const color = stmt.chromodynamic?.value || "unknown";
       const harmonic = parseFloat(stmt.harmonic?.value || "1");
@@ -134,6 +226,10 @@ export class ExecutionEngine {
       result.emissions++;
       result.logs.push(`Emitted ${color} spectrum at Φ[${harmonic}]`);
     } else if (stmt.type === "DETECT_STMT") {
+      if (decision?.nodeIndex !== undefined) {
+        this.nodePool.switchNode(decision.nodeIndex);
+      }
+
       const node = this.nodePool.getActiveNode();
       const hasDuality = stmt.duality !== null;
       const hasOctahedron = stmt.octahedron !== null;
@@ -148,13 +244,17 @@ export class ExecutionEngine {
       const frequency = stmt.frequency?.value || "528Hz";
       const harmonic = parseFloat(stmt.harmonic?.value || "1");
 
-      const water = this.waterPool.materializeQBIT(frequency, harmonic);
+      const water = this.waterPool.materializeQBITAt(
+        decision?.waterIndex,
+        frequency,
+        harmonic,
+      );
       water.crystallize();
       result.qbits++;
       result.logs.push(`Materialized QBITS at ${frequency}, Φ[${harmonic}]`);
     } else if (stmt.type === "LOG_STMT") {
       result.logs.push(stmt.message);
-      console.log(stmt.message);
+      this.log(stmt.message);
     } else if (stmt.type === "TRIGGER_STMT") {
       // Execute trigger: evaluate condition and run associated actions
       result.logs.push(`Trigger evaluated: ${stmt.condition || "(compound)"}`);
@@ -192,6 +292,8 @@ export class ExecutionEngine {
       certification,
       octahedronState,
       waterStats,
+      scheduler: result.scheduler,
+      integration: result.integration,
       logs: result.logs,
     };
 
@@ -220,6 +322,7 @@ export class ExecutionEngine {
     this.nodePool.resetAll();
     this.waterPool.reset();
     this.compliance = new ComplianceValidator();
+    this.scheduler.resetMetrics();
     this.executionResult = null;
     this.statusReport = null;
   }

@@ -10,6 +10,8 @@
     "test:watch": "vitest --watch",
     "parse": "node scripts/parse.js",
     "run": "node scripts/run.js",
+    "benchmark:lattice": "node scripts/benchmark-lattice.js",
+    "benchmark:lattice:real": "node scripts/benchmark-lattice.js --real",
     "codex:upgrade": "node scripts/transform-codex.js",
     "compliance-check": "node scripts/compliance-check.js",
     "status-report": "node scripts/generate-status-report.js",

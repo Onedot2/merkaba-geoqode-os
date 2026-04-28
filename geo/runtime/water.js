@@ -103,12 +103,19 @@ export class WaterPool {
     this.crystallizedCount = 0;
   }
 
-  materializeQBIT(frequency, harmonic) {
-    const molecule =
-      this.molecules[this.materializedCount % this.molecules.length];
+  materializeQBITAt(index, frequency, harmonic) {
+    const safeIndex = Number.isInteger(index)
+      ? Math.max(0, Math.min(this.molecules.length - 1, index))
+      : this.materializedCount % this.molecules.length;
+
+    const molecule = this.molecules[safeIndex];
     molecule.materializeQBIT(frequency, harmonic);
     this.materializedCount++;
     return molecule;
+  }
+
+  materializeQBIT(frequency, harmonic) {
+    return this.materializeQBITAt(undefined, frequency, harmonic);
   }
 
   crystallizeAll() {
