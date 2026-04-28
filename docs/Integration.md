@@ -8,12 +8,12 @@
 
 ## Integration with s4ai-core
 
-GeoQode programs are executable by MERKABA_geoqode OS and designed to integrate seamlessly with s4ai-core.
+GeoQode programs are executable by MERKABA_geoqode Lattice480 and designed to integrate seamlessly with s4ai-core.
 
 ### Basic Integration
 
 ```javascript
-import MerkabageoqodeOS from "@s4ai/merkaba-geoqode-os";
+import MerkabageoqodeOS from "@s4ai/merkaba-geoqode-lattice";
 
 const os = new MerkabageoqodeOS();
 const result = await os.run(geoQodeProgram);
@@ -23,7 +23,7 @@ console.log(result.statusReport);
 ### With Storm Brain
 
 ```javascript
-import MerkabageoqodeOS from "@s4ai/merkaba-geoqode-os";
+import MerkabageoqodeOS from "@s4ai/merkaba-geoqode-lattice";
 import { Brain } from "@s4ai/s4ai-core";
 
 const os = new MerkabageoqodeOS();
@@ -40,6 +40,16 @@ const program = `
 
 const result = await os.run(program);
 brain.recordExecution(result);
+```
+
+Legacy package alias compatibility (during migration):
+
+```json
+{
+  "dependencies": {
+    "@s4ai/merkaba-geoqode-os": "npm:@s4ai/merkaba-geoqode-lattice@^1.0.0"
+  }
+}
 ```
 
 ### With MERKABA Monitoring
@@ -71,7 +81,7 @@ Program TriggerWebhook {
 
 STATUS_REPORT outputs are persisted:
 
-```
+```text
 STATUSREPORT/reports/[YYYY-MM-DD]-cycle-[N].md
 ```
 

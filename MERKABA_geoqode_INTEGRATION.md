@@ -8,7 +8,7 @@
 
 ## Overview
 
-MERKABA_geoqode-os is designed as a **standalone canonical OS** that s4ai-core references, not contains.
+MERKABA_geoqode-lattice is designed as a **standalone canonical lattice runtime** that s4ai-core references, not contains.
 
 This document defines the integration contract.
 
@@ -21,7 +21,8 @@ This document defines the integration contract.
 ```json
 {
   "dependencies": {
-    "@s4ai/merkaba-geoqode-os": "^1.0.0"
+    "@s4ai/merkaba-geoqode-lattice": "^1.0.0",
+    "@s4ai/merkaba-geoqode-os": "npm:@s4ai/merkaba-geoqode-lattice@^1.0.0"
   }
 }
 ```
@@ -29,7 +30,7 @@ This document defines the integration contract.
 ### In Brain.js
 
 ```javascript
-import MerkabageoqodeOS from "@s4ai/merkaba-geoqode-os";
+import MerkabageoqodeOS from "@s4ai/merkaba-geoqode-lattice";
 
 class Brain {
   constructor() {
@@ -61,7 +62,7 @@ console.log(result.statusReport);
 ## Data Flow
 
 1. **s4ai-core Brain** → Requests GeoQode execution
-2. **MERKABA_geoqode-os** → Parses, validates, executes
+2. **MERKABA_geoqode-lattice** → Parses, validates, executes
 3. **STATUS_REPORT** → Generated, logged, persisted
 4. **MERKABA Monitoring** → Observes dimensional compliance
 5. **s4ai-core Knowledge** → Incorporates learnings
@@ -73,10 +74,11 @@ console.log(result.statusReport);
 **In s4ai-core repo**:
 
 - No GeoQode code
-- Only imports: `import MerkabageoqodeOS from '@s4ai/merkaba-geoqode-os'`
+- Preferred imports: `import MerkabageoqodeOS from '@s4ai/merkaba-geoqode-lattice'`
+- Legacy alias shim (supported): `@s4ai/merkaba-geoqode-os -> npm:@s4ai/merkaba-geoqode-lattice`
 - Stores GeoQode programs in database
 
-**In merkaba-geoqode-os repo**:
+**In merkaba-geoqode-lattice repo**:
 
 - Complete OS implementation
 - All grammar, runtime, playbooks, docs
@@ -88,7 +90,10 @@ console.log(result.statusReport);
 
 ```bash
 # In s4ai-core
-npm install @s4ai/merkaba-geoqode-os@latest
+npm install @s4ai/merkaba-geoqode-lattice@latest
+
+# Optional compatibility alias during migration
+npm install @s4ai/merkaba-geoqode-os@npm:@s4ai/merkaba-geoqode-lattice@latest
 
 # In Railway shared variables
 GEOQODE_ENABLED=true
@@ -108,4 +113,4 @@ If GeoQode programs fail to execute:
 
 ---
 
-**Integration Bridge** — MERKABA_geoqode-os ↔ s4ai-core ⧉
+**Integration Bridge** — MERKABA_geoqode-lattice ↔ s4ai-core ⧉

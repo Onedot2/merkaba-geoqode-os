@@ -2,7 +2,7 @@
 // Phase 4: Storm Brain adapter — wraps MerkabaBridge for direct s4ai-core integration.
 //
 // From pwai-ai-worker or pwai-api-service:
-//   import { StormAdapter } from '@s4ai/merkaba-geoqode-os/bridge';
+//   import { StormAdapter } from '@s4ai/merkaba-geoqode-lattice/bridge';
 //   const adapter = new StormAdapter({ adminJwt: process.env.ADMIN_JWT });
 //   await adapter.runPlaybook('migration');
 

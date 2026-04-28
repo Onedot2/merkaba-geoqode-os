@@ -163,7 +163,7 @@ Every GeoQode program executes through a 6-step lifecycle:
 GeoQode programs are executable by MERKABA_geoqode OS:
 
 ```javascript
-import MerkabageoqodeOS from "@s4ai/merkaba-geoqode-os";
+import MerkabageoqodeOS from "@s4ai/merkaba-geoqode-lattice";
 
 const os = new MerkabageoqodeOS();
 const result = await os.run(geoQodeProgram);
