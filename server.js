@@ -7,6 +7,9 @@ import { StormAdapter } from "./geo/bridge/storm-adapter.js";
 import { MerkabaBridge } from "./geo/bridge/merkaba-bridge.js";
 import { MERKABA_LATTICE } from "./geo/certification/enterprise-certifier.js";
 import { CinemaVirtualizer } from "./geo/cinema/cinema-virtualizer.js";
+import { MerkabaLLM } from "./geo/intelligence/merkaba-llm.js";
+import { MerkabAware, AWARENESS_LEVELS, COHERENCE_THRESHOLDS } from "./geo/intelligence/merkaba-aware.js";
+import { createMerkabaTheatreEngine, PROGRAMME_CATALOGUE, REALITY_MODES } from "./MerkabaTheatreEngine.js";
 import {
   MerkabageoqodeOS,
   StormMerkabaTransformCodex,
@@ -17,6 +20,13 @@ import {
   CANONICAL_LATTICE_NODES,
   HARMONIC_SPECTRUM_NODES,
 } from "./geo/index.js";
+
+// ─── MerkabaDimensionalOS Boot Assertion ────────────────────────────────────
+// MUST pass before any service functionality initialises.
+assertCanonicalArchitectureSignature(CANONICAL_ARCHITECTURE);
+console.log(
+  `[MerkabaDimensionalOS] ✅ Boot assertion passed — architecture ${CANONICAL_ARCHITECTURE}, φ=1.618`,
+);
 
 const PORT = parseInt(process.env.PORT || "3030", 10);
 const ADMIN_JWT = process.env.ADMIN_JWT || null;
@@ -99,6 +109,27 @@ function getCinemaVirtualizer() {
   return _cinemaVirtualizer;
 }
 
+// Singleton MerkabAware (Resonance OS supervisory layer)
+let _aware = null;
+function getAware() {
+  if (!_aware) { _aware = new MerkabAware({ autoHeal: true }); _aware.activate(); }
+  return _aware;
+}
+
+// Singleton MerkabaLLM
+let _llm = null;
+function getLLM() {
+  if (!_llm) _llm = new MerkabaLLM({ mode: "theatre" });
+  return _llm;
+}
+
+// Singleton MerkabaTheatreEngine (booted lazily on first use)
+let _theatre = null;
+async function getTheatre() {
+  if (!_theatre) _theatre = await createMerkabaTheatreEngine();
+  return _theatre;
+}
+
 // ─── Minimal HTTP server — no external framework dependency needed ────────
 function json(res, status, data) {
   const canonicalArchitecture = assertCanonicalArchitectureSignature(
@@ -147,37 +178,51 @@ const server = createServer(async (req, res) => {
         description:
           "MERKABA_geoqode OS canonical codex surface for the 8→26→48:480 architecture.",
         architecture: CANONICAL_ARCHITECTURE,
+        os: "MerkabaDimensionalOS",
         endpoints: [
-          "/",
-          "/health",
-          "/status",
-          "/dimensions",
-          "/playbooks",
-          "/codex/status",
-          "/codex/execute",
-          "/merkaba/activation-update",
-          "/merkaba/ai-verification-page",
-          "/merkaba/install-manifest",
-          "/stats",
-          "/execute",
-          "/playbook/:name",
-          "/cinema/status",
-          "/cinema/playbooks",
-          "/cinema/playbooks/:name",
-          "/cinema/virtualize",
-          "/cinema/playbook/:name",
+          "GET  /",
+          "GET  /health",
+          "GET  /status",
+          "GET  /dimensions",
+          "GET  /playbooks",
+          "GET  /codex/status",
+          "POST /codex/execute",
+          "GET  /merkaba/activation-update",
+          "GET  /merkaba/ai-verification-page",
+          "GET  /merkaba/install-manifest",
+          "GET  /stats",
+          "POST /execute",
+          "POST /playbook/:name",
+          "GET  /cinema/status",
+          "GET  /cinema/playbooks",
+          "GET  /cinema/playbooks/:name",
+          "POST /cinema/virtualize",
+          "POST /cinema/playbook/:name",
+          "GET  /theatre/status",
+          "GET  /theatre/programmes",
+          "POST /theatre/project",
+          "POST /theatre/programme/:name",
+          "POST /llm/embed",
+          "GET  /awareness",
         ],
       });
     }
 
     // ── GET /health ──────────────────────────────────────────────────────
     if (req.method === "GET" && pathname === "/health") {
+      const aware = getAware();
+      const awState = aware.getState();
       return json(res, 200, {
         ok: true,
         service: "geoqode-os",
+        os: "MerkabaDimensionalOS",
         version: "1.0.0",
         lattice: "48-dimension canonical MERKABA",
         architecture: CANONICAL_ARCHITECTURE,
+        architectureDisplay: "8→26→48:480",
+        phi: 1.618,
+        awarenessLevel: awState.awarenessLevel,
+        coherenceIndex:  awState.coherenceIndex,
         timestamp: new Date().toISOString(),
       });
     }
@@ -450,6 +495,84 @@ const server = createServer(async (req, res) => {
       }
     }
 
+    // ── GET /theatre/status ─────────────────────────────────────────────
+    if (req.method === "GET" && pathname === "/theatre/status") {
+      const theatre = await getTheatre();
+      return json(res, 200, {
+        ok: true,
+        theatre: theatre.getOSHealth(),
+        programmes: Object.keys(PROGRAMME_CATALOGUE),
+        realityModes: Object.keys(REALITY_MODES),
+      });
+    }
+
+    // ── GET /theatre/programmes ──────────────────────────────────────────
+    if (req.method === "GET" && pathname === "/theatre/programmes") {
+      return json(res, 200, {
+        ok: true,
+        programmes: Object.entries(PROGRAMME_CATALOGUE).map(([name, prog]) => ({
+          name,
+          title: prog.title,
+          genre: prog.genre,
+          mode:  prog.mode,
+        })),
+      });
+    }
+
+    // ── POST /theatre/project ────────────────────────────────────────────
+    if (req.method === "POST" && pathname === "/theatre/project") {
+      const body = await readBody(req);
+      const { narrative, genre, mode, title } = body;
+      if (!narrative || typeof narrative !== "string") {
+        return json(res, 400, { ok: false, error: "narrative (string) is required" });
+      }
+      try {
+        const theatre = await getTheatre();
+        const session = await theatre.project(narrative, { genre, mode, title });
+        return json(res, 200, { ok: true, session });
+      } catch (err) {
+        return json(res, 422, { ok: false, error: "Theatre projection failed", message: err.message });
+      }
+    }
+
+    // ── POST /theatre/programme/:name ────────────────────────────────────
+    const theatreProgrammeMatch = pathname.match(/^\/theatre\/programme\/([a-z0-9-]+)$/);
+    if (req.method === "POST" && theatreProgrammeMatch) {
+      const name = theatreProgrammeMatch[1];
+      const body = await readBody(req);
+      try {
+        const theatre = await getTheatre();
+        const session = await theatre.programme(name, body);
+        return json(res, 200, { ok: true, session });
+      } catch (err) {
+        const status = err.message.includes("Unknown programme") ? 404 : 422;
+        return json(res, status, { ok: false, error: err.message });
+      }
+    }
+
+    // ── POST /llm/embed ──────────────────────────────────────────────────
+    if (req.method === "POST" && pathname === "/llm/embed") {
+      const body = await readBody(req);
+      const { text, genre } = body;
+      if (!text || typeof text !== "string") {
+        return json(res, 400, { ok: false, error: "text (string) is required" });
+      }
+      const llm = getLLM();
+      const embedding = llm.embedText(text, { genre: genre || "narrative" });
+      return json(res, 200, { ok: true, embedding });
+    }
+
+    // ── GET /awareness ───────────────────────────────────────────────────
+    if (req.method === "GET" && pathname === "/awareness") {
+      const aware = getAware();
+      return json(res, 200, {
+        ok: true,
+        awareness: aware.getState(),
+        thresholds: COHERENCE_THRESHOLDS,
+        levels: AWARENESS_LEVELS,
+      });
+    }
+
     // ── POST /cinema/playbook/:name ──────────────────────────────────────
     const cinemaPlaybookRunMatch = pathname.match(
       /^\/cinema\/playbook\/([a-z0-9-]+)$/,
@@ -526,6 +649,12 @@ const server = createServer(async (req, res) => {
         "GET  /cinema/playbooks/:name",
         "POST /cinema/virtualize",
         "POST /cinema/playbook/:name",
+        "GET  /theatre/status",
+        "GET  /theatre/programmes",
+        "POST /theatre/project",
+        "POST /theatre/programme/:name",
+        "POST /llm/embed",
+        "GET  /awareness",
       ],
     });
   } catch (err) {
