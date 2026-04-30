@@ -363,8 +363,8 @@ function scanQuantumArch(code, ctx, drone) {
     );
   }
 
-  // Stale 7.83 Hz (Schumann)
-  if (_RE_STALE_783.test(clean)) {
+  // Stale 7.83 Hz (Schumann) — exclude BeEyeSwarm itself (detector legitimately contains this pattern)
+  if (_RE_STALE_783.test(clean) && !/BeEyeSwarm/.test(ctx.file || "")) {
     findings.push(
       mkFinding(
         "HIGH",

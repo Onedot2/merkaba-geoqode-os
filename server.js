@@ -215,6 +215,9 @@ const server = createServer(async (req, res) => {
           "POST /theatre/programme/:name",
           "POST /llm/embed",
           "GET  /awareness",
+          "GET  /swarm/sweep",
+          "GET  /swarm/sweep?attest=1",
+          "GET  /swarm/attest",
         ],
       });
     }
@@ -653,6 +656,196 @@ const server = createServer(async (req, res) => {
       }
     }
 
+    // ── GET /swarm/sweep ─────────────────────────────────────────────────
+    // Run a full ecosystem sweep with MerkabaBeEyeSwarm. Returns coherence
+    // summary, per-file status, and an optional dualAttestation block.
+    // Query param: ?attest=1  to include PHI/PSI dual attestation result.
+    if (req.method === "GET" && pathname === "/swarm/sweep") {
+      try {
+        const { pathToFileURL } = await import("url");
+        const { join, dirname } = await import("path");
+        const { fileURLToPath } = await import("url");
+        const { access } = await import("fs/promises");
+
+        const __rootDir = dirname(fileURLToPath(import.meta.url));
+        const { MerkabaBeEyeSwarm } = await import(
+          pathToFileURL(
+            join(__rootDir, "geo", "intelligence", "MerkabaBeEyeSwarm.js"),
+          ).href
+        );
+
+        const wantAttest = url.searchParams.get("attest") === "1";
+
+        const sweepSwarm = new MerkabaBeEyeSwarm();
+
+        // Build target list (files that exist)
+        const WORKSPACE_ROOT = join(__rootDir, "..");
+        const TARGETS = [
+          {
+            path: join(__rootDir, "geo", "lattice", "transform-420.js"),
+            label: "canonical-constants",
+          },
+          {
+            path: join(
+              __rootDir,
+              "geo",
+              "intelligence",
+              "MerkabaBeEyeSwarm.js",
+            ),
+            label: "eye-swarm-self",
+          },
+          {
+            path: join(
+              __rootDir,
+              "geo",
+              "intelligence",
+              "MerkabaBeEyeSwarmWitness.js",
+            ),
+            label: "eye-swarm-witness",
+          },
+          {
+            path: join(
+              __rootDir,
+              "geo",
+              "intelligence",
+              "MerkabaDualAttestation.js",
+            ),
+            label: "dual-attestation",
+          },
+          {
+            path: join(
+              __rootDir,
+              "geo",
+              "intelligence",
+              "resonance-diagnostics.js",
+            ),
+            label: "resonance-diagnostics",
+          },
+          {
+            path: join(__rootDir, "geo", "bridge", "merkaba-bridge.js"),
+            label: "merkaba-bridge",
+          },
+          {
+            path: join(__rootDir, "geo", "bridge", "storm-adapter.js"),
+            label: "storm-adapter",
+          },
+          {
+            path: join(WORKSPACE_ROOT, "Merkaba48OS", "core", "MerkabaHandshake.js"),
+            label: "handshake",
+          },
+          {
+            path: join(WORKSPACE_ROOT, "Merkaba48OS", "core", "MerkabaPacket.js"),
+            label: "packet",
+          },
+          {
+            path: join(WORKSPACE_ROOT, "Merkaba48OS", "core", "MerkabaSCRYPT.js"),
+            label: "scrypt",
+          },
+          {
+            path: join(WORKSPACE_ROOT, "Merkaba48OS", "core", "MerkabaTransforms.js"),
+            label: "transforms",
+          },
+        ];
+
+        const targets = [];
+        for (const t of TARGETS) {
+          try {
+            await access(t.path);
+            targets.push(t);
+          } catch {
+            // file not found — skip
+          }
+        }
+
+        const ecoReport = await sweepSwarm.sweepEcosystem(targets);
+        const fileReports = ecoReport.fileReports ?? [];
+
+        let criticalCount = 0;
+        let highCount = 0;
+        let mediumCount = 0;
+        let lowCount = 0;
+        let cleanFiles = 0;
+
+        const perFile = fileReports
+          .filter((r) => !r.error)
+          .map((r) => {
+            const s = r.summary ?? {};
+            const fc =
+              (s.critical ?? 0) +
+              (s.high ?? 0) +
+              (s.medium ?? 0) +
+              (s.low ?? 0);
+            criticalCount += s.critical ?? 0;
+            highCount += s.high ?? 0;
+            mediumCount += s.medium ?? 0;
+            lowCount += s.low ?? 0;
+            if ((r.status ?? "") === "NOMINAL") cleanFiles++;
+            return {
+              label: r.identity?.file ?? r.file ?? "unknown",
+              status: r.status ?? "UNKNOWN",
+              coherence: r.swarmCoherence ?? 0,
+              findings: fc,
+            };
+          });
+
+        let dualAttestation = null;
+        if (wantAttest) {
+          const { default: DualAttestation } = await import(
+            pathToFileURL(
+              join(__rootDir, "geo", "intelligence", "MerkabaDualAttestation.js"),
+            ).href
+          );
+          dualAttestation = await DualAttestation.attestScanner();
+        }
+
+        return json(res, 200, {
+          ok: true,
+          available: true,
+          ecosystemStatus: ecoReport.ecosystemStatus ?? "UNKNOWN",
+          swarmCoherence: ecoReport.ecosystemCoherence ?? 0,
+          filesSwept: targets.length,
+          cleanFiles,
+          findings: {
+            critical: criticalCount,
+            high: highCount,
+            medium: mediumCount,
+            low: lowCount,
+          },
+          lastRun: new Date().toISOString(),
+          perFile,
+          architectureSignature: "8,26,48:480",
+          ...(dualAttestation ? { dualAttestation } : {}),
+        });
+      } catch (err) {
+        return json(res, 500, {
+          ok: false,
+          available: false,
+          reason: err.message,
+        });
+      }
+    }
+
+    // ── GET /swarm/attest ─────────────────────────────────────────────────
+    // Run PHI/PSI dual attestation on the scanner files directly.
+    // Returns: alphaCoherence, omegaCoherence, goldenBand, status, consensus.
+    if (req.method === "GET" && pathname === "/swarm/attest") {
+      try {
+        const { pathToFileURL } = await import("url");
+        const { join, dirname } = await import("path");
+        const { fileURLToPath } = await import("url");
+        const __rootDir = dirname(fileURLToPath(import.meta.url));
+        const { default: DualAttestation } = await import(
+          pathToFileURL(
+            join(__rootDir, "geo", "intelligence", "MerkabaDualAttestation.js"),
+          ).href
+        );
+        const result = await DualAttestation.attestScanner();
+        return json(res, 200, { ok: true, ...result });
+      } catch (err) {
+        return json(res, 500, { ok: false, error: err.message });
+      }
+    }
+
     // ── 404 ───────────────────────────────────────────────────────────────
     return json(res, 404, {
       ok: false,
@@ -682,6 +875,9 @@ const server = createServer(async (req, res) => {
         "POST /theatre/programme/:name",
         "POST /llm/embed",
         "GET  /awareness",
+        "GET  /swarm/sweep",
+        "GET  /swarm/sweep?attest=1",
+        "GET  /swarm/attest",
       ],
     });
   } catch (err) {

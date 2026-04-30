@@ -9,12 +9,13 @@
  * frequency, and severity.
  *
  * Usage:
- *   node scripts/run-swarm-sweep.mjs [--file <path>] [--json] [--kb]
+ *   node scripts/run-swarm-sweep.mjs [--file <path>] [--json] [--kb] [--attest]
  *
  *   (no args)     — sweep all canonical ecosystem targets
  *   --file <p>    — sweep a single file at absolute path <p>
  *   --json        — print full JSON report instead of formatted summary
  *   --kb          — also POST findings summary to Storm KB
+ *   --attest      — run PHI/PSI dual attestation after sweep and print result
  *
  * Architecture: 8→26→48:480  PHI=1.618  BASE_FREQUENCY_HZ=72
  * ─────────────────────────────────────────────────────────────────────────────
@@ -227,6 +228,7 @@ const fileArg = args.includes("--file")
   : null;
 const jsonOut = args.includes("--json");
 const postKB = args.includes("--kb");
+const runAttest = args.includes("--attest");
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 function sev(s) {
@@ -453,4 +455,49 @@ if (postKB) {
   } catch (err) {
     console.warn(`[KB] ⚠️  KB post failed: ${err.message}`);
   }
+}
+
+// ─── PHI/PSI Dual Attestation ─────────────────────────────────────────────
+if (runAttest) {
+  console.log("\n" + "─".repeat(72));
+  console.log("  PHI/PSI DUAL ATTESTATION  (commit f1da3b3)");
+  console.log("  Alpha: MerkabaBeEyeSwarm  PHI=1.618  S1→S8");
+  console.log("  Omega: MerkabaBeEyeSwarmWitness  PSI=1.414  S8→S1");
+  console.log("─".repeat(72));
+
+  try {
+    const { default: DualAttestation } = await import(
+      pathToFileURL(
+        join(REPO_ROOT, "geo", "intelligence", "MerkabaDualAttestation.js"),
+      ).href
+    );
+
+    const attestResult = await DualAttestation.attestScanner();
+
+    const alpha = attestResult.alphaOnOmega ?? attestResult.alpha ?? {};
+    const omega = attestResult.omegaOnAlpha ?? attestResult.omega ?? {};
+    const meta  = attestResult.meta ?? attestResult;
+
+    const alphaC   = typeof alpha === "number" ? alpha : (alpha.coherence ?? "?");
+    const omegaC   = typeof omega === "number" ? omega : (omega.coherence ?? "?");
+    const band     = meta.goldenBand     ?? (attestResult.goldenBand) ?? 3.032;
+    const diff     = meta.goldenDiff     ?? (attestResult.goldenDiff) ?? 0.204;
+    const aWeight  = meta.alphaWeight    ?? (attestResult.alphaWeight) ?? "?";
+    const oWeight  = meta.omegaWeight    ?? (attestResult.omegaWeight) ?? "?";
+    const status   = attestResult.status ?? attestResult.scannerStatus ?? "?";
+    const consensus = attestResult.consensus ?? false;
+
+    console.log(`  Alpha coherence (BESX → Witness): ${alphaC}`);
+    console.log(`  Omega coherence (Witness → BESX): ${omegaC}`);
+    console.log(`  Golden Band  (PHI+PSI): ${band}  [digit-sum=8=FOUNDATION_NODES]`);
+    console.log(`  Golden Diff  (PHI-PSI): ${diff}`);
+    console.log(`  Alpha weight (PHI/3.032): ${aWeight}`);
+    console.log(`  Omega weight (PSI/3.032): ${oWeight}`);
+    console.log(`  Consensus: ${consensus ? "✅ true" : "❌ false"}`);
+    console.log(`  Status: ${status === "SCANNER_ATTESTED" ? "✅ " : "⚠️  "}${status}`);
+  } catch (err) {
+    console.error(`  ❌ Attestation failed: ${err.message}`);
+  }
+
+  console.log("─".repeat(72) + "\n");
 }
