@@ -31,6 +31,23 @@ export const CANONICAL_LATTICE_NODES = 48;
 /** Full harmonic spectrum node count. */
 export const HARMONIC_SPECTRUM_NODES = 480;
 
+/**
+ * GeoQode semantic type → Solfeggio Hz frequency bands.
+ * Canonical across all Storm services. The D48 lattice speaks in these frequencies.
+ * 8 types × 1 frequency = QUEEN-BEE 8-sector → D48 foundation ring map.
+ * Source of truth: transform-420.js (golden root, pure lattice geometry).
+ */
+export const SEMANTIC_FREQUENCY_MAP = Object.freeze({
+  ENTITY:      396, // Liberation / grounding        → S4 (data-structs, 396 Hz)
+  LOCATION:    417, // Transformation                → S2 (code-eng, 417 Hz)
+  ACTION:      528, // DNA repair / activation       → S2/S7 (528 Hz)
+  DIALOGUE:    639, // Connecting relationships      → S6 (639 Hz)
+  EMOTION:     741, // Awakening intuition           → S6 (pain-removal, 741 Hz)
+  PHYSICS:     852, // Returning to order            → S1/S8 (852 Hz)
+  NARRATIVE:   963, // Oneness / completion          → S3 (systems-design, 963 Hz)
+  HOLOGRAPHIC:  72, // Base lattice lock             → BASE_FREQUENCY_HZ (72 Hz)
+});
+
 /** Legacy coupling interval. */
 export const LEGACY_COUPLING_INTERVAL = 8;
 

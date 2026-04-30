@@ -29,6 +29,7 @@ import {
   BOSONIC_ANCHOR_NODES,
   CANONICAL_LATTICE_NODES,
   HARMONIC_SPECTRUM_NODES,
+  SEMANTIC_FREQUENCY_MAP,
 } from "../lattice/transform-420.js";
 
 // Validate canonical signature on module load
@@ -51,23 +52,10 @@ export const MERKABA_SEMANTIC_TYPES = Object.freeze({
   HOLOGRAPHIC: "HOLOGRAPHIC", // Projection geometry      → 72 Hz (BASE_FREQUENCY_HZ)
 });
 
-/**
- * Resonance frequency bands for each semantic type.
- * Aligns narrative elements with the 480-node harmonic spectrum.
- *
- * Keys are UPPERCASE to match the canonical SEMANTIC_FREQUENCY_MAP used
- * in geoqode-native.js, resonance-diagnostics.js, and activation-codex.js.
- */
-export const SEMANTIC_FREQUENCY_MAP = Object.freeze({
-  ENTITY: 396, // Liberation / grounding
-  LOCATION: 417, // Transformation
-  ACTION: 528, // DNA repair / activation
-  DIALOGUE: 639, // Connecting relationships
-  EMOTION: 741, // Awakening intuition
-  PHYSICS: 852, // Returning to order
-  NARRATIVE: 963, // Oneness / completion
-  HOLOGRAPHIC: BASE_FREQUENCY_HZ, // 72 Hz — canonical base lattice frequency
-});
+// SEMANTIC_FREQUENCY_MAP — canonical GeoQode semantic lattice frequencies.
+// Source of truth: geo/lattice/transform-420.js (golden root, pure geometry).
+// Imported above from transform-420.js; re-exported here for downstream consumers.
+export { SEMANTIC_FREQUENCY_MAP };
 
 /**
  * MerkabaLLM
