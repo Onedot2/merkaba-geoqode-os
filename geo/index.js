@@ -96,6 +96,10 @@ export {
   applyDelta,
   applyCycle,
   universalSpectrum,
+  innerOctahedronSurfaceArea,
+  amplificationFactor,
+  fractalInferenceLines,
+  buildFractalSubLattice,
   _codexInstance,
 } from "./intelligence/merkaba-activation-codex.js";
 
