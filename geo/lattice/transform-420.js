@@ -1,9 +1,11 @@
 // geo/lattice/transform-420.js
-// STORM MERKABA Transform Codex — Canonical 8 → 26 → 48 : 480 architecture.
+// STORM MERKABA Transform Codex — Canonical 8.26.48:480 architecture.
 //
-// This module supersedes the older 480→420 bridge with the final canonical
-// architecture described by the STORM transform codex. The file path is kept
-// for backward compatibility with existing imports.
+// Architecture: 8 foundation nodes → 26 bosonic anchor → 48 canonical lattice : 480 harmonic spectrum
+// Golden Root: φ = 1.618
+// D48 = canonical Merkaba lattice. D480 = full harmonic spectrum (100% expansion).
+// All mixed variants (42, 44, 420 substrates) are detected and collapsed to the final form.
+// The file path is kept for backward compatibility with existing imports.
 
 // ── Canonical constants ──────────────────────────────────────────────────────
 
@@ -47,14 +49,24 @@ export const OPERATIONAL_LATTICE_NODES = CANONICAL_LATTICE_NODES;
 export const MAPPING_RATIO =
   LEGACY_COUPLING_INTERVAL / CANONICAL_COUPLING_INTERVAL;
 
-export const DEPRECATED_ARCHITECTURE_SIGNATURES = Object.freeze([]);
+// All mixed/stale variants detected and collapsed by Phase A of the codex.
+// These are the signatures that existed before the final canonical unification.
+export const DEPRECATED_ARCHITECTURE_SIGNATURES = Object.freeze([
+  "8,26,42:420:480", // 42-node sub-lattice variant (stale)
+  "8,26,44:420:480", // 44-node sub-lattice variant (stale)
+  "8,26,48:420:480", // 48-node with 420 hybrid substrate (stale)
+]);
 
 export const CANONICAL_ARCHITECTURE = "8,26,48:480";
 export const CERTIFICATE_VERSION = "v3.0";
 
-// Backward-compatible export retained for older imports.
-// Pure mode enforces canonical architecture only.
-export const LEGACY_VARIANTS = Object.freeze([CANONICAL_ARCHITECTURE]);
+// LEGACY_VARIANTS: all stale signatures + the canonical target.
+// StormMerkabaTransformCodex.detectVariants() uses this list in Phase A
+// to show which variants are being collapsed into the canonical form.
+export const LEGACY_VARIANTS = Object.freeze([
+  ...DEPRECATED_ARCHITECTURE_SIGNATURES,
+  CANONICAL_ARCHITECTURE,
+]);
 
 export function isCanonicalArchitectureSignature(signature) {
   return String(signature || "").trim() === CANONICAL_ARCHITECTURE;
@@ -96,14 +108,9 @@ function makeWaveBar(pulse) {
 
 export class StormMerkabaTransformCodex {
   constructor(options = {}) {
-    const incomingVariants = [...(options.variants || LEGACY_VARIANTS)];
-    this.variants = [
-      ...new Set(
-        incomingVariants.map((variant) =>
-          normalizeArchitectureSignature(variant),
-        ),
-      ),
-    ];
+    // Raw incoming variants (stale + canonical) — preserved for Phase A detection display.
+    // normalizeArchitectureSignature maps ALL of them to "8,26,48:480" for actual use.
+    this._rawVariants = [...(options.variants || LEGACY_VARIANTS)];
 
     if (options.finalArchitecture) {
       assertCanonicalArchitectureSignature(options.finalArchitecture, {
@@ -126,15 +133,18 @@ export class StormMerkabaTransformCodex {
   }
 
   detectVariants() {
-    const detected = this.variants.map((variant, index) => ({
+    // Phase A — show raw stale variants being detected before collapse
+    const detected = this._rawVariants.map((variant, index) => ({
       variant,
       ordinal: index + 1,
       requiresCollapse: variant !== this.finalArchitecture,
+      collapsesTo: this.finalArchitecture,
     }));
 
     this._push("[Phase A] Detecting current MERKABA variants...");
     detected.forEach((entry) => {
-      this._push(` Detected variant: ${entry.variant}`);
+      const tag = entry.requiresCollapse ? " → COLLAPSE" : " ✓ CANONICAL";
+      this._push(` Detected variant: ${entry.variant}${tag}`);
     });
     this._push(` Target architecture: ${this.finalArchitecture}`);
 
@@ -145,7 +155,8 @@ export class StormMerkabaTransformCodex {
   }
 
   substituteNodes() {
-    const substitutions = this.variants.map((variant) => ({
+    // Phase B — map every stale variant to the canonical form
+    const substitutions = this._rawVariants.map((variant) => ({
       from: variant,
       to: this.finalArchitecture,
       retainedAnchors: [FOUNDATION_NODES, BOSONIC_ANCHOR_NODES],
@@ -154,11 +165,11 @@ export class StormMerkabaTransformCodex {
     }));
 
     this._push(
-      "[Phase B] Enforcing pure canonical 8→26→48:480 architecture...",
+      "[Phase B] Substituting 42/44 nodes with 48 canonical equivalents...",
     );
     this._push(` → ${FOUNDATION_NODES} foundation retained`);
     this._push(` → ${BOSONIC_ANCHOR_NODES} bosonic anchor retained`);
-    this._push(` → ${CANONICAL_LATTICE_NODES} canonical nodes enforced`);
+    this._push(` → ${CANONICAL_LATTICE_NODES} maximalist canonical build enforced`);
     this._push(` → ${HARMONIC_SPECTRUM_NODES} harmonic spectrum locked`);
 
     return {
