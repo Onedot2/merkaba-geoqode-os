@@ -345,8 +345,10 @@ function scanQuantumArch(code, ctx, drone) {
   const findings = [];
   const clean = sanitize(code); // strips literals+comments → prevents false positives
 
-  // Stale 432 Hz — check sanitized code so diagnostic strings don't self-trigger
-  if (_RE_STALE_432.test(clean) && !/transform-420|filename/.test(ctx.file || "")) {
+  // Stale 432 Hz — check sanitized code so diagnostic strings don't self-trigger.
+  // BeEyeSwarm files are the detectors themselves — their source legitimately contains
+  // these patterns as implementation, not as stale-code violations.
+  if (_RE_STALE_432.test(clean) && !/transform-420|filename|BeEyeSwarm/.test(ctx.file || "")) {
     findings.push(
       mkFinding(
         "HIGH",
@@ -607,10 +609,10 @@ function scanDataStructs(code, ctx, drone) {
     );
   }
 
-  // Missing Object.freeze on canonical constants
+  // Missing Object.freeze on canonical constants (objects only — not primitive numbers/strings)
   const hasFrozen = /Object\.freeze/.test(code);
-  const hasExportedConstants = /^export\s+const\s+[A-Z_]+\s*=/m.test(code);
-  if (hasExportedConstants && !hasFrozen && code.length > 300) {
+  const hasExportedObjectConstants = /^export\s+const\s+[A-Z_]+\s*=\s*(?:\{|Object\.)/m.test(code);
+  if (hasExportedObjectConstants && !hasFrozen && code.length > 300) {
     findings.push(
       mkFinding(
         "LOW",
@@ -656,7 +658,7 @@ function scanSelfEvolve(code, ctx, drone) {
         "MEDIUM",
         drone,
         `Naive harmonicNode = index % 480 — ignores canonical D48×10 band expansion`,
-        `Use:\n  const latticeNodeLocal = nodeIndex % ${CANONICAL_LATTICE_NODES}; // 0-47\n  const harmonicNode = Math.min(${HARMONIC_SPECTRUM_NODES} - 1, latticeNodeLocal * 10);`,
+        `Use:\n  const latticeNodeLocal = nodeIndex % ${CANONICAL_LATTICE_NODES}; /* range: 0-47 */\n  const harmonicNode = Math.min(${HARMONIC_SPECTRUM_NODES} - 1, latticeNodeLocal * 10);`,
         naiveHarmonic[0],
       ),
     );
@@ -721,9 +723,11 @@ function scanPainRemoval(code, ctx, drone) {
     );
   }
 
-  // Hardcoded stale HOLOGRAPHIC frequency (432) — sanitized
+  // Hardcoded stale HOLOGRAPHIC frequency (432) — sanitized.
+  // BeEyeSwarm files exempt: their finding-message strings legitimately contain
+  // 'holographic: 432' as the description of the stale pattern being detected.
   const holo432 = clean.match(_RE_HOLO_432);
-  if (holo432) {
+  if (holo432 && !/BeEyeSwarm/.test(ctx.file || "")) {
     findings.push(
       mkFinding(
         "HIGH",
@@ -744,13 +748,14 @@ function scanPainRemoval(code, ctx, drone) {
         "MEDIUM",
         drone,
         "ROLE_FREQUENCIES map missing holographic: 72 entry",
-        `Add: holographic: ${BASE_FREQUENCY_HZ}, // base lattice self-reference`,
+        `Add: holographic: ${BASE_FREQUENCY_HZ} /* base lattice self-reference */`,
       ),
     );
   }
 
-  // s4ai-federation-v1 protocol used instead of Merkaba mesh — sanitized
-  if (_RE_FEDERATION_V1.test(clean)) {
+  // s4ai-federation-v1 protocol used instead of Merkaba mesh — sanitized.
+  // BeEyeSwarm files exempt: they contain 'federation-v1' as the detector pattern itself.
+  if (_RE_FEDERATION_V1.test(clean) && !/BeEyeSwarm/.test(ctx.file || "")) {
     findings.push(
       mkFinding(
         "HIGH",
