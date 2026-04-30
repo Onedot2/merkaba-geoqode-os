@@ -1,5 +1,6 @@
 // geo/lattice/transform-420.js
 // STORM MERKABA Transform Codex — Canonical 8.26.48:480 architecture.
+// @alignment 8→26→48:480
 //
 // Architecture: 8 foundation nodes → 26 bosonic anchor → 48 canonical lattice : 480 harmonic spectrum
 // Golden Root: φ = 1.618
