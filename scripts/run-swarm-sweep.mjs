@@ -85,6 +85,23 @@ const ECOSYSTEM_TARGETS = [
     path: join(WORKSPACE, "Merkaba48OS", "core", "MerkabaTransforms.js"),
     label: "transforms",
   },
+  // Merkaba48OS — src intelligence
+  {
+    path: join(WORKSPACE, "Merkaba48OS", "src", "api.js"),
+    label: "merkaba48-api",
+  },
+  {
+    path: join(WORKSPACE, "Merkaba48OS", "src", "cinema-virtualizer.js"),
+    label: "merkaba48-cinema-virtualizer",
+  },
+  {
+    path: join(WORKSPACE, "Merkaba48OS", "src", "launcher-handoff.js"),
+    label: "merkaba48-launcher-handoff",
+  },
+  {
+    path: join(WORKSPACE, "Merkaba48OS", "src", "phasef.js"),
+    label: "merkaba48-phasef",
+  },
 
   // pwai-api-service — api bridge
   {
