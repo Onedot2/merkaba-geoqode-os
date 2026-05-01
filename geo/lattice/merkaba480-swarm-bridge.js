@@ -39,6 +39,7 @@ import {
   buildGeoCoordinate,
 } from "./merkaba480-runtime.js";
 import { MerkabaMAXSwarmCoordinator } from "../intelligence/MerkabaMAXSwarmCoordinator.js";
+import { MerkabaAutoAttestor } from "../intelligence/MerkabaAutoAttestor.js";
 
 // ── Architecture assertion ────────────────────────────────────────────────────
 if (CANONICAL_ARCHITECTURE !== "8,26,48:480") {
@@ -63,15 +64,19 @@ export class SwarmBridge extends EventEmitter {
    * @param {number}   [opts.coordinatorHeartbeatMs=60000] — Attestation report interval
    * @param {boolean}  [opts.autoExpand=true]  — Auto-call os.expand() on RED zone
    * @param {boolean}  [opts.emitReroute=true] — Emit 'bridge:reroute' on misalignment
+   * @param {boolean}  [opts.autoAttest=true]  — Auto-feed Alpha/Omega every 5 min via attestScanner()
+   * @param {number}   [opts.attestIntervalMs=300000] — Re-attest interval (default 5 min)
    * @param {string}   [opts.bridgeId="storm-bridge"]
    */
   constructor(
     os,
     {
       coordinatorHeartbeatMs = 60_000,
-      autoExpand = true,
-      emitReroute = true,
-      bridgeId = "storm-bridge",
+      autoExpand     = true,
+      emitReroute    = true,
+      autoAttest     = true,
+      attestIntervalMs = 5 * 60_000,
+      bridgeId       = "storm-bridge",
     } = {},
   ) {
     super();
@@ -145,6 +150,15 @@ export class SwarmBridge extends EventEmitter {
       },
     });
 
+    // AutoAttestor — closes the Alpha/Omega feedback loop
+    // attestScanner() runs every 5 min → scores fed into coordinator automatically
+    this.attestor = autoAttest
+      ? new MerkabaAutoAttestor({
+          intervalMs:   attestIntervalMs,
+          attestorId:   `${bridgeId}-attestor`,
+        })
+      : null;
+
     // Adaptive heartbeat: adjust scan speed based on safe zone
     this.coordinator.maxSwarm.on("swarm:scan", (report) => {
       this._adaptHeartbeat(report.safeZone);
@@ -182,6 +196,9 @@ export class SwarmBridge extends EventEmitter {
       ...ctx,
     });
 
+    // Start auto-attestor after coordinator (feeds Alpha/Omega scores automatically)
+    if (this.attestor) this.attestor.attachTo(this);
+
     this.emit("bridge:start", {
       bridgeId: this.bridgeId,
       osId: this.os.osId,
@@ -209,6 +226,7 @@ export class SwarmBridge extends EventEmitter {
 
   /** Stop the bridge. */
   stop() {
+    if (this.attestor) this.attestor.stop();
     this.coordinator.stop();
     this.emit("bridge:stop", {
       bridgeId: this.bridgeId,
@@ -282,6 +300,7 @@ export class SwarmBridge extends EventEmitter {
       rerouteCount: this._rerouteCount,
       uptimeMs: this._startedAt ? Date.now() - this._startedAt : 0,
       coordinator: this.coordinator.statusSnapshot(),
+      attestor: this.attestor?.statusSnapshot() ?? null,
       osCoherence: this.os.coherence,
       osTotalAgents: this.os.activeAgents,
       osTotalCapacity: this.os.totalCapacity,
