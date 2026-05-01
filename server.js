@@ -293,7 +293,7 @@ const server = createServer(async (req, res) => {
     // ── POST /waitlist — proxy to Storm API waitlist ──────────────────────
     if (req.method === "POST" && pathname === "/waitlist") {
       const body = await readBody(req);
-      const { name, email, message } = body;
+      const { name, email, message, product } = body;
 
       // Basic validation
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).trim())) {
@@ -313,9 +313,10 @@ const server = createServer(async (req, res) => {
           email: String(email).trim().slice(0, 254),
           organization: "AIOS Early Access",
           role: "Early Adopter",
-          interests: `Products: AIOS\nNotes: ${String(message || "")
+          interests: `Products: ${String(product || "AIOS").trim().slice(0, 80)}\nNotes: ${String(message || "")
             .trim()
             .slice(0, 500)}\nSource: realaios.com`,
+          product: String(product || "AIOS").trim().slice(0, 80),
         };
         const upstream = await fetch(`${STORM_API}/api/waitlist`, {
           method: "POST",
