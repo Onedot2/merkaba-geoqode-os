@@ -586,7 +586,12 @@
         overflow: hidden;
         border-radius: 16px;
         border: 1px solid rgba(0, 180, 255, 0.18);
-        background: linear-gradient(135deg, #040c1e 0%, #071530 55%, #0c1e40 100%);
+        background: linear-gradient(
+          135deg,
+          #040c1e 0%,
+          #071530 55%,
+          #0c1e40 100%
+        );
         padding: 36px 40px 40px;
         min-height: 260px;
         display: flex;
@@ -598,7 +603,11 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: radial-gradient(ellipse at 20% 50%, rgba(0, 160, 255, 0.06) 0%, transparent 65%);
+        background: radial-gradient(
+          ellipse at 20% 50%,
+          rgba(0, 160, 255, 0.06) 0%,
+          transparent 65%
+        );
         pointer-events: none;
       }
 
@@ -626,8 +635,12 @@
         margin-bottom: 8px;
       }
 
-      .slide-side.legacy .slide-side-label { color: #475569; }
-      .slide-side.aios   .slide-side-label { color: var(--cyan); }
+      .slide-side.legacy .slide-side-label {
+        color: #475569;
+      }
+      .slide-side.aios .slide-side-label {
+        color: var(--cyan);
+      }
 
       .slide-side-title {
         font-size: 17px;
@@ -635,8 +648,12 @@
         line-height: 1.3;
       }
 
-      .slide-side.legacy .slide-side-title { color: #64748b; }
-      .slide-side.aios   .slide-side-title { color: var(--text); }
+      .slide-side.legacy .slide-side-title {
+        color: #64748b;
+      }
+      .slide-side.aios .slide-side-title {
+        color: var(--text);
+      }
 
       .slide-side-body {
         font-size: 13px;
@@ -644,8 +661,12 @@
         line-height: 1.55;
       }
 
-      .slide-side.legacy .slide-side-body { color: #374151; }
-      .slide-side.aios   .slide-side-body { color: rgba(0,212,255,0.65); }
+      .slide-side.legacy .slide-side-body {
+        color: #374151;
+      }
+      .slide-side.aios .slide-side-body {
+        color: rgba(0, 212, 255, 0.65);
+      }
 
       .slide-vs-badge {
         text-align: center;
@@ -876,15 +897,21 @@
     <div class="stats-row">
       <div class="stat">
         <div class="stat-value">#1</div>
-        <div class="stat-label">First OS built for AI agents, not desktop users</div>
+        <div class="stat-label">
+          First OS built for AI agents, not desktop users
+        </div>
       </div>
       <div class="stat">
         <div class="stat-value">24/7</div>
-        <div class="stat-label">Self-monitoring — no IT team, no manual fixes</div>
+        <div class="stat-label">
+          Self-monitoring — no IT team, no manual fixes
+        </div>
       </div>
       <div class="stat">
         <div class="stat-value">2×</div>
-        <div class="stat-label">Every critical action verified before it runs</div>
+        <div class="stat-label">
+          Every critical action verified before it runs
+        </div>
       </div>
       <div class="stat">
         <div class="stat-value">0</div>
@@ -896,9 +923,13 @@
     <section>
       <div class="container">
         <p class="section-label">What AIOS Actually Does</p>
-        <h2 class="section-title">Windows was built for humans.<br>AIOS is built for AI.</h2>
+        <h2 class="section-title">
+          Windows was built for humans.<br />AIOS is built for AI.
+        </h2>
         <p class="section-body">
-          Every OS you know — Windows, macOS, Linux, Android, iOS — was designed for a human in front of a screen. AIOS is designed for AI agents doing real work. That's a completely different machine.
+          Every OS you know — Windows, macOS, Linux, Android, iOS — was designed
+          for a human in front of a screen. AIOS is designed for AI agents doing
+          real work. That's a completely different machine.
         </p>
 
         <div class="feature-grid">
@@ -906,7 +937,9 @@
             <div class="feature-icon cyan">⚡</div>
             <h3>AI Is the OS — Not an Add-On</h3>
             <p>
-              On Windows or macOS, AI is an app you install on top of a system that doesn't understand it. On AIOS, AI is baked into the core. No wrappers, no workarounds, no compatibility headaches.
+              On Windows or macOS, AI is an app you install on top of a system
+              that doesn't understand it. On AIOS, AI is baked into the core. No
+              wrappers, no workarounds, no compatibility headaches.
             </p>
           </div>
 
@@ -914,7 +947,9 @@
             <div class="feature-icon purple">✓</div>
             <h3>Every Decision Gets Checked Twice</h3>
             <p>
-              Before AIOS acts on anything critical, two independent AI checks must both agree. One can't override the other. No bad calls from a single point of failure — unlike any other OS on the market.
+              Before AIOS acts on anything critical, two independent AI checks
+              must both agree. One can't override the other. No bad calls from a
+              single point of failure — unlike any other OS on the market.
             </p>
           </div>
 
@@ -922,7 +957,9 @@
             <div class="feature-icon pink">↺</div>
             <h3>Fixes Itself Automatically</h3>
             <p>
-              Windows crashes and you reboot. Linux breaks and you debug. AIOS watches its own health 24/7, catches problems before they become outages, and heals itself — no IT team required.
+              Windows crashes and you reboot. Linux breaks and you debug. AIOS
+              watches its own health 24/7, catches problems before they become
+              outages, and heals itself — no IT team required.
             </p>
           </div>
 
@@ -930,7 +967,9 @@
             <div class="feature-icon gold">◎</div>
             <h3>A Dashboard That Thinks</h3>
             <p>
-              Not a static screen with menus and icons. A live view of what your AI is doing right now — adapting in real time, surfacing what matters, hiding what doesn't.
+              Not a static screen with menus and icons. A live view of what your
+              AI is doing right now — adapting in real time, surfacing what
+              matters, hiding what doesn't.
             </p>
           </div>
         </div>
@@ -942,33 +981,87 @@
       <div class="container">
         <p class="section-label">Side by Side</p>
         <h2 class="section-title">See the difference.</h2>
-        <p class="section-body">Four things AIOS does that no other OS can. Not exaggeration — just what it was built for.</p>
+        <p class="section-body">
+          Four things AIOS does that no other OS can. Not exaggeration — just
+          what it was built for.
+        </p>
 
         <div class="slides-grid">
-
           <div class="slide-card">
             <div class="slide-card-label">AI Integration</div>
             <div class="slide-vs">
               <div class="slide-side legacy">
                 <div class="slide-side-label">Windows / macOS / Linux</div>
                 <div class="slide-side-title">AI as a plugin</div>
-                <div class="slide-side-body">Install apps. Configure APIs. Manage dependencies. Keep everything updated manually.</div>
+                <div class="slide-side-body">
+                  Install apps. Configure APIs. Manage dependencies. Keep
+                  everything updated manually.
+                </div>
               </div>
               <div class="slide-vs-badge">vs</div>
               <div class="slide-side aios">
                 <div class="slide-side-label">AIOS</div>
                 <div class="slide-side-title">AI is the OS</div>
-                <div class="slide-side-body">No installation. No configuration. AI agents run natively at the OS level from day one.</div>
+                <div class="slide-side-body">
+                  No installation. No configuration. AI agents run natively at
+                  the OS level from day one.
+                </div>
               </div>
             </div>
-            <svg class="slide-graphic" width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <circle cx="60" cy="60" r="50" stroke="#00d4ff" stroke-width="1"/>
-              <circle cx="60" cy="60" r="30" stroke="#00d4ff" stroke-width="1"/>
-              <circle cx="60" cy="60" r="10" fill="#00d4ff"/>
-              <line x1="60" y1="10" x2="60" y2="30" stroke="#00d4ff" stroke-width="1"/>
-              <line x1="60" y1="90" x2="60" y2="110" stroke="#00d4ff" stroke-width="1"/>
-              <line x1="10" y1="60" x2="30" y2="60" stroke="#00d4ff" stroke-width="1"/>
-              <line x1="90" y1="60" x2="110" y2="60" stroke="#00d4ff" stroke-width="1"/>
+            <svg
+              class="slide-graphic"
+              width="120"
+              height="120"
+              viewBox="0 0 120 120"
+              fill="none"
+            >
+              <circle
+                cx="60"
+                cy="60"
+                r="50"
+                stroke="#00d4ff"
+                stroke-width="1"
+              />
+              <circle
+                cx="60"
+                cy="60"
+                r="30"
+                stroke="#00d4ff"
+                stroke-width="1"
+              />
+              <circle cx="60" cy="60" r="10" fill="#00d4ff" />
+              <line
+                x1="60"
+                y1="10"
+                x2="60"
+                y2="30"
+                stroke="#00d4ff"
+                stroke-width="1"
+              />
+              <line
+                x1="60"
+                y1="90"
+                x2="60"
+                y2="110"
+                stroke="#00d4ff"
+                stroke-width="1"
+              />
+              <line
+                x1="10"
+                y1="60"
+                x2="30"
+                y2="60"
+                stroke="#00d4ff"
+                stroke-width="1"
+              />
+              <line
+                x1="90"
+                y1="60"
+                x2="110"
+                y2="60"
+                stroke="#00d4ff"
+                stroke-width="1"
+              />
             </svg>
           </div>
 
@@ -978,19 +1071,41 @@
               <div class="slide-side legacy">
                 <div class="slide-side-label">Android / iOS / Linux</div>
                 <div class="slide-side-title">Human intervention required</div>
-                <div class="slide-side-body">Crash. Reboot. Call IT. Apply patch. Wait. Repeat. Problems pile up without someone watching.</div>
+                <div class="slide-side-body">
+                  Crash. Reboot. Call IT. Apply patch. Wait. Repeat. Problems
+                  pile up without someone watching.
+                </div>
               </div>
               <div class="slide-vs-badge">vs</div>
               <div class="slide-side aios">
                 <div class="slide-side-label">AIOS</div>
                 <div class="slide-side-title">Heals itself, 24/7</div>
-                <div class="slide-side-body">AIOS monitors its own health, catches errors before they surface, and recovers automatically. Zero downtime calls.</div>
+                <div class="slide-side-body">
+                  AIOS monitors its own health, catches errors before they
+                  surface, and recovers automatically. Zero downtime calls.
+                </div>
               </div>
             </div>
-            <svg class="slide-graphic" width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <path d="M60 15 L100 40 L100 80 L60 105 L20 80 L20 40 Z" stroke="#00d4ff" stroke-width="1" fill="none"/>
-              <path d="M60 35 L80 47 L80 73 L60 85 L40 73 L40 47 Z" stroke="#00d4ff" stroke-width="1" fill="none"/>
-              <circle cx="60" cy="60" r="8" fill="#00d4ff"/>
+            <svg
+              class="slide-graphic"
+              width="120"
+              height="120"
+              viewBox="0 0 120 120"
+              fill="none"
+            >
+              <path
+                d="M60 15 L100 40 L100 80 L60 105 L20 80 L20 40 Z"
+                stroke="#00d4ff"
+                stroke-width="1"
+                fill="none"
+              />
+              <path
+                d="M60 35 L80 47 L80 73 L60 85 L40 73 L40 47 Z"
+                stroke="#00d4ff"
+                stroke-width="1"
+                fill="none"
+              />
+              <circle cx="60" cy="60" r="8" fill="#00d4ff" />
             </svg>
           </div>
 
@@ -1000,19 +1115,54 @@
               <div class="slide-side legacy">
                 <div class="slide-side-label">Windows / macOS</div>
                 <div class="slide-side-title">Passwords + patches</div>
-                <div class="slide-side-body">Security is bolted on top: antivirus, permissions, certificates. One stolen password and it's over.</div>
+                <div class="slide-side-body">
+                  Security is bolted on top: antivirus, permissions,
+                  certificates. One stolen password and it's over.
+                </div>
               </div>
               <div class="slide-vs-badge">vs</div>
               <div class="slide-side aios">
                 <div class="slide-side-label">AIOS</div>
                 <div class="slide-side-title">Security is structural</div>
-                <div class="slide-side-body">There are no passwords to steal. Credentials are verified by the geometry of the system itself — built in, not bolted on.</div>
+                <div class="slide-side-body">
+                  There are no passwords to steal. Credentials are verified by
+                  the geometry of the system itself — built in, not bolted on.
+                </div>
               </div>
             </div>
-            <svg class="slide-graphic" width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <rect x="20" y="20" width="80" height="80" rx="8" stroke="#00d4ff" stroke-width="1"/>
-              <rect x="35" y="35" width="50" height="50" rx="4" stroke="#00d4ff" stroke-width="1"/>
-              <rect x="50" y="50" width="20" height="20" fill="#00d4ff" rx="2"/>
+            <svg
+              class="slide-graphic"
+              width="120"
+              height="120"
+              viewBox="0 0 120 120"
+              fill="none"
+            >
+              <rect
+                x="20"
+                y="20"
+                width="80"
+                height="80"
+                rx="8"
+                stroke="#00d4ff"
+                stroke-width="1"
+              />
+              <rect
+                x="35"
+                y="35"
+                width="50"
+                height="50"
+                rx="4"
+                stroke="#00d4ff"
+                stroke-width="1"
+              />
+              <rect
+                x="50"
+                y="50"
+                width="20"
+                height="20"
+                fill="#00d4ff"
+                rx="2"
+              />
             </svg>
           </div>
 
@@ -1022,26 +1172,58 @@
               <div class="slide-side legacy">
                 <div class="slide-side-label">Any Traditional OS</div>
                 <div class="slide-side-title">Queues, crashes, limits</div>
-                <div class="slide-side-body">Scale up AI workloads and traditional OSes hit resource conflicts, timeouts, and instability fast.</div>
+                <div class="slide-side-body">
+                  Scale up AI workloads and traditional OSes hit resource
+                  conflicts, timeouts, and instability fast.
+                </div>
               </div>
               <div class="slide-vs-badge">vs</div>
               <div class="slide-side aios">
                 <div class="slide-side-label">AIOS</div>
                 <div class="slide-side-title">Unlimited, collision-free</div>
-                <div class="slide-side-body">Run as many AI agents as you need, simultaneously. AIOS was designed for this — it's not an afterthought.</div>
+                <div class="slide-side-body">
+                  Run as many AI agents as you need, simultaneously. AIOS was
+                  designed for this — it's not an afterthought.
+                </div>
               </div>
             </div>
-            <svg class="slide-graphic" width="120" height="120" viewBox="0 0 120 120" fill="none">
-              <circle cx="60" cy="20" r="8" fill="#00d4ff"/>
-              <circle cx="20" cy="80" r="8" fill="#00d4ff"/>
-              <circle cx="100" cy="80" r="8" fill="#00d4ff"/>
-              <circle cx="60" cy="60" r="6" stroke="#00d4ff" stroke-width="1"/>
-              <line x1="60" y1="26" x2="60" y2="54" stroke="#00d4ff" stroke-width="1"/>
-              <line x1="26" y1="80" x2="54" y2="63" stroke="#00d4ff" stroke-width="1"/>
-              <line x1="94" y1="80" x2="66" y2="63" stroke="#00d4ff" stroke-width="1"/>
+            <svg
+              class="slide-graphic"
+              width="120"
+              height="120"
+              viewBox="0 0 120 120"
+              fill="none"
+            >
+              <circle cx="60" cy="20" r="8" fill="#00d4ff" />
+              <circle cx="20" cy="80" r="8" fill="#00d4ff" />
+              <circle cx="100" cy="80" r="8" fill="#00d4ff" />
+              <circle cx="60" cy="60" r="6" stroke="#00d4ff" stroke-width="1" />
+              <line
+                x1="60"
+                y1="26"
+                x2="60"
+                y2="54"
+                stroke="#00d4ff"
+                stroke-width="1"
+              />
+              <line
+                x1="26"
+                y1="80"
+                x2="54"
+                y2="63"
+                stroke="#00d4ff"
+                stroke-width="1"
+              />
+              <line
+                x1="94"
+                y1="80"
+                x2="66"
+                y2="63"
+                stroke="#00d4ff"
+                stroke-width="1"
+              />
             </svg>
           </div>
-
         </div>
       </div>
     </section>
@@ -1057,14 +1239,29 @@
               AI needs <span>something different</span>.
             </h2>
             <p class="section-body" style="max-width: 100%">
-              Windows, macOS, Linux, Android, iOS — all built for one thing: a person clicking and typing. As AI agents take on real work, the OS underneath them hasn't kept up. AIOS was built from scratch for this moment.
+              Windows, macOS, Linux, Android, iOS — all built for one thing: a
+              person clicking and typing. As AI agents take on real work, the OS
+              underneath them hasn't kept up. AIOS was built from scratch for
+              this moment.
             </p>
           </div>
           <ul class="philosophy-points">
-            <li>AI agents shouldn't fight an OS designed for mouse clicks — they need one built for them.</li>
-            <li>Windows gets hacked because security is an add-on. AIOS security is built into how it works.</li>
-            <li>Linux is powerful but requires experts to run it. AIOS runs itself.</li>
-            <li>Android and iOS are locked-down consumer platforms. AIOS is an open runtime for builders and agents.</li>
+            <li>
+              AI agents shouldn't fight an OS designed for mouse clicks — they
+              need one built for them.
+            </li>
+            <li>
+              Windows gets hacked because security is an add-on. AIOS security
+              is built into how it works.
+            </li>
+            <li>
+              Linux is powerful but requires experts to run it. AIOS runs
+              itself.
+            </li>
+            <li>
+              Android and iOS are locked-down consumer platforms. AIOS is an
+              open runtime for builders and agents.
+            </li>
             <li>The best OS is one you never have to think about.</li>
           </ul>
         </div>
@@ -1081,33 +1278,45 @@
           <tbody>
             <tr>
               <td>Run AI agents</td>
-              <td>Install apps, configure APIs, manage dependencies — ongoing</td>
+              <td>
+                Install apps, configure APIs, manage dependencies — ongoing
+              </td>
               <td>App-based AI only, heavily restricted</td>
-              <td class="highlight check">Built-in — AI runs natively at the OS level</td>
+              <td class="highlight check">
+                Built-in — AI runs natively at the OS level
+              </td>
             </tr>
             <tr>
               <td>Keep it running</td>
               <td>Manual updates, reboots, IT support</td>
               <td>Auto-updates, but no self-repair</td>
-              <td class="highlight check">Self-healing — finds and fixes its own errors 24/7</td>
+              <td class="highlight check">
+                Self-healing — finds and fixes its own errors 24/7
+              </td>
             </tr>
             <tr>
               <td>Security</td>
               <td>Passwords, antivirus, constant patching</td>
               <td>App store restrictions, no deeper control</td>
-              <td class="highlight">Structural — no passwords to steal, nothing to patch</td>
+              <td class="highlight">
+                Structural — no passwords to steal, nothing to patch
+              </td>
             </tr>
             <tr>
               <td>Run many AI tasks at once</td>
               <td>Resource conflicts, crashes, queues</td>
               <td class="cross">Not designed for this</td>
-              <td class="highlight check">Unlimited parallel tasks — no conflicts</td>
+              <td class="highlight check">
+                Unlimited parallel tasks — no conflicts
+              </td>
             </tr>
             <tr>
               <td>Verify decisions before acting</td>
               <td class="cross">No — runs whatever it's told</td>
               <td class="cross">No</td>
-              <td class="highlight check">Yes — every critical action is checked twice</td>
+              <td class="highlight check">
+                Yes — every critical action is checked twice
+              </td>
             </tr>
             <tr>
               <td>Admin / maintenance required</td>
