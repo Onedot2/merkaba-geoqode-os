@@ -72,11 +72,11 @@ export class SwarmBridge extends EventEmitter {
     os,
     {
       coordinatorHeartbeatMs = 60_000,
-      autoExpand     = true,
-      emitReroute    = true,
-      autoAttest     = true,
+      autoExpand = true,
+      emitReroute = true,
+      autoAttest = true,
       attestIntervalMs = 5 * 60_000,
-      bridgeId       = "storm-bridge",
+      bridgeId = "storm-bridge",
     } = {},
   ) {
     super();
@@ -154,8 +154,8 @@ export class SwarmBridge extends EventEmitter {
     // attestScanner() runs every 5 min → scores fed into coordinator automatically
     this.attestor = autoAttest
       ? new MerkabaAutoAttestor({
-          intervalMs:   attestIntervalMs,
-          attestorId:   `${bridgeId}-attestor`,
+          intervalMs: attestIntervalMs,
+          attestorId: `${bridgeId}-attestor`,
         })
       : null;
 

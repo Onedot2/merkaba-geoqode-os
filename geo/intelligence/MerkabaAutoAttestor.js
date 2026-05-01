@@ -37,19 +37,17 @@ import {
   ALPHA_WEIGHT,
   OMEGA_WEIGHT,
 } from "./MerkabaDualAttestation.js";
-import {
-  CANONICAL_ARCHITECTURE,
-  PHI,
-  PSI,
-} from "../lattice/transform-420.js";
+import { CANONICAL_ARCHITECTURE, PHI, PSI } from "../lattice/transform-420.js";
 
 // Architecture assertion
 if (CANONICAL_ARCHITECTURE !== "8,26,48:480") {
-  throw new Error(`[AutoAttestor] CANONICAL_ARCHITECTURE drift: "${CANONICAL_ARCHITECTURE}"`);
+  throw new Error(
+    `[AutoAttestor] CANONICAL_ARCHITECTURE drift: "${CANONICAL_ARCHITECTURE}"`,
+  );
 }
 
-const DEFAULT_INTERVAL_MS = 5 * 60_000;  // 5 minutes — long enough for source to change
-const WARMUP_DELAY_MS     = 30_000;       // 30s after attach before first run (let OS warm up)
+const DEFAULT_INTERVAL_MS = 5 * 60_000; // 5 minutes — long enough for source to change
+const WARMUP_DELAY_MS = 30_000; // 30s after attach before first run (let OS warm up)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MerkabaAutoAttestor
@@ -63,21 +61,21 @@ export class MerkabaAutoAttestor extends EventEmitter {
    * @param {string}  [opts.attestorId="auto-attestor"]
    */
   constructor({
-    intervalMs    = DEFAULT_INTERVAL_MS,
+    intervalMs = DEFAULT_INTERVAL_MS,
     warmupDelayMs = WARMUP_DELAY_MS,
-    attestorId    = "auto-attestor",
+    attestorId = "auto-attestor",
   } = {}) {
     super();
-    this.intervalMs    = intervalMs;
+    this.intervalMs = intervalMs;
     this.warmupDelayMs = warmupDelayMs;
-    this.attestorId    = attestorId;
+    this.attestorId = attestorId;
 
-    this._bridge       = null;
-    this._timer        = null;
-    this._warmupTimer  = null;
-    this._runCount     = 0;
-    this._lastResult   = null;
-    this._running      = false;
+    this._bridge = null;
+    this._timer = null;
+    this._warmupTimer = null;
+    this._runCount = 0;
+    this._lastResult = null;
+    this._running = false;
   }
 
   // ── Attach to a SwarmBridge ───────────────────────────────────────────────
@@ -102,14 +100,14 @@ export class MerkabaAutoAttestor extends EventEmitter {
 
     console.log(
       `[AutoAttestor] ⬡ Attached to bridge "${bridge.bridgeId}" — ` +
-      `first run in ${this.warmupDelayMs / 1000}s, then every ${this.intervalMs / 60000}min`,
+        `first run in ${this.warmupDelayMs / 1000}s, then every ${this.intervalMs / 60000}min`,
     );
 
     this.emit("auto-attest:attached", {
-      attestorId:   this.attestorId,
-      bridgeId:     bridge.bridgeId,
-      intervalMs:   this.intervalMs,
-      warmupMs:     this.warmupDelayMs,
+      attestorId: this.attestorId,
+      bridgeId: bridge.bridgeId,
+      intervalMs: this.intervalMs,
+      warmupMs: this.warmupDelayMs,
     });
 
     return this;
@@ -117,10 +115,19 @@ export class MerkabaAutoAttestor extends EventEmitter {
 
   /** Stop the auto-attestation schedule. */
   stop() {
-    if (this._timer) { clearInterval(this._timer); this._timer = null; }
-    if (this._warmupTimer) { clearTimeout(this._warmupTimer); this._warmupTimer = null; }
+    if (this._timer) {
+      clearInterval(this._timer);
+      this._timer = null;
+    }
+    if (this._warmupTimer) {
+      clearTimeout(this._warmupTimer);
+      this._warmupTimer = null;
+    }
     this._running = false;
-    this.emit("auto-attest:stopped", { attestorId: this.attestorId, runCount: this._runCount });
+    this.emit("auto-attest:stopped", {
+      attestorId: this.attestorId,
+      runCount: this._runCount,
+    });
     return this;
   }
 
@@ -160,15 +167,15 @@ export class MerkabaAutoAttestor extends EventEmitter {
         elapsedMs: elapsed,
         alphaScore,
         omegaScore,
-        attestedScore:  result.attestedScore,
-        consensus:      result.consensus,
+        attestedScore: result.attestedScore,
+        consensus: result.consensus,
         scannerTrusted: result.scannerTrusted,
-        status:         result.status,
-        phiAnchor:      PHI,
-        psiAnchor:      PSI,
-        separatorBand:  SEPARATOR_BAND,
-        alphaWeight:    ALPHA_WEIGHT,
-        omegaWeight:    OMEGA_WEIGHT,
+        status: result.status,
+        phiAnchor: PHI,
+        psiAnchor: PSI,
+        separatorBand: SEPARATOR_BAND,
+        alphaWeight: ALPHA_WEIGHT,
+        omegaWeight: OMEGA_WEIGHT,
         architectureSignature: CANONICAL_ARCHITECTURE,
       };
 
@@ -178,37 +185,48 @@ export class MerkabaAutoAttestor extends EventEmitter {
         this._bridge.setOmega(omegaScore);
       }
 
-      const verdict = result.scannerTrusted ? "SCANNER_ATTESTED" : "SCANNER_DEGRADED";
+      const verdict = result.scannerTrusted
+        ? "SCANNER_ATTESTED"
+        : "SCANNER_DEGRADED";
       console.log(
         `[AutoAttestor] #${run} → α=${alphaScore.toFixed(4)} ω=${omegaScore.toFixed(4)} ` +
-        `attested=${result.attestedScore.toFixed(4)} ${verdict} (${elapsed}ms)`,
+          `attested=${result.attestedScore.toFixed(4)} ${verdict} (${elapsed}ms)`,
       );
 
       this.emit("auto-attest:done", this._lastResult);
       return result;
-
     } catch (err) {
       console.error(`[AutoAttestor] #${run} FAILED:`, err.message);
-      this.emit("auto-attest:error", { run, error: err.message, attestorId: this.attestorId });
+      this.emit("auto-attest:error", {
+        run,
+        error: err.message,
+        attestorId: this.attestorId,
+      });
       return null;
     }
   }
 
   // ── Status ────────────────────────────────────────────────────────────────
 
-  get isRunning()  { return this._running; }
-  get lastResult() { return this._lastResult; }
-  get runCount()   { return this._runCount; }
+  get isRunning() {
+    return this._running;
+  }
+  get lastResult() {
+    return this._lastResult;
+  }
+  get runCount() {
+    return this._runCount;
+  }
 
   statusSnapshot() {
     return {
-      attestorId:   this.attestorId,
-      isRunning:    this._running,
-      runCount:     this._runCount,
-      intervalMs:   this.intervalMs,
-      warmupMs:     this.warmupDelayMs,
-      bridgeId:     this._bridge?.bridgeId ?? null,
-      last:         this._lastResult,
+      attestorId: this.attestorId,
+      isRunning: this._running,
+      runCount: this._runCount,
+      intervalMs: this.intervalMs,
+      warmupMs: this.warmupDelayMs,
+      bridgeId: this._bridge?.bridgeId ?? null,
+      last: this._lastResult,
     };
   }
 }
