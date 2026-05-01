@@ -76,6 +76,7 @@ export const DEPRECATED_ARCHITECTURE_SIGNATURES = Object.freeze([
 ]);
 
 export const CANONICAL_ARCHITECTURE = "8,26,48:480";
+export const CANONICAL_ARCHITECTURE_DISPLAY = "8\u219226\u219248:480"; // "8→26→48:480"
 export const CERTIFICATE_VERSION = "v3.0";
 
 // LEGACY_VARIANTS: all stale signatures + the canonical target.
@@ -459,6 +460,45 @@ export class AnchorHierarchy {
   }
 }
 
+/**
+ * Build a canonical GeoQode coordinate envelope.
+ * Single source of truth — per-service shims should import and re-export this.
+ *
+ * @param {object} options
+ * @param {string} options.semanticType  - One of SEMANTIC_FREQUENCY_MAP keys
+ * @param {number} options.latticeNode   - 0-47 (D48)
+ * @param {number} [options.harmonicNode=0] - 0-479 (D480)
+ * @param {number} [options.coherence=0.95]
+ * @param {string} [options.domain=""]
+ * @param {string} [options.source=""]
+ * @returns {object} GeoQode coordinate envelope
+ */
+export function buildGeoCoordinate({
+  semanticType = "HOLOGRAPHIC",
+  latticeNode = 0,
+  harmonicNode = 0,
+  coherence = 0.95,
+  domain = "",
+  source = "",
+} = {}) {
+  const freq = SEMANTIC_FREQUENCY_MAP[semanticType] ?? BASE_FREQUENCY_HZ;
+  return {
+    architectureSignature: CANONICAL_ARCHITECTURE,
+    architectureDisplay: CANONICAL_ARCHITECTURE_DISPLAY,
+    semanticType,
+    frequency: freq,
+    latticeNode: latticeNode % CANONICAL_LATTICE_NODES,
+    harmonicNode: harmonicNode % HARMONIC_SPECTRUM_NODES,
+    phiCoefficient: PHI,
+    psiCoefficient: PSI,
+    coherence: Math.min(1, Math.max(0, coherence)),
+    domain,
+    source,
+    d48Expansion: "CANONICAL",
+    d480Expansion: "FULL_HARMONIC",
+  };
+}
+
 export default {
   StormMerkabaTransformCodex,
   MerkabaTransform420,
@@ -480,8 +520,10 @@ export default {
   DEPRECATED_ARCHITECTURE_SIGNATURES,
   LEGACY_VARIANTS,
   CANONICAL_ARCHITECTURE,
+  CANONICAL_ARCHITECTURE_DISPLAY,
   CERTIFICATE_VERSION,
   isCanonicalArchitectureSignature,
   normalizeArchitectureSignature,
   assertCanonicalArchitectureSignature,
+  buildGeoCoordinate,
 };
