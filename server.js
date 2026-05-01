@@ -564,6 +564,29 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
       }
     }
 
+    // ── GET /api/lattice-state — canonical lattice state for StormConductor ──
+    if (req.method === "GET" && pathname === "/api/lattice-state") {
+      return json(res, 200, {
+        ok: true,
+        service: "aios",
+        brand: "AIOS",
+        architectureSignature: CANONICAL_ARCHITECTURE,
+        architectureDisplay: "8→26→48:480",
+        phi: 1.618,
+        psi: 1.414,
+        baseFrequencyHz: 72,
+        foundationNodes: 8,
+        bosonicAnchorNodes: 26,
+        canonicalLatticeNodes: 48,
+        harmonicSpectrumNodes: 480,
+        semanticFrequencyMap: {
+          ENTITY: 396, LOCATION: 417, ACTION: 528, DIALOGUE: 639,
+          EMOTION: 741, PHYSICS: 852, NARRATIVE: 963, HOLOGRAPHIC: 72,
+        },
+        timestamp: new Date().toISOString(),
+      });
+    }
+
     // ── GET /health ──────────────────────────────────────────────────────
     if (req.method === "GET" && pathname === "/health") {
       const aware = getAware();
