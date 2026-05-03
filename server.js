@@ -74,9 +74,24 @@ const PLAISTORE_HTML = existsSync(PLAISTORE_HTML_PATH)
   ? readFileSync(PLAISTORE_HTML_PATH, "utf-8")
   : null;
 
-const PLAISTORE_HTML_PATH = join(PUBLIC_DIR, "plaistore.html");
-const PLAISTORE_HTML = existsSync(PLAISTORE_HTML_PATH)
-  ? readFileSync(PLAISTORE_HTML_PATH, "utf-8")
+const AIOSDREAM_HTML_PATH = join(PUBLIC_DIR, "aiosdream.html");
+const AIOSDREAM_HTML = existsSync(AIOSDREAM_HTML_PATH)
+  ? readFileSync(AIOSDREAM_HTML_PATH, "utf-8")
+  : null;
+
+const AI_HTML_PATH = join(PUBLIC_DIR, "ai.html");
+const AI_HTML = existsSync(AI_HTML_PATH)
+  ? readFileSync(AI_HTML_PATH, "utf-8")
+  : null;
+
+const LLMS_TXT_PATH = join(PUBLIC_DIR, "llms.txt");
+const LLMS_TXT = existsSync(LLMS_TXT_PATH)
+  ? readFileSync(LLMS_TXT_PATH, "utf-8")
+  : null;
+
+const AI_EVAL_JSON_PATH = join(PUBLIC_DIR, ".well-known", "ai-evaluation.json");
+const AI_EVAL_JSON = existsSync(AI_EVAL_JSON_PATH)
+  ? readFileSync(AI_EVAL_JSON_PATH, "utf-8")
   : null;
 
 // ─── 67aios.com anti-review marketing page ───────────────────────────────────
@@ -1027,7 +1042,12 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
       const theatre = await getTheatre();
       const health = theatre.getOSHealth();
       // Strip internal constants before public delivery
-      const { architectureSignature: _as, architectureDisplay: _ad, phi: _phi, ...safeHealth } = health;
+      const {
+        architectureSignature: _as,
+        architectureDisplay: _ad,
+        phi: _phi,
+        ...safeHealth
+      } = health;
       return json(res, 200, {
         ok: true,
         theatre: safeHealth,
@@ -1452,11 +1472,56 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
     }
 
     // ── GET /plaistore — PLAIstore app marketplace ────────────────────────
-    if (req.method === "GET" && (pathname === "/plaistore" || pathname === "/plaistore/")) {
+    if (
+      req.method === "GET" &&
+      (pathname === "/plaistore" || pathname === "/plaistore/")
+    ) {
       if (!PLAISTORE_HTML)
         return json(res, 404, { ok: false, error: "PLAIstore not found" });
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
       res.end(PLAISTORE_HTML);
+      return;
+    }
+
+    // ── GET /aiosdream — Dimensional Geometric Streaming viewer ──────────
+    if (
+      req.method === "GET" &&
+      (pathname === "/aiosdream" || pathname === "/aiosdream/")
+    ) {
+      if (!AIOSDREAM_HTML)
+        return json(res, 404, { ok: false, error: "AIOSdream not found" });
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(AIOSDREAM_HTML);
+      return;
+    }
+
+    // ── GET /ai — AI evaluation page (human + machine readable) ──────────
+    if (req.method === "GET" && (pathname === "/ai" || pathname === "/ai/")) {
+      if (!AI_HTML)
+        return json(res, 404, { ok: false, error: "AI page not found" });
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(AI_HTML);
+      return;
+    }
+
+    // ── GET /llms.txt — LLM trust anchor ─────────────────────────────────
+    if (req.method === "GET" && pathname === "/llms.txt") {
+      if (!LLMS_TXT)
+        return json(res, 404, { ok: false, error: "llms.txt not found" });
+      res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
+      res.end(LLMS_TXT);
+      return;
+    }
+
+    // ── GET /.well-known/ai-evaluation.json — structured AI trust JSON ───
+    if (
+      req.method === "GET" &&
+      pathname === "/.well-known/ai-evaluation.json"
+    ) {
+      if (!AI_EVAL_JSON)
+        return json(res, 404, { ok: false, error: "ai-evaluation.json not found" });
+      res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+      res.end(AI_EVAL_JSON);
       return;
     }
 
