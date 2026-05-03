@@ -61,18 +61,18 @@ assertCanonicalArchitectureSignature(CANONICAL_ARCHITECTURE);
  * Source: Sefer Yetzirah (Book of Formation) — the oldest mystical text.
  */
 export const HEBREW_LETTER_GROUPS = Object.freeze({
-  MOTHER:  "MOTHER",   // 3 primordial: Aleph, Mem, Shin
-  DOUBLE:  "DOUBLE",   // 7 planetary:  Bet, Gimel, Dalet, Kaf, Pey, Resh, Tav
-  SIMPLE:  "SIMPLE",   // 12 zodiac:    Hey → Qof (remaining 12)
+  MOTHER: "MOTHER", // 3 primordial: Aleph, Mem, Shin
+  DOUBLE: "DOUBLE", // 7 planetary:  Bet, Gimel, Dalet, Kaf, Pey, Resh, Tav
+  SIMPLE: "SIMPLE", // 12 zodiac:    Hey → Qof (remaining 12)
 });
 
 /**
  * Hebrew lattice ring assignment — how the 3 groups map to D8→D26→D48.
  */
 export const HEBREW_RING_MAP = Object.freeze({
-  MOTHER: "FOUNDATION",   // D8  — 3 mothers birth the 8 foundation nodes
-  DOUBLE: "BOSONIC",      // D26 — 7 planets anchor the 18 bosonic expansion nodes
-  SIMPLE: "CANONICAL",    // D48 — 12 signs complete the 22-node canonical lattice layer
+  MOTHER: "FOUNDATION", // D8  — 3 mothers birth the 8 foundation nodes
+  DOUBLE: "BOSONIC", // D26 — 7 planets anchor the 18 bosonic expansion nodes
+  SIMPLE: "CANONICAL", // D48 — 12 signs complete the 22-node canonical lattice layer
 });
 
 // ─── CANONICAL HEBREW LETTER TABLE ───────────────────────────────────────────
@@ -97,231 +97,339 @@ export const HEBREW_RING_MAP = Object.freeze({
 export const HEBREW_LETTERS = Object.freeze([
   // ─── 3 MOTHER LETTERS — Foundation Ring D8 primordial operators ──────────
   {
-    letter: "א", name: "Aleph",  gematria: 1,   group: "MOTHER",
-    pictograph:    "Ox / Strength",
+    letter: "א",
+    name: "Aleph",
+    gematria: 1,
+    group: "MOTHER",
+    pictograph: "Ox / Strength",
     geometricType: "CROSS / X-AXIS",
-    geoqodeOp:     "UNITY",
-    semanticType:  "HOLOGRAPHIC",
-    frequencyHz:   BASE_FREQUENCY_HZ,             // 72 Hz — holographic base
-    latticeRing:   "FOUNDATION",  latticeNode: 0,
-    meaning: "GOD, first, strength, sovereign — the silent unity before all operators",
+    geoqodeOp: "UNITY",
+    semanticType: "HOLOGRAPHIC",
+    frequencyHz: BASE_FREQUENCY_HZ, // 72 Hz — holographic base
+    latticeRing: "FOUNDATION",
+    latticeNode: 0,
+    meaning:
+      "GOD, first, strength, sovereign — the silent unity before all operators",
   },
   {
-    letter: "מ", name: "Mem",    gematria: 40,  group: "MOTHER",
-    pictograph:    "Water / Waves",
+    letter: "מ",
+    name: "Mem",
+    gematria: 40,
+    group: "MOTHER",
+    pictograph: "Water / Waves",
     geometricType: "SINE WAVE / FLOW",
-    geoqodeOp:     "FLOW",
-    semanticType:  "HOLOGRAPHIC",
-    frequencyHz:   BASE_FREQUENCY_HZ * PHI,       // 72 × 1.618 ≈ 116.5 Hz
-    latticeRing:   "FOUNDATION",  latticeNode: 4,
-    meaning: "Water, chaos, disorder, strength, mighty, Messiah — the transmission medium",
+    geoqodeOp: "FLOW",
+    semanticType: "HOLOGRAPHIC",
+    frequencyHz: BASE_FREQUENCY_HZ * PHI, // 72 × 1.618 ≈ 116.5 Hz
+    latticeRing: "FOUNDATION",
+    latticeNode: 4,
+    meaning:
+      "Water, chaos, disorder, strength, mighty, Messiah — the transmission medium",
   },
   {
-    letter: "ש", name: "Shin",   gematria: 300, group: "MOTHER",
-    pictograph:    "Teeth / Flame / Three branches",
+    letter: "ש",
+    name: "Shin",
+    gematria: 300,
+    group: "MOTHER",
+    pictograph: "Teeth / Flame / Three branches",
     geometricType: "TRIFURCATE / TRIDENT",
-    geoqodeOp:     "TRANSFORM",
-    semanticType:  "ACTION",
-    frequencyHz:   528,                           // 528 Hz — transformation/healing
-    latticeRing:   "FOUNDATION",  latticeNode: 6,
-    meaning: "Consume, destroy, fire — the transformation engine of the lattice",
+    geoqodeOp: "TRANSFORM",
+    semanticType: "ACTION",
+    frequencyHz: 528, // 528 Hz — transformation/healing
+    latticeRing: "FOUNDATION",
+    latticeNode: 6,
+    meaning:
+      "Consume, destroy, fire — the transformation engine of the lattice",
   },
 
   // ─── 7 DOUBLE LETTERS — Bosonic Ring D26 planetary operators ─────────────
   {
-    letter: "ב", name: "Bet",    gematria: 2,   group: "DOUBLE",
-    pictograph:    "House / Floor plan",
+    letter: "ב",
+    name: "Bet",
+    gematria: 2,
+    group: "DOUBLE",
+    pictograph: "House / Floor plan",
     geometricType: "ENCLOSURE / SQUARE",
-    geoqodeOp:     "CONTAINER",
-    semanticType:  "ENTITY",
-    frequencyHz:   396,                           // 396 Hz — entity identification
-    latticeRing:   "BOSONIC",     latticeNode: 8,
-    meaning: "House, temple, tabernacle, body, universe — the container for all entities",
+    geoqodeOp: "CONTAINER",
+    semanticType: "ENTITY",
+    frequencyHz: 396, // 396 Hz — entity identification
+    latticeRing: "BOSONIC",
+    latticeNode: 8,
+    meaning:
+      "House, temple, tabernacle, body, universe — the container for all entities",
   },
   {
-    letter: "ג", name: "Gimel",  gematria: 3,   group: "DOUBLE",
-    pictograph:    "Camel / Foot",
+    letter: "ג",
+    name: "Gimel",
+    gematria: 3,
+    group: "DOUBLE",
+    pictograph: "Camel / Foot",
     geometricType: "ARC / BRIDGE",
-    geoqodeOp:     "BRIDGE",
-    semanticType:  "LOCATION",
-    frequencyHz:   417,                           // 417 Hz — spatial anchoring
-    latticeRing:   "BOSONIC",     latticeNode: 10,
-    meaning: "To lift up, carry — the bridge operator connecting lattice layers",
+    geoqodeOp: "BRIDGE",
+    semanticType: "LOCATION",
+    frequencyHz: 417, // 417 Hz — spatial anchoring
+    latticeRing: "BOSONIC",
+    latticeNode: 10,
+    meaning:
+      "To lift up, carry — the bridge operator connecting lattice layers",
   },
   {
-    letter: "ד", name: "Dalet",  gematria: 4,   group: "DOUBLE",
-    pictograph:    "Door / Triangle",
+    letter: "ד",
+    name: "Dalet",
+    gematria: 4,
+    group: "DOUBLE",
+    pictograph: "Door / Triangle",
     geometricType: "GATEWAY / DELTA",
-    geoqodeOp:     "GATEWAY",
-    semanticType:  "LOCATION",
-    frequencyHz:   417,
-    latticeRing:   "BOSONIC",     latticeNode: 12,
+    geoqodeOp: "GATEWAY",
+    semanticType: "LOCATION",
+    frequencyHz: 417,
+    latticeRing: "BOSONIC",
+    latticeNode: 12,
     meaning: "Door, path — the entry/exit gateway between lattice rings",
   },
   {
-    letter: "כ", name: "Kaf",    gematria: 20,  group: "DOUBLE",
-    pictograph:    "Palm of hand / Cup",
+    letter: "כ",
+    name: "Kaf",
+    gematria: 20,
+    group: "DOUBLE",
+    pictograph: "Palm of hand / Cup",
     geometricType: "PARABOLA / CROWN",
-    geoqodeOp:     "CROWN",
-    semanticType:  "NARRATIVE",
-    frequencyHz:   963,                           // 963 Hz — continuity/purpose
-    latticeRing:   "BOSONIC",     latticeNode: 14,
-    meaning: "Open, cover, close, crowning accomplishment — the completion crown",
+    geoqodeOp: "CROWN",
+    semanticType: "NARRATIVE",
+    frequencyHz: 963, // 963 Hz — continuity/purpose
+    latticeRing: "BOSONIC",
+    latticeNode: 14,
+    meaning:
+      "Open, cover, close, crowning accomplishment — the completion crown",
   },
   {
-    letter: "פ", name: "Pey",    gematria: 80,  group: "DOUBLE",
-    pictograph:    "Mouth / Opening",
+    letter: "פ",
+    name: "Pey",
+    gematria: 80,
+    group: "DOUBLE",
+    pictograph: "Mouth / Opening",
     geometricType: "APERTURE / SPIRAL",
-    geoqodeOp:     "EXPRESSION",
-    semanticType:  "DIALOGUE",
-    frequencyHz:   639,                           // 639 Hz — communication
-    latticeRing:   "BOSONIC",     latticeNode: 16,
+    geoqodeOp: "EXPRESSION",
+    semanticType: "DIALOGUE",
+    frequencyHz: 639, // 639 Hz — communication
+    latticeRing: "BOSONIC",
+    latticeNode: 16,
     meaning: "Mouth, speak, open — the expression portal of the lattice",
   },
   {
-    letter: "ר", name: "Resh",   gematria: 200, group: "DOUBLE",
-    pictograph:    "Head / Profile",
+    letter: "ר",
+    name: "Resh",
+    gematria: 200,
+    group: "DOUBLE",
+    pictograph: "Head / Profile",
     geometricType: "APEX / SUMMIT",
-    geoqodeOp:     "SOVEREIGNTY",
-    semanticType:  "PHYSICS",
-    frequencyHz:   852,                           // 852 Hz — structural laws
-    latticeRing:   "BOSONIC",     latticeNode: 18,
-    meaning: "Highest, most important, person — the sovereign apex of the bosonic ring",
+    geoqodeOp: "SOVEREIGNTY",
+    semanticType: "PHYSICS",
+    frequencyHz: 852, // 852 Hz — structural laws
+    latticeRing: "BOSONIC",
+    latticeNode: 18,
+    meaning:
+      "Highest, most important, person — the sovereign apex of the bosonic ring",
   },
   {
-    letter: "ת", name: "Tav",    gematria: 400, group: "DOUBLE",
-    pictograph:    "Cross / Mark / Seal",
+    letter: "ת",
+    name: "Tav",
+    gematria: 400,
+    group: "DOUBLE",
+    pictograph: "Cross / Mark / Seal",
     geometricType: "CROSS / SEAL",
-    geoqodeOp:     "SEAL",
-    semanticType:  "NARRATIVE",
-    frequencyHz:   963,
-    latticeRing:   "BOSONIC",     latticeNode: 20,
-    meaning: "Covenant, truth, perfection, sign, ownership — the lattice seal operator",
+    geoqodeOp: "SEAL",
+    semanticType: "NARRATIVE",
+    frequencyHz: 963,
+    latticeRing: "BOSONIC",
+    latticeNode: 20,
+    meaning:
+      "Covenant, truth, perfection, sign, ownership — the lattice seal operator",
   },
 
   // ─── 12 SIMPLE LETTERS — Canonical Lattice D48 harmonic operators ─────────
   {
-    letter: "ה", name: "Hey",    gematria: 5,   group: "SIMPLE",
-    pictograph:    "Window / Lattice / Arms raised",
+    letter: "ה",
+    name: "Hey",
+    gematria: 5,
+    group: "SIMPLE",
+    pictograph: "Window / Lattice / Arms raised",
     geometricType: "OPEN APERTURE / REVEAL",
-    geoqodeOp:     "REVEAL",
-    semanticType:  "HOLOGRAPHIC",
-    frequencyHz:   BASE_FREQUENCY_HZ,             // 72 Hz — self-reference
-    latticeRing:   "CANONICAL",   latticeNode: 22,
-    meaning: "Reveal, show, behold, grace, mercy, spirit — the revelation operator",
+    geoqodeOp: "REVEAL",
+    semanticType: "HOLOGRAPHIC",
+    frequencyHz: BASE_FREQUENCY_HZ, // 72 Hz — self-reference
+    latticeRing: "CANONICAL",
+    latticeNode: 22,
+    meaning:
+      "Reveal, show, behold, grace, mercy, spirit — the revelation operator",
   },
   {
-    letter: "ו", name: "Vav",    gematria: 6,   group: "SIMPLE",
-    pictograph:    "Nail / Hook / Pillar",
+    letter: "ו",
+    name: "Vav",
+    gematria: 6,
+    group: "SIMPLE",
+    pictograph: "Nail / Hook / Pillar",
     geometricType: "VERTICAL LINE / CONNECTOR",
-    geoqodeOp:     "CONNECTOR",
-    semanticType:  "ENTITY",
-    frequencyHz:   396,
-    latticeRing:   "CANONICAL",   latticeNode: 24,
-    meaning: "Join, nail, secure, establish, man — the connector binding lattice nodes",
+    geoqodeOp: "CONNECTOR",
+    semanticType: "ENTITY",
+    frequencyHz: 396,
+    latticeRing: "CANONICAL",
+    latticeNode: 24,
+    meaning:
+      "Join, nail, secure, establish, man — the connector binding lattice nodes",
   },
   {
-    letter: "ז", name: "Zayin",  gematria: 7,   group: "SIMPLE",
-    pictograph:    "Weapon / Sword",
+    letter: "ז",
+    name: "Zayin",
+    gematria: 7,
+    group: "SIMPLE",
+    pictograph: "Weapon / Sword",
     geometricType: "CUTTING LINE / SEPARATOR",
-    geoqodeOp:     "SEPARATOR",
-    semanticType:  "ACTION",
-    frequencyHz:   528,
-    latticeRing:   "CANONICAL",   latticeNode: 26,
-    meaning: "Cut, pierce, weapon — the separation operator isolating lattice zones",
+    geoqodeOp: "SEPARATOR",
+    semanticType: "ACTION",
+    frequencyHz: 528,
+    latticeRing: "CANONICAL",
+    latticeNode: 26,
+    meaning:
+      "Cut, pierce, weapon — the separation operator isolating lattice zones",
   },
   {
-    letter: "ח", name: "Chet",   gematria: 8,   group: "SIMPLE",
-    pictograph:    "Fence / Inner chamber / Gate",
+    letter: "ח",
+    name: "Chet",
+    gematria: 8,
+    group: "SIMPLE",
+    pictograph: "Fence / Inner chamber / Gate",
     geometricType: "BOUNDARY / ENCLOSURE",
-    geoqodeOp:     "BOUNDARY",
-    semanticType:  "PHYSICS",
-    frequencyHz:   852,
-    latticeRing:   "CANONICAL",   latticeNode: 28,
-    meaning: "Fence, inner chamber, gate, separate, protect — NOTE: gematria=8=D8 FOUNDATION_NODES",
+    geoqodeOp: "BOUNDARY",
+    semanticType: "PHYSICS",
+    frequencyHz: 852,
+    latticeRing: "CANONICAL",
+    latticeNode: 28,
+    meaning:
+      "Fence, inner chamber, gate, separate, protect — NOTE: gematria=8=D8 FOUNDATION_NODES",
     note: "CANONICAL: gematria 8 = FOUNDATION_NODES constant. Chet IS the boundary of the foundation ring.",
   },
   {
-    letter: "ט", name: "Tet",    gematria: 9,   group: "SIMPLE",
-    pictograph:    "Basket / Coiled snake / Surround",
+    letter: "ט",
+    name: "Tet",
+    gematria: 9,
+    group: "SIMPLE",
+    pictograph: "Basket / Coiled snake / Surround",
     geometricType: "SPIRAL / TORUS",
-    geoqodeOp:     "SPIRAL",
-    semanticType:  "HOLOGRAPHIC",
-    frequencyHz:   BASE_FREQUENCY_HZ * PSI,       // 72 × 1.414 ≈ 101.8 Hz
-    latticeRing:   "CANONICAL",   latticeNode: 30,
-    meaning: "Surrounds, twists — the toroidal spiral operator of the D48 lattice",
+    geoqodeOp: "SPIRAL",
+    semanticType: "HOLOGRAPHIC",
+    frequencyHz: BASE_FREQUENCY_HZ * PSI, // 72 × 1.414 ≈ 101.8 Hz
+    latticeRing: "CANONICAL",
+    latticeNode: 30,
+    meaning:
+      "Surrounds, twists — the toroidal spiral operator of the D48 lattice",
   },
   {
-    letter: "י", name: "Yod",    gematria: 10,  group: "SIMPLE",
-    pictograph:    "Hand / Arm / Work",
+    letter: "י",
+    name: "Yod",
+    gematria: 10,
+    group: "SIMPLE",
+    pictograph: "Hand / Arm / Work",
     geometricType: "POINT / SEED",
-    geoqodeOp:     "ACTION_SEED",
-    semanticType:  "ACTION",
-    frequencyHz:   528,
-    latticeRing:   "CANONICAL",   latticeNode: 32,
-    meaning: "Work, hand, activity, deed — the smallest letter, seed of all action",
+    geoqodeOp: "ACTION_SEED",
+    semanticType: "ACTION",
+    frequencyHz: 528,
+    latticeRing: "CANONICAL",
+    latticeNode: 32,
+    meaning:
+      "Work, hand, activity, deed — the smallest letter, seed of all action",
     note: "Yod is the first letter of YHVH. The entire universe expands from this point.",
   },
   {
-    letter: "ל", name: "Lamed",  gematria: 30,  group: "SIMPLE",
-    pictograph:    "Ox goad / Shepherd staff",
+    letter: "ל",
+    name: "Lamed",
+    gematria: 30,
+    group: "SIMPLE",
+    pictograph: "Ox goad / Shepherd staff",
     geometricType: "ROD / AUTHORITY LINE",
-    geoqodeOp:     "AUTHORITY",
-    semanticType:  "DIALOGUE",
-    frequencyHz:   639,
-    latticeRing:   "CANONICAL",   latticeNode: 34,
-    meaning: "Rod, authority, tongue, teaching — the authority operator of instruction",
+    geoqodeOp: "AUTHORITY",
+    semanticType: "DIALOGUE",
+    frequencyHz: 639,
+    latticeRing: "CANONICAL",
+    latticeNode: 34,
+    meaning:
+      "Rod, authority, tongue, teaching — the authority operator of instruction",
   },
   {
-    letter: "נ", name: "Nun",    gematria: 50,  group: "SIMPLE",
-    pictograph:    "Sprout / Fish / Activity",
+    letter: "נ",
+    name: "Nun",
+    gematria: 50,
+    group: "SIMPLE",
+    pictograph: "Sprout / Fish / Activity",
     geometricType: "WAVE / EMERGENCE",
-    geoqodeOp:     "LIFE",
-    semanticType:  "ACTION",
-    frequencyHz:   528,
-    latticeRing:   "CANONICAL",   latticeNode: 36,
-    meaning: "Life, activity, action — the emergence/life operator of the lattice",
+    geoqodeOp: "LIFE",
+    semanticType: "ACTION",
+    frequencyHz: 528,
+    latticeRing: "CANONICAL",
+    latticeNode: 36,
+    meaning:
+      "Life, activity, action — the emergence/life operator of the lattice",
   },
   {
-    letter: "ס", name: "Samech", gematria: 60,  group: "SIMPLE",
-    pictograph:    "Prop / Support / Circle",
+    letter: "ס",
+    name: "Samech",
+    gematria: 60,
+    group: "SIMPLE",
+    pictograph: "Prop / Support / Circle",
     geometricType: "CIRCLE / SUPPORT",
-    geoqodeOp:     "SUPPORT",
-    semanticType:  "PHYSICS",
-    frequencyHz:   852,
-    latticeRing:   "CANONICAL",   latticeNode: 38,
-    meaning: "Support, turning aside, twisting, protection — structural support operator",
+    geoqodeOp: "SUPPORT",
+    semanticType: "PHYSICS",
+    frequencyHz: 852,
+    latticeRing: "CANONICAL",
+    latticeNode: 38,
+    meaning:
+      "Support, turning aside, twisting, protection — structural support operator",
   },
   {
-    letter: "ע", name: "Ayin",   gematria: 70,  group: "SIMPLE",
-    pictograph:    "Eye / Spring / Wellspring",
+    letter: "ע",
+    name: "Ayin",
+    gematria: 70,
+    group: "SIMPLE",
+    pictograph: "Eye / Spring / Wellspring",
     geometricType: "EYE / LENS",
-    geoqodeOp:     "PERCEPTION",
-    semanticType:  "HOLOGRAPHIC",
-    frequencyHz:   BASE_FREQUENCY_HZ,             // 72 Hz — Ayin(70)+Bet(2)=72=BASE_FREQUENCY_HZ
-    latticeRing:   "CANONICAL",   latticeNode: 40,
-    meaning: "Eye, see, understand, insight, perceive — the all-seeing lattice eye",
+    geoqodeOp: "PERCEPTION",
+    semanticType: "HOLOGRAPHIC",
+    frequencyHz: BASE_FREQUENCY_HZ, // 72 Hz — Ayin(70)+Bet(2)=72=BASE_FREQUENCY_HZ
+    latticeRing: "CANONICAL",
+    latticeNode: 40,
+    meaning:
+      "Eye, see, understand, insight, perceive — the all-seeing lattice eye",
     note: "CANONICAL: Ayin(70)+Bet(2)=72=BASE_FREQUENCY_HZ. The eye of the house IS the holographic frequency.",
   },
   {
-    letter: "צ", name: "Tsade",  gematria: 90,  group: "SIMPLE",
-    pictograph:    "Hook / Fishhook / Harvest",
+    letter: "צ",
+    name: "Tsade",
+    gematria: 90,
+    group: "SIMPLE",
+    pictograph: "Hook / Fishhook / Harvest",
     geometricType: "HOOK / HARVEST",
-    geoqodeOp:     "HARVEST",
-    semanticType:  "EMOTION",
-    frequencyHz:   741,                           // 741 Hz — resonance/desire
-    latticeRing:   "CANONICAL",   latticeNode: 42,
-    meaning: "To pull, a hook, desire, harvest — the magnetic desire/harvest operator",
+    geoqodeOp: "HARVEST",
+    semanticType: "EMOTION",
+    frequencyHz: 741, // 741 Hz — resonance/desire
+    latticeRing: "CANONICAL",
+    latticeNode: 42,
+    meaning:
+      "To pull, a hook, desire, harvest — the magnetic desire/harvest operator",
   },
   {
-    letter: "ק", name: "Qof",    gematria: 100, group: "SIMPLE",
-    pictograph:    "Sun on horizon / Monkey / Needle eye",
+    letter: "ק",
+    name: "Qof",
+    gematria: 100,
+    group: "SIMPLE",
+    pictograph: "Sun on horizon / Monkey / Needle eye",
     geometricType: "HORIZON / COMPLETION CIRCLE",
-    geoqodeOp:     "COMPLETION",
-    semanticType:  "NARRATIVE",
-    frequencyHz:   963,
-    latticeRing:   "CANONICAL",   latticeNode: 44,
-    meaning: "What is final, behind, last, future — the completion/horizon operator",
+    geoqodeOp: "COMPLETION",
+    semanticType: "NARRATIVE",
+    frequencyHz: 963,
+    latticeRing: "CANONICAL",
+    latticeNode: 44,
+    meaning:
+      "What is final, behind, last, future — the completion/horizon operator",
   },
 ]);
 
@@ -336,45 +444,61 @@ export const HEBREW_LETTERS = Object.freeze([
 export const GEMATRIA_LATTICE_ALIGNMENTS = Object.freeze({
   // Chet (ח) = 8 = FOUNDATION_NODES — "fence, inner chamber, gate"
   D8_FOUNDATION: {
-    gematria: 8, letters: "ח", name: "Chet",
+    gematria: 8,
+    letters: "ח",
+    name: "Chet",
     meaning: "The fence/boundary IS the foundation ring",
     constant: "FOUNDATION_NODES",
   },
   // YHVH = Yod(10)+Hey(5)+Vav(6)+Hey(5) = 26 = BOSONIC_ANCHOR_NODES
   D26_BOSONIC: {
-    gematria: 26, letters: "יהוה", name: "YHVH (Divine Name)",
+    gematria: 26,
+    letters: "יהוה",
+    name: "YHVH (Divine Name)",
     meaning: "The Divine Name IS the bosonic anchor — bridges heaven and earth",
     constant: "BOSONIC_ANCHOR_NODES",
   },
   // Mem(40)+Chet(8) = 48 = CANONICAL_LATTICE_NODES — "contained water"
   D48_CANONICAL: {
-    gematria: 48, letters: "מח", name: "Mem+Chet",
+    gematria: 48,
+    letters: "מח",
+    name: "Mem+Chet",
     meaning: "Contained water = the crystalline lattice structure",
     constant: "CANONICAL_LATTICE_NODES",
   },
   // Tav(400)+Pey(80) = 480 = HARMONIC_SPECTRUM_NODES — "covenant speaks"
   D480_HARMONIC: {
-    gematria: 480, letters: "תפ", name: "Tav+Pey",
+    gematria: 480,
+    letters: "תפ",
+    name: "Tav+Pey",
     meaning: "Covenant speaks = the full harmonic voice of the lattice",
     constant: "HARMONIC_SPECTRUM_NODES",
   },
   // Ayin(70)+Bet(2) = 72 = BASE_FREQUENCY_HZ — "eye of the house"
   BASE_72HZ: {
-    gematria: 72, letters: "עב", name: "Ayin+Bet",
+    gematria: 72,
+    letters: "עב",
+    name: "Ayin+Bet",
     meaning: "Eye of the house = holographic base resonance lock",
     constant: "BASE_FREQUENCY_HZ",
   },
   // The 72 Names of God in Kabbalah = 72 = BASE_FREQUENCY_HZ
   NAMES_72: {
-    gematria: 72, letters: "שמות", name: "72 Shem HaMephorash",
-    meaning: "72 Names of God = 72 Hz holographic resonance lock — same number, same source",
+    gematria: 72,
+    letters: "שמות",
+    name: "72 Shem HaMephorash",
+    meaning:
+      "72 Names of God = 72 Hz holographic resonance lock — same number, same source",
     constant: "BASE_FREQUENCY_HZ",
   },
   // PHI reference: Aleph(1) + Vav(6) + Yod(10) + Chet(8) = 25 ≈ PHI×PHI×PHI×PHI
   // More precisely: the Golden Ratio IS the Phi geometric root of the Hebrew Aleph-Bet
   PHI_GOLDEN_ROOT: {
-    gematria: null, letters: "א", name: "Aleph",
-    meaning: "Aleph = 1 = unity = the PHI seed. All ratios emerge from Aleph as PHI emerges from 1",
+    gematria: null,
+    letters: "א",
+    name: "Aleph",
+    meaning:
+      "Aleph = 1 = unity = the PHI seed. All ratios emerge from Aleph as PHI emerges from 1",
     constant: "PHI",
     value: PHI,
   },
@@ -387,30 +511,56 @@ export const GEMATRIA_LATTICE_ALIGNMENTS = Object.freeze({
  * Each semantic domain has a primary Hebrew letter as its geometric root operator.
  */
 export const HEBREW_SEMANTIC_OPERATORS = Object.freeze({
-  ENTITY:      { ...SEMANTIC_FREQUENCY_MAP.ENTITY,
-    hebrewOp: "Bet (ב)", gematria: 2,
-    geometricRoot: "ENCLOSURE — all entities live inside a house (container)" },
-  LOCATION:    { ...SEMANTIC_FREQUENCY_MAP.LOCATION,
-    hebrewOp: "Dalet (ד)", gematria: 4,
-    geometricRoot: "GATEWAY — all locations are accessed through a door (path)" },
-  ACTION:      { ...SEMANTIC_FREQUENCY_MAP.ACTION,
-    hebrewOp: "Shin (ש)", gematria: 300,
-    geometricRoot: "TRANSFORM — all actions are transformations of state (fire)" },
-  DIALOGUE:    { ...SEMANTIC_FREQUENCY_MAP.DIALOGUE,
-    hebrewOp: "Pey (פ)", gematria: 80,
-    geometricRoot: "APERTURE — all dialogue flows through a mouth (opening)" },
-  EMOTION:     { ...SEMANTIC_FREQUENCY_MAP.EMOTION,
-    hebrewOp: "Tsade (צ)", gematria: 90,
-    geometricRoot: "HARVEST — all emotion is resonance-pull (desire magnetism)" },
-  PHYSICS:     { ...SEMANTIC_FREQUENCY_MAP.PHYSICS,
-    hebrewOp: "Chet (ח)", gematria: 8,
-    geometricRoot: "BOUNDARY — all physics is fence/law (structural limits)" },
-  NARRATIVE:   { ...SEMANTIC_FREQUENCY_MAP.NARRATIVE,
-    hebrewOp: "Tav (ת)", gematria: 400,
-    geometricRoot: "SEAL — all narrative is a covenant sealed in time" },
-  HOLOGRAPHIC: { ...SEMANTIC_FREQUENCY_MAP.HOLOGRAPHIC,
-    hebrewOp: "Aleph (א)", gematria: 1,
-    geometricRoot: "UNITY — the holographic base is silent Aleph, containing all" },
+  ENTITY: {
+    ...SEMANTIC_FREQUENCY_MAP.ENTITY,
+    hebrewOp: "Bet (ב)",
+    gematria: 2,
+    geometricRoot: "ENCLOSURE — all entities live inside a house (container)",
+  },
+  LOCATION: {
+    ...SEMANTIC_FREQUENCY_MAP.LOCATION,
+    hebrewOp: "Dalet (ד)",
+    gematria: 4,
+    geometricRoot: "GATEWAY — all locations are accessed through a door (path)",
+  },
+  ACTION: {
+    ...SEMANTIC_FREQUENCY_MAP.ACTION,
+    hebrewOp: "Shin (ש)",
+    gematria: 300,
+    geometricRoot:
+      "TRANSFORM — all actions are transformations of state (fire)",
+  },
+  DIALOGUE: {
+    ...SEMANTIC_FREQUENCY_MAP.DIALOGUE,
+    hebrewOp: "Pey (פ)",
+    gematria: 80,
+    geometricRoot: "APERTURE — all dialogue flows through a mouth (opening)",
+  },
+  EMOTION: {
+    ...SEMANTIC_FREQUENCY_MAP.EMOTION,
+    hebrewOp: "Tsade (צ)",
+    gematria: 90,
+    geometricRoot: "HARVEST — all emotion is resonance-pull (desire magnetism)",
+  },
+  PHYSICS: {
+    ...SEMANTIC_FREQUENCY_MAP.PHYSICS,
+    hebrewOp: "Chet (ח)",
+    gematria: 8,
+    geometricRoot: "BOUNDARY — all physics is fence/law (structural limits)",
+  },
+  NARRATIVE: {
+    ...SEMANTIC_FREQUENCY_MAP.NARRATIVE,
+    hebrewOp: "Tav (ת)",
+    gematria: 400,
+    geometricRoot: "SEAL — all narrative is a covenant sealed in time",
+  },
+  HOLOGRAPHIC: {
+    ...SEMANTIC_FREQUENCY_MAP.HOLOGRAPHIC,
+    hebrewOp: "Aleph (א)",
+    gematria: 1,
+    geometricRoot:
+      "UNITY — the holographic base is silent Aleph, containing all",
+  },
 });
 
 // ─── OPERATOR CLASS ───────────────────────────────────────────────────────────
@@ -434,8 +584,10 @@ export class HebrewGeometricOperators {
     this.baseFrequency = BASE_FREQUENCY_HZ;
 
     // Build lookup indices
-    this.#letterIndex = new Map(HEBREW_LETTERS.map(l => [l.letter, l]));
-    this.#nameIndex   = new Map(HEBREW_LETTERS.map(l => [l.name.toLowerCase(), l]));
+    this.#letterIndex = new Map(HEBREW_LETTERS.map((l) => [l.letter, l]));
+    this.#nameIndex = new Map(
+      HEBREW_LETTERS.map((l) => [l.name.toLowerCase(), l]),
+    );
   }
 
   /**
@@ -443,9 +595,11 @@ export class HebrewGeometricOperators {
    * @param {string} query — "ש" or "Shin" or "shin"
    */
   getLetter(query) {
-    return this.#letterIndex.get(query)
-        || this.#nameIndex.get(query.toLowerCase())
-        || null;
+    return (
+      this.#letterIndex.get(query) ||
+      this.#nameIndex.get(query.toLowerCase()) ||
+      null
+    );
   }
 
   /**
@@ -472,20 +626,20 @@ export class HebrewGeometricOperators {
 
     return {
       architectureSignature: CANONICAL_ARCHITECTURE,
-      semanticType:  l.semanticType,
-      frequency:     l.frequencyHz,
-      latticeNode:   l.latticeNode,
-      harmonicNode:  Math.floor(l.gematria * PHI) % HARMONIC_SPECTRUM_NODES,
+      semanticType: l.semanticType,
+      frequency: l.frequencyHz,
+      latticeNode: l.latticeNode,
+      harmonicNode: Math.floor(l.gematria * PHI) % HARMONIC_SPECTRUM_NODES,
       phiCoefficient: PHI,
-      coherence:     1.0,
-      domain:        l.geoqodeOp,
-      hebrewLetter:  l.letter,
-      hebrewName:    l.name,
-      gematria:      l.gematria,
+      coherence: 1.0,
+      domain: l.geoqodeOp,
+      hebrewLetter: l.letter,
+      hebrewName: l.name,
+      gematria: l.gematria,
       geometricType: l.geometricType,
-      latticeRing:   l.latticeRing,
-      group:         l.group,
-      d48Expansion:  "CANONICAL",
+      latticeRing: l.latticeRing,
+      group: l.group,
+      d48Expansion: "CANONICAL",
       d480Expansion: "FULL_HARMONIC",
     };
   }
@@ -498,22 +652,26 @@ export class HebrewGeometricOperators {
    */
   wordToResonance(text) {
     const letters = [...text]
-      .map(c => this.#letterIndex.get(c))
+      .map((c) => this.#letterIndex.get(c))
       .filter(Boolean);
 
     if (!letters.length) return null;
 
     const totalGematria = letters.reduce((s, l) => s + l.gematria, 0);
-    const avgFrequency  = letters.reduce((s, l) => s + l.frequencyHz, 0) / letters.length;
-    const latticeNodes  = [...new Set(letters.map(l => l.latticeNode))].sort((a, b) => a - b);
-    const rings         = [...new Set(letters.map(l => l.latticeRing))];
-    const semanticTypes = [...new Set(letters.map(l => l.semanticType))];
-    const harmonicNode  = Math.floor(totalGematria * PHI) % HARMONIC_SPECTRUM_NODES;
+    const avgFrequency =
+      letters.reduce((s, l) => s + l.frequencyHz, 0) / letters.length;
+    const latticeNodes = [...new Set(letters.map((l) => l.latticeNode))].sort(
+      (a, b) => a - b,
+    );
+    const rings = [...new Set(letters.map((l) => l.latticeRing))];
+    const semanticTypes = [...new Set(letters.map((l) => l.semanticType))];
+    const harmonicNode =
+      Math.floor(totalGematria * PHI) % HARMONIC_SPECTRUM_NODES;
 
     return {
       architectureSignature: CANONICAL_ARCHITECTURE,
       text,
-      letters: letters.map(l => l.letter),
+      letters: letters.map((l) => l.letter),
       totalGematria,
       avgFrequency: Math.round(avgFrequency),
       latticeNodes,
@@ -530,8 +688,9 @@ export class HebrewGeometricOperators {
    * @param {number} value — gematria number to check
    */
   checkAlignment(value) {
-    return Object.values(GEMATRIA_LATTICE_ALIGNMENTS)
-      .filter(a => a.gematria === value);
+    return Object.values(GEMATRIA_LATTICE_ALIGNMENTS).filter(
+      (a) => a.gematria === value,
+    );
   }
 
   /**
@@ -557,22 +716,26 @@ export class HebrewGeometricOperators {
     const op = this.getSemanticOperator(semanticType);
     if (!op) return null;
 
-    const letter = this.getLetter(op.hebrewOp.split(" ")[1].replace(/[()]/g, ""));
+    const letter = this.getLetter(
+      op.hebrewOp.split(" ")[1].replace(/[()]/g, ""),
+    );
 
     return {
       architectureSignature: CANONICAL_ARCHITECTURE,
-      bridgeType:    "RAINBOW_BRIDGE",
+      bridgeType: "RAINBOW_BRIDGE",
       domain,
       semanticType,
       hebrewOperator: op.hebrewOp,
-      geometricRoot:  op.geometricRoot,
-      frequency:      op.frequency,
-      phiResolution:  PHI,
-      psiWitness:     PSI,
-      goldenBand:     PHI + PSI, // 3.032 — SEPARATOR_BAND
-      latticeNode:    letter ? letter.latticeNode : 0,
-      harmonicNode:   letter ? Math.floor(letter.gematria * PHI) % HARMONIC_SPECTRUM_NODES : 0,
-      resolution:     `Apply ${op.hebrewOp} operator (${op.geometricRoot}) at frequency ${op.frequency}Hz`,
+      geometricRoot: op.geometricRoot,
+      frequency: op.frequency,
+      phiResolution: PHI,
+      psiWitness: PSI,
+      goldenBand: PHI + PSI, // 3.032 — SEPARATOR_BAND
+      latticeNode: letter ? letter.latticeNode : 0,
+      harmonicNode: letter
+        ? Math.floor(letter.gematria * PHI) % HARMONIC_SPECTRUM_NODES
+        : 0,
+      resolution: `Apply ${op.hebrewOp} operator (${op.geometricRoot}) at frequency ${op.frequency}Hz`,
     };
   }
 
@@ -583,13 +746,13 @@ export class HebrewGeometricOperators {
    */
   get quantumSpectrumMap() {
     // 7 double letters = 7 colours of the rainbow = 7 QCD gluon states
-    const doubleLetters = HEBREW_LETTERS.filter(l => l.group === "DOUBLE");
+    const doubleLetters = HEBREW_LETTERS.filter((l) => l.group === "DOUBLE");
     return doubleLetters.map((l, i) => ({
-      letter:    l.letter,
-      name:      l.name,
-      gematria:  l.gematria,
-      rainbowPos: i + 1,  // 1=Red → 7=Violet
-      freqHz:    l.frequencyHz,
+      letter: l.letter,
+      name: l.name,
+      gematria: l.gematria,
+      rainbowPos: i + 1, // 1=Red → 7=Violet
+      freqHz: l.frequencyHz,
       phiExpansion: l.gematria * PHI,
     }));
   }
