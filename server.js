@@ -1037,6 +1037,36 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
       });
     }
 
+    // ── Theatre session sanitizer — strips internal constants before public delivery ──
+    function sanitizeTheatreSession(session) {
+      if (!session || typeof session !== "object") return session;
+      const s = { ...session };
+      // Strip internal resonance constants
+      if (s.resonance) {
+        const { architectureSignature: _as, phi: _phi, ...safeResonance } = s.resonance;
+        s.resonance = safeResonance;
+      }
+      // Strip internal geoqode envelope
+      delete s.geoqode;
+      // Strip internal projection environment fields
+      if (s.projection?.environment) {
+        const { architectureSignature: _as, dimensionality: _dim, authorship: _auth, ...safeEnv } = s.projection.environment;
+        s.projection = { ...s.projection, environment: safeEnv };
+      }
+      // Strip phiCoefficient and architectureLayer from semantic embeddings
+      if (s.semanticProfile?.embeddings) {
+        s.semanticProfile = {
+          ...s.semanticProfile,
+          embeddings: s.semanticProfile.embeddings.map((e) => {
+            if (typeof e === "string") return e;
+            const { phiCoefficient: _pc, architectureLayer: _al, architectureSignature: _as, ...safeE } = e;
+            return safeE;
+          }),
+        };
+      }
+      return s;
+    }
+
     // ── GET /theatre/programmes ──────────────────────────────────────────
     if (req.method === "GET" && pathname === "/theatre/programmes") {
       return json(res, 200, {
@@ -1067,7 +1097,7 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
           mode,
           title,
         });
-        return json(res, 200, { ok: true, session });
+        return json(res, 200, { ok: true, session: sanitizeTheatreSession(session) });
       } catch (err) {
         return json(res, 422, {
           ok: false,
@@ -1087,7 +1117,7 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
       try {
         const theatre = await getTheatre();
         const session = await theatre.programme(name, body);
-        return json(res, 200, { ok: true, session });
+        return json(res, 200, { ok: true, session: sanitizeTheatreSession(session) });
       } catch (err) {
         const status = err.message.includes("Unknown programme") ? 404 : 422;
         return json(res, status, { ok: false, error: err.message });
