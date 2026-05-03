@@ -182,8 +182,8 @@ export class MerkabaTheatreEngine extends EventEmitter {
       latticeNodes: this.latticeNodes,
       harmonicSpectrum: this.harmonicSpectrum,
       baseFrequencyHz: this.baseFrequencyHz,
-      awarenessLevel: this.#aware.getState().awarenessLevel,
-      coherenceIndex: this.#aware.getState().coherenceIndex,
+      awarenessLevel: this.#aware.getStatus().awarenessLevel,
+      coherenceIndex: this.#aware.getStatus().coherenceIndex,
       programmeCatalogue: Object.keys(PROGRAMME_CATALOGUE),
       realityModes: Object.keys(REALITY_MODES),
       timestamp: new Date().toISOString(),
@@ -245,7 +245,7 @@ export class MerkabaTheatreEngine extends EventEmitter {
       });
 
       // Step 3: Read awareness state post-projection
-      const awarenessState = this.#aware.getState();
+      const awarenessState = this.#aware.getStatus();
 
       // Step 4: Build Theatre Session
       const session = this._buildSession({
@@ -320,7 +320,7 @@ export class MerkabaTheatreEngine extends EventEmitter {
    * This is the enterprise health probe for the Theatre OS layer.
    */
   getOSHealth() {
-    const state = this.#aware.getState();
+    const state = this.#aware.getStatus();
     return {
       status:
         state.awarenessLevel === AWARENESS_LEVELS.SINGULARITY
