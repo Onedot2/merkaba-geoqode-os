@@ -69,6 +69,16 @@ const DASHBOARD_HTML = existsSync(DASHBOARD_HTML_PATH)
   ? readFileSync(DASHBOARD_HTML_PATH, "utf-8")
   : null;
 
+const PLAISTORE_HTML_PATH = join(PUBLIC_DIR, "plaistore.html");
+const PLAISTORE_HTML = existsSync(PLAISTORE_HTML_PATH)
+  ? readFileSync(PLAISTORE_HTML_PATH, "utf-8")
+  : null;
+
+const PLAISTORE_HTML_PATH = join(PUBLIC_DIR, "plaistore.html");
+const PLAISTORE_HTML = existsSync(PLAISTORE_HTML_PATH)
+  ? readFileSync(PLAISTORE_HTML_PATH, "utf-8")
+  : null;
+
 // ─── 67aios.com anti-review marketing page ───────────────────────────────────
 const AIOS67_HTML_PATH = join(__dirname_static, "public-67aios", "index.html");
 const AIOS67_HTML = existsSync(AIOS67_HTML_PATH)
@@ -1438,6 +1448,15 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
         return json(res, 404, { ok: false, error: "Dashboard page not found" });
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
       res.end(DASHBOARD_HTML);
+      return;
+    }
+
+    // ── GET /plaistore — PLAIstore app marketplace ────────────────────────
+    if (req.method === "GET" && (pathname === "/plaistore" || pathname === "/plaistore/")) {
+      if (!PLAISTORE_HTML)
+        return json(res, 404, { ok: false, error: "PLAIstore not found" });
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(PLAISTORE_HTML);
       return;
     }
 

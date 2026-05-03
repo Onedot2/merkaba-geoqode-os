@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PLAIstore — AIOS App Marketplace</title>
+  <meta name="description" content="Discover and install Theatre programmes, Cinema playbooks, AI agents, and analytic tools built for the AIOS platform." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131e;
+      --card: #1a1a2e;
+      --border: #2a2a45;
+      --accent: #7c3aed;
+      --accent2: #a855f7;
+      --gold: #f59e0b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --green: #10b981;
+      --radius: 12px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      height: 60px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .logo-text { font-size: 18px; font-weight: 700; color: var(--text); }
+    .logo-badge {
+      font-size: 10px; font-weight: 600; color: var(--accent2);
+      background: rgba(124,58,237,0.15);
+      border: 1px solid rgba(168,85,247,0.3);
+      border-radius: 4px; padding: 2px 6px;
+    }
+    .search-bar {
+      flex: 1;
+      max-width: 420px;
+      margin-left: auto;
+    }
+    .search-bar input {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--text);
+      font-size: 14px;
+      padding: 8px 16px 8px 38px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-bar input:focus { border-color: var(--accent2); }
+    .search-wrap { position: relative; }
+    .search-wrap::before {
+      content: "🔍";
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      font-size: 14px; pointer-events: none;
+    }
+    .aios-link {
+      text-decoration: none; color: var(--muted); font-size: 13px;
+      padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .aios-link:hover { color: var(--text); border-color: var(--accent2); }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(168,85,247,0.05) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    .hero h1 { font-size: clamp(28px, 5vw, 44px); font-weight: 800; line-height: 1.1; margin-bottom: 12px; }
+    .hero h1 span { background: linear-gradient(90deg, var(--accent2), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { color: var(--muted); font-size: 16px; max-width: 480px; margin: 0 auto 24px; }
+    .hero-stats { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
+    .hero-stat { text-align: center; }
+    .hero-stat-num { font-size: 24px; font-weight: 700; color: var(--accent2); }
+    .hero-stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* ── Main layout ── */
+    .main { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+    /* ── Section headings ── */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .section-title { font-size: 20px; font-weight: 700; }
+    .section-link { font-size: 13px; color: var(--accent2); text-decoration: none; }
+    .section-link:hover { text-decoration: underline; }
+
+    /* ── Categories ── */
+    .categories { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 36px; }
+    .cat-chip {
+      padding: 6px 14px; border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted); font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; user-select: none;
+    }
+    .cat-chip:hover, .cat-chip.active {
+      border-color: var(--accent2); color: var(--accent2);
+      background: rgba(124,58,237,0.1);
+    }
+    .cat-chip.active { font-weight: 600; }
+
+    /* ── App grid ── */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .app-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .app-card:hover { border-color: var(--accent2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,58,237,0.15); }
+    .app-card-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+    .app-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .app-info { flex: 1; min-width: 0; }
+    .app-name { font-size: 15px; font-weight: 600; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .app-developer { font-size: 12px; color: var(--muted); }
+    .app-verified { display: inline-flex; align-items: center; gap: 3px; }
+    .app-verified::after { content: "✓"; color: var(--green); font-size: 10px; }
+    .app-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .app-footer { display: flex; align-items: center; justify-content: space-between; }
+    .app-meta { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
+    .app-rating { display: flex; align-items: center; gap: 3px; }
+    .app-rating-star { color: var(--gold); }
+    .app-downloads { }
+    .app-badge {
+      font-size: 11px; font-weight: 600;
+      padding: 2px 8px; border-radius: 20px;
+    }
+    .badge-free { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+    .badge-paid { background: rgba(245,158,11,0.15); color: var(--gold); border: 1px solid rgba(245,158,11,0.3); }
+    .badge-live { background: rgba(124,58,237,0.15); color: var(--accent2); border: 1px solid rgba(168,85,247,0.3); }
+
+    /* ── Category count chips in category section ── */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+    .cat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .cat-card:hover { border-color: var(--accent2); background: rgba(124,58,237,0.08); }
+    .cat-card-icon { font-size: 28px; margin-bottom: 8px; }
+    .cat-card-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .cat-card-count { font-size: 12px; color: var(--muted); }
+
+    /* ── Install CTA ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      text-decoration: none; cursor: pointer; border: none;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent2); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    /* ── Loading state ── */
+    .loading { text-align: center; padding: 48px; color: var(--muted); }
+    .spinner {
+      width: 32px; height: 32px; border: 3px solid var(--border);
+      border-top-color: var(--accent2); border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Empty state ── */
+    .empty { text-align: center; padding: 48px; color: var(--muted); }
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
+
+    /* ── Modal overlay ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7); z-index: 500;
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; max-width: 560px; width: 100%;
+      max-height: 80vh; overflow-y: auto; padding: 28px;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: var(--card); border: 1px solid var(--border);
+      color: var(--text); width: 32px; height: 32px; border-radius: 8px;
+      cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;
+    }
+    .modal-app-header { display: flex; gap: 16px; margin-bottom: 20px; }
+    .modal-icon { width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 30px; flex-shrink: 0; }
+    .modal-app-name { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .modal-app-dev { font-size: 13px; color: var(--muted); }
+    .modal-desc { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
+    .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* ── How to install ── */
+    .install-steps { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 48px; }
+    .install-steps h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+    .step { text-align: center; }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; background: rgba(124,58,237,0.2); border: 1px solid var(--accent); color: var(--accent2); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
+    .step-text { font-size: 13px; color: var(--muted); }
+
+    /* ── Footer ── */
+    footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; color: var(--muted); font-size: 13px; margin-top: 48px; }
+    footer a { color: var(--accent2); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 18px; font-size: 14px;
+      transform: translateY(80px); opacity: 0;
+      transition: all 0.3s; z-index: 999; max-width: 300px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: var(--green); }
+    .toast.error { border-color: #ef4444; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <div class="logo-icon">🛍️</div>
+      <span class="logo-text">PLAIstore</span>
+      <span class="logo-badge">AIOS</span>
+    </a>
+    <div class="search-bar">
+      <div class="search-wrap">
+        <input type="text" id="search-input" placeholder="Search apps, theatre, cinema..." autocomplete="off" />
+      </div>
+    </div>
+    <a href="https://realaios.com" class="aios-link" target="_blank" rel="noopener">← AIOS</a>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <h1>The AIOS App <span>Marketplace</span></h1>
+  <p>Discover Theatre programmes, Cinema playbooks, AI agents, and tools built natively for the AIOS platform.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="stat-apps">—</div>
+      <div class="hero-stat-label">Apps</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="stat-categories">8</div>
+      <div class="hero-stat-label">Categories</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="stat-installs">—</div>
+      <div class="hero-stat-label">Installs</div>
+    </div>
+  </div>
+</section>
+
+<main class="main">
+
+  <!-- Category filter chips -->
+  <div class="categories" id="category-chips">
+    <div class="cat-chip active" data-cat="all">All</div>
+    <div class="cat-chip" data-cat="Theatre">Theatre</div>
+    <div class="cat-chip" data-cat="Cinema">Cinema</div>
+    <div class="cat-chip" data-cat="Playbooks">Playbooks</div>
+    <div class="cat-chip" data-cat="Agents">Agents</div>
+    <div class="cat-chip" data-cat="Codex">Codex</div>
+    <div class="cat-chip" data-cat="Analytics">Analytics</div>
+    <div class="cat-chip" data-cat="Integrations">Integrations</div>
+    <div class="cat-chip" data-cat="Utilities">Utilities</div>
+  </div>
+
+  <!-- Featured -->
+  <div class="section-header">
+    <h2 class="section-title">✨ Featured</h2>
+    <a href="#all-apps" class="section-link">See all →</a>
+  </div>
+  <div class="app-grid" id="featured-grid">
+    <div class="loading"><div class="spinner"></div><p>Loading apps...</p></div>
+  </div>
+
+  <!-- All apps -->
+  <div class="section-header" id="all-apps">
+    <h2 class="section-title" id="apps-title">All Apps</h2>
+    <span id="apps-count" style="color: var(--muted); font-size: 13px;"></span>
+  </div>
+  <div class="app-grid" id="apps-grid">
+    <div class="loading"><div class="spinner"></div></div>
+  </div>
+
+  <!-- Category browse -->
+  <div class="section-header">
+    <h2 class="section-title">Browse by Category</h2>
+  </div>
+  <div class="cat-grid" id="cat-grid">
+    <div class="loading"><div class="spinner"></div></div>
+  </div>
+
+  <!-- How to install -->
+  <div class="install-steps">
+    <h3>How to install</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">Browse or search for an app that interests you</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Sign in with your AIOS account (free)</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">Tap <strong>Install</strong> — the app is added to your library instantly</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text">Launch it directly inside AIOS — no downloads, no waiting</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- App detail modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal" id="modal-content">
+    <button class="modal-close" id="modal-close">✕</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<footer>
+  <p>PLAIstore is part of <a href="https://realaios.com" target="_blank" rel="noopener">AIOS</a> by <a href="https://getbrains4ai.com" target="_blank" rel="noopener">Brains4Ai</a></p>
+</footer>
+
+<script>
+  const API = "https://api.getbrains4ai.com";
+  const CATEGORY_ICONS = {
+    Theatre: "🎭", Cinema: "🎬", Playbooks: "📖", Agents: "🤖",
+    Codex: "📜", Analytics: "📊", Integrations: "🔌", Utilities: "🔧"
+  };
+
+  let allApps = [];
+  let currentCategory = "all";
+  let jwt = localStorage.getItem("plai_jwt") || null;
+
+  // ── Data fetch ─────────────────────────────────────────────────────────────
+  async function fetchJSON(path) {
+    const headers = {};
+    if (jwt) headers["Authorization"] = "Bearer " + jwt;
+    const r = await fetch(API + path, { headers });
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  }
+
+  async function loadFeatured() {
+    try {
+      const data = await fetchJSON("/api/plai/featured");
+      const apps = data.apps || [];
+      document.getElementById("stat-installs").textContent = apps.reduce((s, a) => s + (a.downloads || 0), 0).toLocaleString();
+      renderGrid("featured-grid", apps.slice(0, 4));
+    } catch {
+      document.getElementById("featured-grid").innerHTML = '<div class="empty"><div class="empty-icon">🛍️</div><p>No featured apps yet</p></div>';
+    }
+  }
+
+  async function loadAllApps(category = "all") {
+    document.getElementById("apps-grid").innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    try {
+      const cat = category === "all" ? "" : "&category=" + encodeURIComponent(category);
+      const data = await fetchJSON("/api/plai/apps?limit=50" + cat);
+      allApps = data.apps || [];
+      document.getElementById("stat-apps").textContent = data.total || allApps.length;
+      document.getElementById("apps-count").textContent = allApps.length + " apps";
+      document.getElementById("apps-title").textContent = category === "all" ? "All Apps" : category;
+      renderGrid("apps-grid", allApps);
+    } catch {
+      document.getElementById("apps-grid").innerHTML = '<div class="empty"><div class="empty-icon">📭</div><p>Failed to load apps</p></div>';
+    }
+  }
+
+  async function loadCategories() {
+    try {
+      const data = await fetchJSON("/api/plai/categories");
+      const cats = data.categories || [];
+      const grid = document.getElementById("cat-grid");
+      grid.innerHTML = cats.map(c => `
+        <div class="cat-card" onclick="filterCategory('${c.category}')">
+          <div class="cat-card-icon">${CATEGORY_ICONS[c.category] || "📦"}</div>
+          <div class="cat-card-name">${c.category}</div>
+          <div class="cat-card-count">${c.app_count} apps</div>
+        </div>
+      `).join("") || '<div class="empty"><p>No categories yet</p></div>';
+    } catch {
+      document.getElementById("cat-grid").innerHTML = '';
+    }
+  }
+
+  // ── Render ─────────────────────────────────────────────────────────────────
+  function renderGrid(id, apps) {
+    const grid = document.getElementById(id);
+    if (!apps.length) {
+      grid.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><p>No apps found</p></div>';
+      return;
+    }
+    grid.innerHTML = apps.map(app => appCard(app)).join("");
+  }
+
+  function appCard(app) {
+    const icon = CATEGORY_ICONS[app.category] || "📦";
+    const rating = app.rating_avg > 0
+      ? `<span class="app-rating"><span class="app-rating-star">★</span> ${parseFloat(app.rating_avg).toFixed(1)}</span>`
+      : "";
+    const dls = app.downloads > 0 ? `<span>${app.downloads.toLocaleString()} installs</span>` : "";
+    const price = app.price_cents === 0
+      ? '<span class="app-badge badge-free">Free</span>'
+      : `<span class="app-badge badge-paid">$${(app.price_cents / 100).toFixed(2)}</span>`;
+    const devName = app.developer_name || "AIOS";
+    const verified = app.developer_verified ? '<span class="app-verified"></span>' : "";
+
+    return `
+      <div class="app-card" onclick="openApp(${app.id})">
+        <div class="app-card-header">
+          <div class="app-icon">${icon}</div>
+          <div class="app-info">
+            <div class="app-name">${esc(app.name)}</div>
+            <div class="app-developer">${esc(devName)}${verified}</div>
+          </div>
+        </div>
+        <div class="app-desc">${esc(app.short_desc || app.description || "")}</div>
+        <div class="app-footer">
+          <div class="app-meta">${rating}${dls}</div>
+          ${price}
+        </div>
+      </div>`;
+  }
+
+  // ── App detail modal ───────────────────────────────────────────────────────
+  async function openApp(id) {
+    document.getElementById("modal-body").innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+    document.getElementById("modal").classList.add("open");
+    try {
+      const data = await fetchJSON("/api/plai/apps/" + id);
+      const app = data.app;
+      if (!app) throw new Error("Not found");
+      const icon = CATEGORY_ICONS[app.category] || "📦";
+      const launchUrl = app.entry_point || ("https://realaios.com");
+      document.getElementById("modal-body").innerHTML = `
+        <div class="modal-app-header">
+          <div class="modal-icon">${icon}</div>
+          <div>
+            <div class="modal-app-name">${esc(app.name)}</div>
+            <div class="modal-app-dev">${esc(app.developer_name || "AIOS")} · ${esc(app.category)}</div>
+          </div>
+        </div>
+        <p class="modal-desc">${esc(app.description || "")}</p>
+        <div class="modal-actions">
+          <button class="btn btn-primary" onclick="installApp(${app.id}, '${esc(app.name)}')">Install</button>
+          <a href="${esc(launchUrl)}" target="_blank" rel="noopener" class="btn btn-outline">Open in AIOS</a>
+        </div>
+      `;
+    } catch {
+      document.getElementById("modal-body").innerHTML = '<div class="empty"><p>Failed to load app details</p></div>';
+    }
+  }
+
+  async function installApp(id, name) {
+    if (!jwt) {
+      showToast("Sign in to install apps", "error");
+      window.open("https://admin.getbrains4ai.com/PublicAdmin/login", "_blank");
+      return;
+    }
+    try {
+      await fetch(`${API}/api/plai/apps/${id}/install`, {
+        method: "POST",
+        headers: { Authorization: "Bearer " + jwt }
+      });
+      showToast(`✓ ${name} installed`, "success");
+    } catch {
+      showToast("Install failed — please sign in", "error");
+    }
+  }
+
+  // ── Search ─────────────────────────────────────────────────────────────────
+  let searchTimer;
+  document.getElementById("search-input").addEventListener("input", e => {
+    clearTimeout(searchTimer);
+    const q = e.target.value.trim();
+    if (!q) { loadAllApps(currentCategory); return; }
+    searchTimer = setTimeout(async () => {
+      try {
+        const data = await fetchJSON("/api/plai/search?q=" + encodeURIComponent(q));
+        allApps = data.apps || [];
+        document.getElementById("apps-title").textContent = `Results for "${q}"`;
+        document.getElementById("apps-count").textContent = allApps.length + " apps";
+        renderGrid("apps-grid", allApps);
+      } catch {}
+    }, 350);
+  });
+
+  // ── Category filter ────────────────────────────────────────────────────────
+  function filterCategory(cat) {
+    currentCategory = cat;
+    document.querySelectorAll(".cat-chip").forEach(c => c.classList.toggle("active", c.dataset.cat === cat));
+    loadAllApps(cat);
+    document.getElementById("all-apps").scrollIntoView({ behavior: "smooth" });
+  }
+  document.getElementById("category-chips").addEventListener("click", e => {
+    const chip = e.target.closest(".cat-chip");
+    if (chip) filterCategory(chip.dataset.cat);
+  });
+
+  // ── Modal close ────────────────────────────────────────────────────────────
+  document.getElementById("modal-close").addEventListener("click", () => document.getElementById("modal").classList.remove("open"));
+  document.getElementById("modal").addEventListener("click", e => { if (e.target === document.getElementById("modal")) document.getElementById("modal").classList.remove("open"); });
+
+  // ── Toast ──────────────────────────────────────────────────────────────────
+  function showToast(msg, type = "") {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.className = "toast show " + type;
+    setTimeout(() => t.className = "toast", 3000);
+  }
+
+  // ── Utils ──────────────────────────────────────────────────────────────────
+  function esc(str) {
+    return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  // ── Boot ───────────────────────────────────────────────────────────────────
+  loadFeatured();
+  loadAllApps();
+  loadCategories();
+</script>
+</body>
+</html>
