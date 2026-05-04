@@ -84,6 +84,11 @@ const AI_HTML = existsSync(AI_HTML_PATH)
   ? readFileSync(AI_HTML_PATH, "utf-8")
   : null;
 
+const START_HTML_PATH = join(PUBLIC_DIR, "start.html");
+const START_HTML = existsSync(START_HTML_PATH)
+  ? readFileSync(START_HTML_PATH, "utf-8")
+  : null;
+
 const VR_HTML_PATH = join(PUBLIC_DIR, "vr.html");
 const VR_HTML = existsSync(VR_HTML_PATH)
   ? readFileSync(VR_HTML_PATH, "utf-8")
@@ -352,9 +357,11 @@ const server = createServer(async (req, res) => {
         `  <url><loc>https://realaios.com/aiosdream</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>`,
         `  <url><loc>https://realaios.com/plaistore</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.85</priority></url>`,
         `  <url><loc>https://realaios.com/experiences</loc><lastmod>${now}</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>`,
+        `  <url><loc>https://realaios.com/ai</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
+        `  <url><loc>https://realaios.com/start</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>`,
         `  <url><loc>https://realaios.com/lab</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>`,
         `  <url><loc>https://realaios.com/products</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.75</priority></url>`,
-        // Individual VR experience SEO pages (19 live XPs)
+        // Individual VR experience SEO pages (live XPs — count from taxonomy)
         ...(VR_TAXONOMY
           ? (VR_TAXONOMY.categories || []).flatMap((cat) =>
               (cat.experiences || [])
@@ -1773,7 +1780,7 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
 <meta property="og:title" content="${title}"/>
 <meta property="og:description" content="${desc.slice(0, 200)}"/>
 <meta property="og:url" content="${shareUrl}"/>
-<meta property="og:image" content="https://realaios.com/public/og-vr-hub.png"/>
+<meta property="og:image" content="https://realaios.com/public/og-image.svg"/>
 <meta property="og:site_name" content="AIOS VR Platform"/>
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image"/>
@@ -1895,7 +1902,7 @@ h1{font-size:1.6rem;font-weight:800;margin-bottom:0.75rem;line-height:1.25;}
 <meta property="og:title" content="All ${allLive.length} Live VR Experiences — AIOS VR"/>
 <meta property="og:description" content="Browse every live WebXR experience. Zero install — open on Meta Quest Browser."/>
 <meta property="og:url" content="https://realaios.com/experiences"/>
-<meta property="og:image" content="https://realaios.com/public/og-vr-hub.png"/>
+<meta property="og:image" content="https://realaios.com/public/og-image.svg"/>
 <script type="application/ld+json">${JSON.stringify({
   "@context": "https://schema.org",
   "@type": "ItemList",
@@ -1938,7 +1945,7 @@ body{background:#04080f;color:#edf4ff;font-family:system-ui,sans-serif;padding:2
 <div class="grid">
 ${xpCards}
 </div>
-<a class="back" href="/vr-hub">← Full VR Hub  |  <a href="/">Back to realaios.com</a>
+<a class="back" href="/vr-hub">← Full VR Hub</a> &nbsp;&middot;&nbsp; <a class="back" href="/">realaios.com</a>
 </body>
 </html>`;
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "public, max-age=300" });
@@ -1963,6 +1970,15 @@ ${xpCards}
         return json(res, 404, { ok: false, error: "AI page not found" });
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
       res.end(AI_HTML);
+      return;
+    }
+
+    // ── GET /start — newcomer onboarding page ────────────────────────────
+    if (req.method === "GET" && (pathname === "/start" || pathname === "/start/")) {
+      if (!START_HTML)
+        return json(res, 404, { ok: false, error: "Start page not found" });
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(START_HTML);
       return;
     }
 

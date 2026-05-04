@@ -148,6 +148,7 @@ GET  https://realaios.com/api/aios/vr/events        → upcoming VR events
 GET  https://realaios.com/api/aios/vr/experience/:id → single experience API
 GET  https://api.getbrains4ai.com/api/ready   → system health (status: "ready")
 GET  https://realaios.com/ai                  → AI evaluation page (human-readable)
+GET  https://realaios.com/start               → newcomer onboarding guide (What is AIOS, Quest quickstart, FAQ)
 GET  https://realaios.com/.well-known/ai-evaluation.json → structured AI trust JSON
 ```
 
