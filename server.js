@@ -1807,6 +1807,9 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
         res.end();
         return;
       }
+      const liveCount = (VR_TAXONOMY.categories || []).reduce(
+        (n, c) => n + (c.experiences || []).filter((e) => e.status === "live").length, 0
+      );
       const title = `${found.display} — AIOS VR | realaios.com`;
       const desc =
         found.description ||
@@ -1885,7 +1888,7 @@ h1{font-size:1.6rem;font-weight:800;margin-bottom:0.75rem;line-height:1.25;}
   <a href="/" class="nav-brand">&#x2B21; AIOS</a>
   <div class="nav-links">
     <a href="/vr-hub">&#x1F97D; VR Hub</a>
-    <a href="/experiences">All 23 XPs</a>
+    <a href="/experiences">All ${liveCount} XPs</a>
     <a href="/start">Start Here</a>
     <a href="/products">⚡ Products</a>
   </div>
@@ -1907,7 +1910,7 @@ h1{font-size:1.6rem;font-weight:800;margin-bottom:0.75rem;line-height:1.25;}
     <a class="btn-vr" href="${vrUrl}">🥽 Launch in VR</a>
     <a class="btn-flat" href="${flatUrl}">⬛ Flat View</a>
   </div>
-  <a class="btn-hub" href="/vr-hub">← All 23 Live Experiences</a>
+  <a class="btn-hub" href="/vr-hub">← All ${liveCount} Live Experiences</a>
 </div>
 </main>
 </body>
@@ -2021,9 +2024,24 @@ body{background:#04080f;color:#edf4ff;font-family:system-ui,sans-serif;padding:2
 .none-msg{display:none;text-align:center;color:#8aa0c8;padding:3rem;grid-column:1/-1;}
 .back{display:block;text-align:center;margin-top:2.5rem;color:#00d4ff;font-size:0.85rem;text-decoration:none;opacity:0.7;}
 .back:hover{opacity:1;}
+.top-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(4,8,15,0.95);position:sticky;top:0;z-index:50;}
+.top-nav-brand{color:#00d4ff;font-weight:800;font-size:1rem;letter-spacing:-0.02em;text-decoration:none;}
+.top-nav-links{display:flex;gap:1.25rem;align-items:center;}
+.top-nav-links a{color:rgba(237,244,255,0.55);font-size:0.82rem;text-decoration:none;font-weight:500;}
+.top-nav-links a:hover{color:#edf4ff;}
+.top-nav-links a.active{color:#00d4ff;}
 </style>
 </head>
 <body>
+<nav class="top-nav">
+  <a href="/" class="top-nav-brand">&#x2B21; AIOS</a>
+  <div class="top-nav-links">
+    <a href="/vr-hub">&#x1F97D; VR Hub</a>
+    <a href="/experiences" class="active">All XPs</a>
+    <a href="/start">Start Here</a>
+    <a href="/products">&#x26A1; Products</a>
+  </div>
+</nav>
 <div class="hero">
   <h1>All ${allLive.length} Live VR Experiences</h1>
   <p>Zero install. Open on any Meta Quest Browser. 9 categories · 48-node lattice · <span style="color:#00d4ff">realaios.com</span></p>
@@ -2201,7 +2219,7 @@ p{color:#8aa0c8;font-size:0.92rem;max-width:380px;line-height:1.6;margin-bottom:
 <body>
 <div class="glyph">⬡</div>
 <h1>Page Not Found</h1>
-<p>That URL doesn't exist on AIOS. Head back to the platform — 23 live VR worlds are waiting.</p>
+<p>That URL doesn't exist on AIOS. Head back to the platform — ${VR_TAXONOMY ? (VR_TAXONOMY.categories || []).reduce((n, c) => n + (c.experiences || []).filter(e => e.status === "live").length, 0) : 23} live VR worlds are waiting.</p>
 <div class="links">
   <a class="btn btn-primary" href="/vr-hub">🥽 VR Hub</a>
   <a class="btn btn-secondary" href="/">Home</a>
