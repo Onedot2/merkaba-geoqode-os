@@ -1736,6 +1736,8 @@
           <a href="#wellness">Wellness</a>
           <a href="#social">Social</a>
           <a href="#creator">Creator</a>
+          <a href="#education">Education</a>
+          <a href="#art">Art &amp; Music</a>
         </div>
         <div class="footer-col">
           <h4>Platform</h4>
@@ -1817,6 +1819,26 @@
           color: "#eab308",
           badge: "live",
           entry: "/vr?prog=governance",
+        },
+        {
+          name: "training-sim",
+          emoji: "🎓",
+          title: "Training Simulator",
+          desc: "Onboard, train, and certify your team inside immersive 3D scenario rooms. Zero travel.",
+          freq: "528 Hz · ACTION",
+          color: "#3b82f6",
+          badge: "live",
+          entry: "/vr?prog=training-sim",
+        },
+        {
+          name: "remote-hq",
+          emoji: "🏛️",
+          title: "Remote HQ",
+          desc: "Persistent virtual headquarters. Meet, present, and collaborate at 417 Hz spatial fields.",
+          freq: "417 Hz · LOCATION",
+          color: "#00d4ff",
+          badge: "live",
+          entry: "/vr?prog=remote-hq",
         },
       ];
 
@@ -2190,9 +2212,6 @@
       }
 
       function buildWellCard(w) {
-        return `<div class="well-card" style="--accent:${w.color}">
-          <span class="well-icon">${w.emoji}</span>
-          <div class="well-title">${w.title}</div>
         const tag = w.entry ? "a" : "div";
         const href = w.entry ? `href="${w.entry}"` : "";
         const liveBadge = w.badge === "live" ? `<span style="font-size:0.65rem;background:#22c55e;color:#000;padding:0.15rem 0.4rem;border-radius:3px;font-weight:700;margin-left:0.4rem;">LIVE</span>` : "";
@@ -2201,7 +2220,10 @@
           <div class="well-title">${w.title}${liveBadge}</div>
           <div class="well-freq">${w.freq}</div>
           <div class="well-desc">${w.desc}</div>
-        </${tag}n buildTeaserCard(t) {
+        </${tag}>`;
+      }
+
+      function buildTeaserCard(t) {
         return `<div class="teaser-card">
           <div class="teaser-icon">${t.emoji}</div>
           <div class="teaser-title">${t.title}</div>
@@ -2215,6 +2237,39 @@
       document.getElementById("art-grid").innerHTML = ART_XP.map((x) =>
         buildXpCard(x, "#ec4899"),
       ).join("");
+
+      // ── Share deep-link ───────────────────────────────────────────────────
+      async function shareXP(xpId, title) {
+        const url = `https://realaios.com/vr-hub?xp=${xpId}`;
+        if (navigator.share) {
+          try {
+            await navigator.share({ title: title + " — AIOS VR", url });
+            return;
+          } catch (_) {}
+        }
+        // Fallback: clipboard copy
+        try {
+          await navigator.clipboard.writeText(url);
+        } catch (_) {
+          const ta = document.createElement("textarea");
+          ta.value = url;
+          ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;";
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+        }
+        const btn = document.getElementById("share-" + xpId);
+        if (btn) {
+          const orig = btn.textContent;
+          btn.textContent = "✓ Copied!";
+          btn.style.color = "#22c55e";
+          setTimeout(() => {
+            btn.textContent = orig;
+            btn.style.color = "";
+          }, 1800);
+        }
+      }
 
       // ── Render ───────────────────────────────────────────────────────────
       document.getElementById("cinema-grid").innerHTML = CINEMA_XP.map((x) =>

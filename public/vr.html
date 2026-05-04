@@ -605,9 +605,11 @@
         <button class="cat-tab" onclick="filterProgs('enterprise', this)">
           🏢 Enterprise
         </button>
-        <a href="/vr-hub#lab" class="cat-tab">🔬 Lab</a>
-        <a href="/vr-hub#arcade" class="cat-tab">🎮 Arcade</a>
-        <a href="/vr-hub#wellness" class="cat-tab">🧘 Wellness</a>
+        <button class="cat-tab" onclick="filterProgs('lab', this)">🔬 Lab</button>
+        <button class="cat-tab" onclick="filterProgs('arcade', this)">🎮 Arcade</button>
+        <button class="cat-tab" onclick="filterProgs('wellness', this)">🧘 Wellness</button>
+        <button class="cat-tab" onclick="filterProgs('education', this)">📚 Education</button>
+        <button class="cat-tab" onclick="filterProgs('art', this)">🎨 Art</button>
         <a
           href="/vr-hub"
           class="cat-tab"
@@ -854,6 +856,26 @@
           shortDesc: "Compose by placing sounds in space. Solfeggio.",
           panelAngle: 105,
           latticeNode: 45,
+        },
+        {
+          name: "training-sim",
+          display: "Corporate Training Simulator",
+          sem: "ACTION",
+          cat: "enterprise",
+          desc: "Onboard teams in immersive 3D. Skills assessment, compliance drills, scenario replay.",
+          shortDesc: "Train your team in VR. Zero travel cost.",
+          panelAngle: 115,
+          latticeNode: 35,
+        },
+        {
+          name: "remote-hq",
+          display: "Remote HQ — Virtual Office",
+          sem: "LOCATION",
+          cat: "enterprise",
+          desc: "Persistent spatial office anchored to the lattice. Meet, present, and collaborate at 417 Hz.",
+          shortDesc: "Your office. In the lattice. Always on.",
+          panelAngle: 125,
+          latticeNode: 37,
         },
       ];
 

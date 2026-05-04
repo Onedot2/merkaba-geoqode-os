@@ -8,7 +8,7 @@
   "psi": 1.414,
   "baseFrequencyHz": 72,
   "totalExperiences": 48,
-  "liveExperiences": 15,
+  "liveExperiences": 17,
   "categories": [
     {
       "id": "cinema",
@@ -189,10 +189,10 @@
         {
           "id": "training-sim",
           "display": "Corporate Training Simulator",
-          "status": "coming",
-          "version": null,
-          "vrUrl": null,
-          "flatUrl": null,
+          "status": "live",
+          "version": "1.0.0",
+          "vrUrl": "/vr?prog=training-sim",
+          "flatUrl": "/aiosdream?prog=training-sim",
           "semanticType": "ACTION",
           "frequencyHz": 528,
           "latticeNode": 35,
@@ -203,15 +203,15 @@
           "questCompatible": true,
           "flatCompatible": true,
           "estimatedDuration": "20-45 min",
-          "releaseDate": "2026-Q3"
+          "releaseDate": "2026-05-01"
         },
         {
           "id": "remote-hq",
           "display": "Remote HQ — Virtual Office",
-          "status": "coming",
-          "version": null,
-          "vrUrl": null,
-          "flatUrl": null,
+          "status": "live",
+          "version": "1.0.0",
+          "vrUrl": "/vr?prog=remote-hq",
+          "flatUrl": "/aiosdream?prog=remote-hq",
           "semanticType": "LOCATION",
           "frequencyHz": 417,
           "latticeNode": 37,
@@ -220,9 +220,9 @@
           "shortDesc": "Your office. In the lattice. Always on.",
           "tags": ["remote", "office", "collaboration", "spatial"],
           "questCompatible": true,
-          "flatCompatible": false,
+          "flatCompatible": true,
           "estimatedDuration": "persistent",
-          "releaseDate": "2026-Q4"
+          "releaseDate": "2026-05-01"
         }
       ]
     },
