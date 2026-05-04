@@ -14,7 +14,7 @@
       name="keywords"
       content="AIOS, AI operating system, autonomous AI, AI runtime, agentic OS, AI tools, GeoQode, founding partner"
     />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://realaios.com" />
 
     <!-- Open Graph -->
@@ -62,19 +62,49 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "AIOS — Autonomous Intelligence Operating System",
-        "alternateName": "AIOS",
-        "description": "The world's first AI-native autonomous operating system. Geometric lattice architecture (8→26→48:480). Self-healing, resonance-certified, PHI/PSI dual-attested. NOT a chatbot. NOT a property platform.",
-        "url": "https://realaios.com",
-        "applicationCategory": "DeveloperApplication",
-        "applicationSubCategory": "Autonomous AI Operating System",
-        "operatingSystem": "Web, API, Meta Quest",
-        "author": {
-          "@type": "Person",
-          "name": "Brad Levitan"
-        },
-        "sameAs": ["https://realaios.com"]
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://realaios.com/#org",
+            "name": "Brains4Ai",
+            "url": "https://realaios.com",
+            "email": "storm.s4ai@gmail.com",
+            "founder": { "@type": "Person", "name": "Brad Levitan" },
+            "foundingDate": "2024",
+            "sameAs": [
+              "https://github.com/Onedot2",
+              "https://getbrains4ai.com"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://realaios.com/#website",
+            "url": "https://realaios.com",
+            "name": "AIOS",
+            "publisher": { "@id": "https://realaios.com/#org" },
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://realaios.com/news?q={search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://realaios.com/#app",
+            "name": "AIOS — Autonomous Intelligence Operating System",
+            "alternateName": "AIOS",
+            "description": "An open, autonomous AI operating system built by Brad Levitan (Brains4Ai). Geometric lattice architecture (8→26→48:480). Self-healing, resonance-certified, PHI/PSI dual-attested.",
+            "url": "https://realaios.com",
+            "applicationCategory": "DeveloperApplication",
+            "applicationSubCategory": "Autonomous AI Operating System",
+            "operatingSystem": "Web, API, Meta Quest",
+            "author": { "@type": "Person", "name": "Brad Levitan" },
+            "publisher": { "@id": "https://realaios.com/#org" }
+          }
+        ]
       }
     </script>
     <link rel="icon" type="image/svg+xml" href="/public/favicon.svg" />

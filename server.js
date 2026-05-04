@@ -53,15 +53,16 @@ const GA_ID =
   "G-G38FVKETP3";
 const GSC_TOKEN = process.env.GOOGLE_SITE_VERIFICATION || "tmtbFW4NtmRAviebhnpYumANQ8Z6d8H7oqsrRiKq_9E";
 
-/** Inject GA4 + optional GSC meta tag + preconnect hints into any HTML string before </head> */
+/** Inject GA4 + optional GSC meta tag + preconnect hints immediately after <head> (Google's required position) */
 function withMeta(html) {
   if (!html) return html;
   const gscTag = GSC_TOKEN
-    ? `<meta name="google-site-verification" content="${GSC_TOKEN}"/>`
+    ? `<meta name="google-site-verification" content="${GSC_TOKEN}"/>\n`
     : "";
-  const preconnect = `<link rel="preconnect" href="https://www.googletagmanager.com"/><link rel="dns-prefetch" href="https://www.google-analytics.com"/>`;
-  const gaTag = `<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true,cookie_flags:'SameSite=None;Secure'});</script>`;
-  return html.replace("</head>", `${gscTag}${preconnect}${gaTag}\n</head>`);
+  const preconnect = `<link rel="preconnect" href="https://www.googletagmanager.com"/>\n<link rel="dns-prefetch" href="https://www.google-analytics.com"/>\n`;
+  const gaTag = `<!-- Google tag (gtag.js) -->\n<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>\n<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}');</script>\n`;
+  // Inject immediately after <head> — Google Tag Assistant requires this position
+  return html.replace(/(<head[^>]*>)/, `$1\n${gscTag}${preconnect}${gaTag}`);
 }
 
 // ─── Static assets ───────────────────────────────────────────────────────────
