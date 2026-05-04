@@ -1304,7 +1304,9 @@
             this.style.opacity = '1';
             this.style.transform = '';
           "
-          onclick="window.B4AAnalytics?.track('hero_cta_click', { type: 'try_free' })"
+          onclick="
+            window.B4AAnalytics?.track('hero_cta_click', { type: 'try_free' })
+          "
         >
           Explore Free &mdash; No Account Needed &rarr;
         </a>
@@ -1621,7 +1623,8 @@
               <span class="tier-badge enterprise">Studio — $149/mo</span>
             </div>
             <a
-              href="/waitlist" class="product-cta"
+              href="/waitlist"
+              class="product-cta"
               data-product="AIOS App Factory"
               >Join Waitlist ?</a
             >
@@ -1645,9 +1648,7 @@
               <span class="tier-badge paid">Team — $199/mo</span>
               <span class="tier-badge enterprise">Enterprise — $699/mo</span>
             </div>
-            <a
-              href="/waitlist" class="product-cta"
-              data-product="AttestedAI"
+            <a href="/waitlist" class="product-cta" data-product="AttestedAI"
               >Join Waitlist ?</a
             >
             <a href="/products/attested-ai" class="product-details"
@@ -1670,9 +1671,7 @@
               <span class="tier-badge paid">Growth — $149/mo</span>
               <span class="tier-badge enterprise">Scale — $449/mo</span>
             </div>
-            <a
-              href="/waitlist" class="product-cta"
-              data-product="NeverDown"
+            <a href="/waitlist" class="product-cta" data-product="NeverDown"
               >Join Waitlist ?</a
             >
             <a href="/products/never-down" class="product-details"
@@ -1695,9 +1694,7 @@
               <span class="tier-badge paid">Professional — $299/mo</span>
               <span class="tier-badge enterprise">Enterprise — $1,499/mo</span>
             </div>
-            <a
-              href="/waitlist" class="product-cta"
-              data-product="TruthAgent"
+            <a href="/waitlist" class="product-cta" data-product="TruthAgent"
               >Join Waitlist ?</a
             >
             <a href="/products/truth-agent" class="product-details"
@@ -1721,9 +1718,7 @@
               <span class="tier-badge paid">Publisher Pro — $79/mo</span>
               <span class="tier-badge paid">Consumer Pro — $29/mo</span>
             </div>
-            <a
-              href="/waitlist" class="product-cta"
-              data-product="FreqHub"
+            <a href="/waitlist" class="product-cta" data-product="FreqHub"
               >Join Waitlist ?</a
             >
             <a href="/products/freq-hub" class="product-details"
@@ -1746,9 +1741,7 @@
               <span class="tier-badge paid">Company — $199/mo</span>
               <span class="tier-badge enterprise">Studio — $599/mo</span>
             </div>
-            <a
-              href="/waitlist" class="product-cta"
-              data-product="FreqMatch"
+            <a href="/waitlist" class="product-cta" data-product="FreqMatch"
               >Join Waitlist ?</a
             >
             <a href="/products/freq-match" class="product-details"
@@ -2809,9 +2802,8 @@
           </h3>
           <p style="font-size: 0.875rem; color: #94a3b8; line-height: 1.7">
             AIOS is a research and software platform by
-            <strong style="color: #e2e8f0">Brains4Ai</strong>. An
-            experiment in autonomous AI architecture — a real, running system,
-            not vaporware.
+            <strong style="color: #e2e8f0">Brains4Ai</strong>. An experiment in
+            autonomous AI architecture — a real, running system, not vaporware.
           </p>
           <p
             style="
@@ -3008,7 +3000,9 @@
               "
               onmouseover="this.style.opacity = '.85'"
               onmouseout="this.style.opacity = '1'"
-              onclick="window.B4AAnalytics?.track('begin_explore', { tier: 'free' })"
+              onclick="
+                window.B4AAnalytics?.track('begin_explore', { tier: 'free' })
+              "
             >
               Start Exploring &rarr;
             </a>
@@ -3106,7 +3100,12 @@
               "
               onmouseover="this.style.opacity = '.85'"
               onmouseout="this.style.opacity = '1'"
-              onclick="window.B4AAnalytics?.track('begin_checkout', { tier: 'pro', placement: 'pricing_section' })"
+              onclick="
+                window.B4AAnalytics?.track('begin_checkout', {
+                  tier: 'pro',
+                  placement: 'pricing_section',
+                })
+              "
             >
               Get Pro &mdash; $9/mo &rarr;
             </a>

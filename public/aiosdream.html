@@ -2183,7 +2183,12 @@
         PSI = 1.414;
 
       // ── Programme-specific canvas state ──
-      const _cinemaProgs = new Set(["matrix", "inception", "apollo11", "starwars"]);
+      const _cinemaProgs = new Set([
+        "matrix",
+        "inception",
+        "apollo11",
+        "starwars",
+      ]);
       const MATRIX_CHARS =
         "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF";
       const _matrixCols = { arr: null };
@@ -2198,14 +2203,16 @@
         const fontSize = 16;
         const numCols = Math.floor(dreamW / fontSize);
         if (!_matrixCols.arr || _matrixCols.arr.length !== numCols) {
-          _matrixCols.arr = Array.from({ length: numCols }, () =>
-            Math.floor(Math.random() * (dreamH / fontSize)) * fontSize,
+          _matrixCols.arr = Array.from(
+            { length: numCols },
+            () => Math.floor(Math.random() * (dreamH / fontSize)) * fontSize,
           );
         }
         dreamCtx.font = "bold " + fontSize + "px monospace";
         for (let i = 0; i < _matrixCols.arr.length; i++) {
           dreamCtx.fillStyle = "#ccffcc";
-          const ch = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
+          const ch =
+            MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
           dreamCtx.fillText(ch, i * fontSize, _matrixCols.arr[i]);
           if (_matrixCols.arr[i] > fontSize) {
             dreamCtx.fillStyle = "#00ff41";
@@ -2256,8 +2263,7 @@
         const baseY = dreamH * 0.82;
         const buildN = 14;
         for (let i = 0; i < buildN; i++) {
-          const bx =
-            (dreamW * i) / buildN + 5 * Math.sin(t * 0.4 + i * 1.3);
+          const bx = (dreamW * i) / buildN + 5 * Math.sin(t * 0.4 + i * 1.3);
           const bh =
             dreamH * (0.1 + 0.15 * Math.abs(Math.sin(i * 2.1 + t * 0.15)));
           const bw = (dreamW / buildN) * 0.55;
@@ -2426,7 +2432,14 @@
         const key = Object.entries(PROGRAMMES).find(([, v]) => v === prog)?.[0];
 
         // Background gradient
-        const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.7);
+        const bg = ctx.createRadialGradient(
+          cx,
+          cy,
+          0,
+          cx,
+          cy,
+          Math.max(w, h) * 0.7,
+        );
         bg.addColorStop(0, col + "22");
         bg.addColorStop(1, "#000000aa");
         ctx.fillStyle = bg;
@@ -2493,8 +2506,12 @@
           ctx.closePath();
           ctx.fill();
           const eg = ctx.createRadialGradient(
-            w * 0.2 - 4, h * 0.3 - 4, 1,
-            w * 0.2, h * 0.3, 13,
+            w * 0.2 - 4,
+            h * 0.3 - 4,
+            1,
+            w * 0.2,
+            h * 0.3,
+            13,
           );
           eg.addColorStop(0, "rgba(120,200,255,0.95)");
           eg.addColorStop(0.6, "rgba(30,100,200,0.85)");
