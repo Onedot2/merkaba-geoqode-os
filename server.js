@@ -89,6 +89,11 @@ const VR_HTML = existsSync(VR_HTML_PATH)
   ? readFileSync(VR_HTML_PATH, "utf-8")
   : null;
 
+const VR_HUB_HTML_PATH = join(PUBLIC_DIR, "vr-hub.html");
+const VR_HUB_HTML = existsSync(VR_HUB_HTML_PATH)
+  ? readFileSync(VR_HUB_HTML_PATH, "utf-8")
+  : null;
+
 const LLMS_TXT_PATH = join(PUBLIC_DIR, "llms.txt");
 const LLMS_TXT = existsSync(LLMS_TXT_PATH)
   ? readFileSync(LLMS_TXT_PATH, "utf-8")
@@ -1500,6 +1505,18 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
       return;
     }
 
+    // ── GET /vr-hub — AIOS VR Platform Hub (storefront + categories) ──────
+    if (
+      req.method === "GET" &&
+      (pathname === "/vr-hub" || pathname === "/vr-hub/")
+    ) {
+      if (!VR_HUB_HTML)
+        return json(res, 404, { ok: false, error: "VR Hub not found" });
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(VR_HUB_HTML);
+      return;
+    }
+
     // ── GET /aiosdream — Dimensional Geometric Streaming viewer ──────────
     if (
       req.method === "GET" &&
@@ -1644,6 +1661,8 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
         "GET  /viewer",
         "GET  /attest",
         "GET  /dashboard",
+        "GET  /vr",
+        "GET  /vr-hub",
         "GET  /audio/status",
         "GET  /audio/frequencies",
         "POST /audio/score",
