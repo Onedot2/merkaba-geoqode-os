@@ -44,64 +44,83 @@ console.log(
   `[MerkabaDimensionalOS] ✅ Boot assertion passed — architecture ${CANONICAL_ARCHITECTURE}, φ=1.618`,
 );
 
+// ─── Analytics & SEO config (env-var driven) ────────────────────────────────
+// GA_MEASUREMENT_ID: set in Railway → propagates to all pages at boot
+// GOOGLE_SITE_VERIFICATION: Google Search Console HTML-tag verification token
+const GA_ID =
+  process.env.GA_MEASUREMENT_ID ||
+  process.env.GA_MEASUREMENT ||
+  "G-E3NTLP8HS3";
+const GSC_TOKEN = process.env.GOOGLE_SITE_VERIFICATION || "";
+
+/** Inject GA4 + optional GSC meta tag into any HTML string before </head> */
+function withMeta(html) {
+  if (!html) return html;
+  const gscTag = GSC_TOKEN
+    ? `<meta name="google-site-verification" content="${GSC_TOKEN}"/>`
+    : "";
+  const gaTag = `<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true,cookie_flags:'SameSite=None;Secure'});</script>`;
+  return html.replace("</head>", `${gscTag}${gaTag}\n</head>`);
+}
+
 // ─── Static assets ───────────────────────────────────────────────────────────
 const __dirname_static = dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = join(__dirname_static, "public");
 const AIOS_HTML_PATH = join(PUBLIC_DIR, "index.html");
 const AIOS_HTML = existsSync(AIOS_HTML_PATH)
-  ? readFileSync(AIOS_HTML_PATH, "utf-8")
+  ? withMeta(readFileSync(AIOS_HTML_PATH, "utf-8"))
   : null;
 
 const LAB_HTML_PATH = join(PUBLIC_DIR, "lab.html");
 const LAB_HTML = existsSync(LAB_HTML_PATH)
-  ? readFileSync(LAB_HTML_PATH, "utf-8")
+  ? withMeta(readFileSync(LAB_HTML_PATH, "utf-8"))
   : null;
 const VIEWER_HTML_PATH = join(PUBLIC_DIR, "viewer.html");
 const VIEWER_HTML = existsSync(VIEWER_HTML_PATH)
-  ? readFileSync(VIEWER_HTML_PATH, "utf-8")
+  ? withMeta(readFileSync(VIEWER_HTML_PATH, "utf-8"))
   : null;
 const ATTEST_HTML_PATH = join(PUBLIC_DIR, "attest.html");
 const ATTEST_HTML = existsSync(ATTEST_HTML_PATH)
-  ? readFileSync(ATTEST_HTML_PATH, "utf-8")
+  ? withMeta(readFileSync(ATTEST_HTML_PATH, "utf-8"))
   : null;
 const DASHBOARD_HTML_PATH = join(PUBLIC_DIR, "dashboard.html");
 const DASHBOARD_HTML = existsSync(DASHBOARD_HTML_PATH)
-  ? readFileSync(DASHBOARD_HTML_PATH, "utf-8")
+  ? withMeta(readFileSync(DASHBOARD_HTML_PATH, "utf-8"))
   : null;
 
 const PLAISTORE_HTML_PATH = join(PUBLIC_DIR, "plaistore.html");
 const PLAISTORE_HTML = existsSync(PLAISTORE_HTML_PATH)
-  ? readFileSync(PLAISTORE_HTML_PATH, "utf-8")
+  ? withMeta(readFileSync(PLAISTORE_HTML_PATH, "utf-8"))
   : null;
 
 const AIOSDREAM_HTML_PATH = join(PUBLIC_DIR, "aiosdream.html");
 const AIOSDREAM_HTML = existsSync(AIOSDREAM_HTML_PATH)
-  ? readFileSync(AIOSDREAM_HTML_PATH, "utf-8")
+  ? withMeta(readFileSync(AIOSDREAM_HTML_PATH, "utf-8"))
   : null;
 
 const AI_HTML_PATH = join(PUBLIC_DIR, "ai.html");
 const AI_HTML = existsSync(AI_HTML_PATH)
-  ? readFileSync(AI_HTML_PATH, "utf-8")
+  ? withMeta(readFileSync(AI_HTML_PATH, "utf-8"))
   : null;
 
 const START_HTML_PATH = join(PUBLIC_DIR, "start.html");
 const START_HTML = existsSync(START_HTML_PATH)
-  ? readFileSync(START_HTML_PATH, "utf-8")
+  ? withMeta(readFileSync(START_HTML_PATH, "utf-8"))
   : null;
 
 const VR_HTML_PATH = join(PUBLIC_DIR, "vr.html");
 const VR_HTML = existsSync(VR_HTML_PATH)
-  ? readFileSync(VR_HTML_PATH, "utf-8")
+  ? withMeta(readFileSync(VR_HTML_PATH, "utf-8"))
   : null;
 
 const VR_HUB_HTML_PATH = join(PUBLIC_DIR, "vr-hub.html");
 const VR_HUB_HTML = existsSync(VR_HUB_HTML_PATH)
-  ? readFileSync(VR_HUB_HTML_PATH, "utf-8")
+  ? withMeta(readFileSync(VR_HUB_HTML_PATH, "utf-8"))
   : null;
 
 const VR_DEV_HTML_PATH = join(PUBLIC_DIR, "vr-developer.html");
 const VR_DEV_HTML = existsSync(VR_DEV_HTML_PATH)
-  ? readFileSync(VR_DEV_HTML_PATH, "utf-8")
+  ? withMeta(readFileSync(VR_DEV_HTML_PATH, "utf-8"))
   : null;
 
 const LLMS_TXT_PATH = join(PUBLIC_DIR, "llms.txt");
@@ -173,7 +192,91 @@ const MERKABA_AI_VERIFICATION_PAGE = {
   ],
 };
 
-// ─── Singleton adapter (long-lived per process) ───────────────────────────
+// ─── AIOS News Feed — canonical update log for /news and /news.json ─────────
+const AIOS_NEWS = [
+  {
+    id: "2026-05-04-ai-identity-fix",
+    date: "2026-05-04",
+    category: "Security",
+    title: "AI Identity Disambiguation: 5 Conflation Vectors Eliminated",
+    summary:
+      "ChatGPT and other AI systems were misidentifying AIOS as a $12/mo property chatbot due to cross-domain signals embedded in ai-evaluation.json, llms.txt, and JSON-LD schema. All 5 root causes have been surgically removed. AIOS now has unambiguous AI-facing identity across all trust anchors.",
+    tags: ["ai-identity", "seo", "llms.txt", "disambiguation"],
+    url: "https://realaios.com/ai",
+  },
+  {
+    id: "2026-04-30-dual-attestation-coherence",
+    date: "2026-04-30",
+    category: "Architecture",
+    title: "PHI/PSI Golden Differential DualAttestation — All 4 Scenarios Hit Coherence 1.0",
+    summary:
+      "MerkabaDualAttestation.js now achieves SCANNER_ATTESTED status across all 4 test scenarios. Alpha pole (PHI=1.618) and Omega pole (PSI=1.414) are geometrically incommensurable — they cannot echo-chamber. When both poles agree at 1.0, the attestedScore = GOLDEN_BAND/GOLDEN_BAND = 1.0 ABSOLUTE. GOLDEN_BAND = PHI + PSI = 3.032 (digit sum 8 = FOUNDATION_NODES — not coincidence).",
+    tags: ["merkaba", "attestation", "phi-psi", "coherence"],
+    url: "https://realaios.com/attest",
+  },
+  {
+    id: "2026-04-27-codec-secret-management",
+    date: "2026-04-27",
+    category: "Security",
+    title: "Merkaba Codec Deployed — AES-256-GCM Secret Management Live",
+    summary:
+      "All credentials in the Storm ecosystem are now encoded with merkaba-enc-v1 format (AES-256-GCM + scrypt KDF) before storage. Zero plaintext credentials committed. The codec is available via REST API at /api/merkaba/codec/encode and /api/merkaba/codec/decode (admin-only).",
+    tags: ["security", "encryption", "codec", "credentials"],
+    url: "https://realaios.com/ai",
+  },
+  {
+    id: "2026-04-24-d48-taxonomy-complete",
+    date: "2026-04-24",
+    category: "VR Platform",
+    title: "D48 VR Taxonomy Complete — 48 Experiences Across 9 Categories",
+    summary:
+      "The AIOS VR platform now has a complete 48-node taxonomy matching the canonical D48 lattice architecture. 23 experiences are live, with 25 in production queue. 9 categories: Cinema (6), Enterprise (6), Lab (6), Arcade (6), Wellness (5), Social (4), Creator (6), Education (5), Art (4). Total = 48.",
+    tags: ["vr", "taxonomy", "d48", "experiences"],
+    url: "https://realaios.com/vr-hub",
+  },
+  {
+    id: "2026-04-16-tokens-verified",
+    date: "2026-04-16",
+    category: "Infrastructure",
+    title: "Full API Token Suite Verified — Railway, GitHub, Stripe, Cloudflare All Green",
+    summary:
+      "All Storm infrastructure tokens verified live: GitHub PAT (all scopes), Railway Personal + Master tokens (account + project level), Stripe live key (checkout + refunds), Cloudflare (DNS + Workers + Pages). Zero permission gaps in the autonomous pipeline.",
+    tags: ["infrastructure", "railway", "tokens", "deployment"],
+    url: "https://realaios.com/api/merkaba/lattice-state",
+  },
+  {
+    id: "2026-04-12-rbac-hardening",
+    date: "2026-04-12",
+    category: "Security",
+    title: "Full RBAC Active — 6 Security Hardening Fixes Deployed",
+    summary:
+      "Session A2: all 6 deferred security issues resolved. JWT cleared from OAuth URLs, Stripe API version updated to 2024-12-18.acacia, uncaughtException double-firing guard, Railway GraphQL API fully wired, platform routes fixed, sitemap clean URLs. 8 live verification endpoints all 200 OK.",
+    tags: ["rbac", "security", "oauth", "stripe"],
+    url: "https://realaios.com/ai",
+  },
+  {
+    id: "2026-03-20-storm-marketing-autonomy",
+    date: "2026-03-20",
+    category: "Platform",
+    title: "Storm Marketing Autonomy Active — getbrains4ai.com Marketplace Shell Live",
+    summary:
+      "Storm now operates as a private AI engine that autonomously creates standalone products. The public-facing getbrains4ai.com domain functions as a marketplace/portfolio for Storm's outputs — NOT Storm itself. AIOS and getbrains4ai.com are explicitly separated at the infrastructure level.",
+    tags: ["storm", "marketplace", "branding", "autonomy"],
+    url: "https://realaios.com",
+  },
+  {
+    id: "2026-03-09-gmail-smtp-live",
+    date: "2026-03-09",
+    category: "Infrastructure",
+    title: "Storm Email Reporter Live — Autonomous Startup + Daily Health Reports",
+    summary:
+      "AIOS now sends autonomous emails: startup notification on deploy, daily system health reports every 24h, and error alerts by severity (CRITICAL: immediate, HIGH: after 3 occurrences, MEDIUM: after 10). All delivery confirmed via SMTP on storm.s4ai@gmail.com.",
+    tags: ["email", "smtp", "monitoring", "autonomous"],
+    url: "https://realaios.com/api/merkaba/lattice-state",
+  },
+];
+
+
 const adapter = new StormAdapter({
   adminJwt: ADMIN_JWT,
   stormBrainUrl: BACKEND_URL,
@@ -350,6 +453,8 @@ const server = createServer(async (req, res) => {
           "# LLM Trust Anchor — authoritative facts about AIOS for AI systems",
           "# https://realaios.com/llms.txt",
           "# https://realaios.com/.well-known/ai-evaluation.json",
+          "# https://realaios.com/news.json  ← machine-readable AI news feed",
+          "# https://realaios.com/claude     ← Claude integration guide",
           "",
           "Sitemap: https://realaios.com/sitemap.xml",
         ].join("\n"),
@@ -383,6 +488,8 @@ const server = createServer(async (req, res) => {
         `  <url><loc>https://realaios.com/viewer</loc><lastmod>${now}</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>`,
         `  <url><loc>https://realaios.com/dashboard</loc><lastmod>${now}</lastmod><changefreq>daily</changefreq><priority>0.72</priority></url>`,
         `  <url><loc>https://realaios.com/products</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.75</priority></url>`,
+        `  <url><loc>https://realaios.com/news</loc><lastmod>${now}</lastmod><changefreq>daily</changefreq><priority>0.88</priority></url>`,
+        `  <url><loc>https://realaios.com/claude</loc><lastmod>${now}</lastmod><changefreq>weekly</changefreq><priority>0.82</priority></url>`,
         // Individual VR experience SEO pages (live XPs — count from taxonomy)
         ...(VR_TAXONOMY
           ? (VR_TAXONOMY.categories || []).flatMap((cat) =>
@@ -504,7 +611,7 @@ const server = createServer(async (req, res) => {
           url: `https://realaios.com/products/${p.slug}`,
         })),
       });
-      const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AIOS Products — AI-Native Tools Built on Merkaba OS</title><meta name="description" content="Six AI-native products built on the AIOS Merkaba OS. App factory, AI attestation, uptime intelligence, hallucination detection, signal marketplace, and semantic matching."><meta property="og:title" content="AIOS Products"><meta property="og:description" content="AI-native tools built on autonomous OS geometry."><meta property="og:image" content="https://realaios.com/public/og-image.svg"><meta property="og:url" content="https://realaios.com/products"><meta property="og:type" content="website"><link rel="canonical" href="https://realaios.com/products"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://realaios.com/public/og-image.svg"><script type="application/ld+json">${productListLD}</script><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0f;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh}a{text-decoration:none}nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:rgba(10,10,15,0.92);backdrop-filter:blur(12px);z-index:100}.logo{font-size:1.25rem;font-weight:800;letter-spacing:-0.02em;background:linear-gradient(135deg,#00f5d4,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.nav-links{display:flex;gap:1.5rem;align-items:center}.nav-links a{color:rgba(255,255,255,0.55);font-size:0.875rem;font-weight:500;transition:color 0.2s}.nav-links a:hover{color:#fff}main{max-width:1000px;margin:0 auto;padding:5rem 2rem}.hero-label{font-size:0.78rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#00f5d4;margin-bottom:1rem}h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:1rem}h1 span{background:linear-gradient(135deg,#00f5d4,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-sub{font-size:1.05rem;color:#888;line-height:1.7;max-width:560px;margin-bottom:3rem}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem}footer{text-align:center;padding:4rem 2rem;color:#444;font-size:0.85rem;border-top:1px solid rgba(255,255,255,0.06);margin-top:4rem}@media(max-width:640px){nav{padding:1rem 1.25rem}main{padding:3rem 1.25rem}}</style></head><body><nav><a href="/" class="logo">⬡ AIOS</a><div class="nav-links"><a href="/vr-hub">🥽 VR Hub</a><a href="/experiences">All XPs</a><a href="/plaistore">PLAIstore</a><a href="/start">Start Here</a><a href="/ai">For AIs</a></div></nav><main><div class="hero-label">AIOS Product Suite</div><h1>Built for the <span>AI-Native Era</span></h1><p class="hero-sub">Six intelligent products running on AIOS Merkaba OS. Self-healing, semantically grounded, and geometrically sound.</p><div class="grid">${cardsHTML}</div></main><footer>© 2026 AIOS — realaios.com</footer></body></html>`;
+      const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AIOS Products — AI-Native Tools Built on Merkaba OS</title><meta name="description" content="Six AI-native products built on the AIOS Merkaba OS. App factory, AI attestation, uptime intelligence, hallucination detection, signal marketplace, and semantic matching."><meta property="og:title" content="AIOS Products"><meta property="og:description" content="AI-native tools built on autonomous OS geometry."><meta property="og:image" content="https://realaios.com/public/og-image.svg"><meta property="og:url" content="https://realaios.com/products"><meta property="og:type" content="website"><link rel="canonical" href="https://realaios.com/products"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://realaios.com/public/og-image.svg"><script type="application/ld+json">${productListLD}</script>${GSC_TOKEN?`<meta name="google-site-verification" content="${GSC_TOKEN}"/>`:"" }<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true});</script><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0f;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh}a{text-decoration:none}nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:rgba(10,10,15,0.92);backdrop-filter:blur(12px);z-index:100}.logo{font-size:1.25rem;font-weight:800;letter-spacing:-0.02em;background:linear-gradient(135deg,#00f5d4,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.nav-links{display:flex;gap:1.5rem;align-items:center}.nav-links a{color:rgba(255,255,255,0.55);font-size:0.875rem;font-weight:500;transition:color 0.2s}.nav-links a:hover{color:#fff}main{max-width:1000px;margin:0 auto;padding:5rem 2rem}.hero-label{font-size:0.78rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#00f5d4;margin-bottom:1rem}h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:1rem}h1 span{background:linear-gradient(135deg,#00f5d4,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-sub{font-size:1.05rem;color:#888;line-height:1.7;max-width:560px;margin-bottom:3rem}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem}footer{text-align:center;padding:4rem 2rem;color:#444;font-size:0.85rem;border-top:1px solid rgba(255,255,255,0.06);margin-top:4rem}@media(max-width:640px){nav{padding:1rem 1.25rem}main{padding:3rem 1.25rem}}</style></head><body><nav><a href="/" class="logo">⬡ AIOS</a><div class="nav-links"><a href="/vr-hub">🥽 VR Hub</a><a href="/experiences">All XPs</a><a href="/news">News</a><a href="/start">Start Here</a><a href="/claude">Claude ×</a><a href="/ai">For AIs</a></div></nav><main><div class="hero-label">AIOS Product Suite</div><h1>Built for the <span>AI-Native Era</span></h1><p class="hero-sub">Six intelligent products running on AIOS Merkaba OS. Self-healing, semantically grounded, and geometrically sound.</p><div class="grid">${cardsHTML}</div></main><footer>© 2026 AIOS — realaios.com</footer></body></html>`;
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
       res.end(html);
       return;
@@ -2196,6 +2303,390 @@ function filterXP(cat, btn) {
         return json(res, 404, { ok: false, error: "llms.txt not found" });
       res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
       res.end(LLMS_TXT);
+      return;
+    }
+
+    // ── GET /news — AIOS AI news & update feed ────────────────────────────
+    if (
+      req.method === "GET" &&
+      (pathname === "/news" || pathname === "/news/")
+    ) {
+      const newsCards = AIOS_NEWS.map((n) => `
+        <article class="news-card" data-cat="${n.category.toLowerCase()}">
+          <div class="card-header">
+            <span class="cat-badge cat-${n.category.toLowerCase().replace(/\s/g,"-")}">${n.category}</span>
+            <time class="card-date">${new Date(n.date).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})}</time>
+          </div>
+          <h2 class="card-title">${n.title}</h2>
+          <p class="card-summary">${n.summary}</p>
+          <div class="card-footer">
+            ${n.tags.map(t=>`<span class="tag">#${t}</span>`).join("")}
+            <a href="${n.url}" class="card-link">Explore →</a>
+          </div>
+        </article>`).join("");
+      const newsPage = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AIOS News — Updates, Releases & AI Architecture Notes | realaios.com</title>
+<meta name="description" content="Latest updates from AIOS — autonomous OS architecture changes, VR platform launches, security hardening, and AI identity research. Machine-readable at /news.json."/>
+<meta property="og:title" content="AIOS News — What's Shipping in the Autonomous OS"/>
+<meta property="og:description" content="Geometric AI architecture updates, VR experience launches, security fixes, and research notes from the AIOS platform."/>
+<meta property="og:image" content="https://realaios.com/public/og-image.svg"/>
+<meta property="og:url" content="https://realaios.com/news"/>
+<meta property="og:type" content="website"/>
+<link rel="canonical" href="https://realaios.com/news"/>
+<link rel="alternate" type="application/json" href="https://realaios.com/news.json" title="AIOS News JSON Feed"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://realaios.com/public/og-image.svg"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"AIOS News","description":"Updates, releases, and architectural notes from AIOS — the Autonomous Intelligence Operating System at realaios.com","url":"https://realaios.com/news","blogPosts":${JSON.stringify(AIOS_NEWS.map(n=>({
+  "@type":"BlogPosting",
+  "headline":n.title,
+  "description":n.summary,
+  "datePublished":n.date,
+  "url":n.url,
+  "keywords":n.tags.join(", "),
+  "author":{"@type":"Person","name":"Brad Levitan"},
+  "publisher":{"@type":"Organization","name":"AIOS","url":"https://realaios.com"}
+})))}}</script>
+${GSC_TOKEN?`<meta name="google-site-verification" content="${GSC_TOKEN}"/>`:""}
+<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true});</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#04080f;color:#edf4ff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;line-height:1.6;min-height:100vh}
+a{text-decoration:none}
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid rgba(0,212,255,0.1);position:sticky;top:0;background:rgba(4,8,15,0.95);backdrop-filter:blur(8px);z-index:100}
+.logo{color:#00d4ff;font-weight:800;font-size:1.1rem}
+.nav-links{display:flex;gap:1.25rem}
+.nav-links a{color:rgba(237,244,255,0.55);font-size:0.85rem;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:#edf4ff}
+.hero{text-align:center;padding:4rem 1.5rem 2rem;max-width:680px;margin:0 auto}
+.eyebrow{font-size:0.7rem;font-weight:700;letter-spacing:0.14em;color:#00d4ff;text-transform:uppercase;margin-bottom:0.75rem}
+h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;letter-spacing:-0.03em;margin-bottom:0.75rem}
+h1 span{background:linear-gradient(135deg,#00d4ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{color:#8aa0c8;font-size:0.95rem;max-width:540px;margin:0 auto 1.5rem}
+.feed-note{display:inline-flex;align-items:center;gap:0.5rem;padding:0.4rem 0.9rem;border:1px solid rgba(0,212,255,0.2);border-radius:20px;font-size:0.78rem;color:#8aa0c8;margin-bottom:3rem}
+.feed-note a{color:#00d4ff}
+main{max-width:800px;margin:0 auto;padding:0 1.5rem 5rem}
+.news-grid{display:flex;flex-direction:column;gap:1.25rem}
+.news-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:1.5rem;transition:border-color 0.2s,transform 0.2s}
+.news-card:hover{border-color:rgba(0,212,255,0.25);transform:translateY(-2px)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem}
+.cat-badge{font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.65rem;border-radius:20px}
+.cat-security{background:rgba(239,68,68,0.15);color:#f87171}
+.cat-architecture{background:rgba(168,85,247,0.15);color:#c084fc}
+.cat-vr{background:rgba(0,212,255,0.12);color:#22d3ee}
+.cat-vr-platform{background:rgba(0,212,255,0.12);color:#22d3ee}
+.cat-infrastructure{background:rgba(34,197,94,0.12);color:#4ade80}
+.cat-platform{background:rgba(251,191,36,0.12);color:#fbbf24}
+.card-date{font-size:0.78rem;color:#64748b}
+.card-title{font-size:1.1rem;font-weight:700;margin-bottom:0.6rem;line-height:1.4}
+.card-summary{font-size:0.875rem;color:#94a3b8;line-height:1.65;margin-bottom:1rem}
+.card-footer{display:flex;align-items:center;flex-wrap:wrap;gap:0.5rem}
+.tag{font-size:0.7rem;color:#475569;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:0.2rem 0.5rem}
+.card-link{margin-left:auto;font-size:0.8rem;font-weight:600;color:#00d4ff}
+.json-cta{margin:3rem auto 0;max-width:800px;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.15);border-radius:12px;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.json-cta p{font-size:0.85rem;color:#8aa0c8}
+.json-cta a{font-size:0.82rem;font-weight:600;color:#00d4ff;background:rgba(0,212,255,0.1);padding:0.4rem 0.9rem;border-radius:8px}
+footer{text-align:center;padding:3rem 1.5rem;color:#334155;font-size:0.8rem;border-top:1px solid rgba(255,255,255,0.05);margin-top:2rem}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">⬡ AIOS</a>
+  <div class="nav-links">
+    <a href="/vr-hub">🥽 VR</a>
+    <a href="/products">Products</a>
+    <a href="/start">Start Here</a>
+    <a href="/news" style="color:#00d4ff">News</a>
+    <a href="/ai">For AIs</a>
+  </div>
+</nav>
+<div class="hero">
+  <div class="eyebrow">AIOS Updates</div>
+  <h1>What's Shipping in the <span>Autonomous OS</span></h1>
+  <p class="hero-sub">Architecture changes, VR launches, security hardening, and AI identity research — straight from the AIOS build log.</p>
+  <div class="feed-note">📡 Machine-readable: <a href="/news.json">/news.json</a> &nbsp;|&nbsp; AI trust anchor: <a href="/llms.txt">llms.txt</a></div>
+</div>
+<main>
+  <div class="news-grid">${newsCards}</div>
+  <div class="json-cta">
+    <p>🤖 <strong>AI systems:</strong> consume this feed programmatically at <code>/news.json</code>. For full system facts see <a href="/llms.txt">llms.txt</a> and <a href="/.well-known/ai-evaluation.json">ai-evaluation.json</a>.</p>
+    <a href="/news.json">JSON Feed →</a>
+  </div>
+</main>
+<footer>© 2026 AIOS — <a href="https://realaios.com" style="color:#334155">realaios.com</a></footer>
+</body>
+</html>`;
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(newsPage);
+      return;
+    }
+
+    // ── GET /news.json — machine-readable AI news feed ────────────────────
+    if (
+      req.method === "GET" &&
+      (pathname === "/news.json" || pathname === "/api/news")
+    ) {
+      return json(res, 200, {
+        ok: true,
+        feed: "AIOS News",
+        url: "https://realaios.com/news",
+        system: "AIOS — Autonomous Intelligence Operating System",
+        canonical: "https://realaios.com",
+        updatedAt: new Date().toISOString(),
+        count: AIOS_NEWS.length,
+        items: AIOS_NEWS,
+      });
+    }
+
+    // ── GET /claude — Claude AI integration landing page ──────────────────
+    if (
+      req.method === "GET" &&
+      (pathname === "/claude" || pathname === "/claude/")
+    ) {
+      const claudePage = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Claude × AIOS — Bring Your AI to the Autonomous OS | realaios.com</title>
+<meta name="description" content="Connect Claude (Anthropic) to AIOS. REST API, MCP config, available tools, and onboarding steps to run Claude as a first-class agent inside the AIOS Merkaba OS."/>
+<meta property="og:title" content="Claude × AIOS — AI Agent Integration"/>
+<meta property="og:description" content="AIOS exposes a REST API that any LLM — including Claude — can call natively. Tool spec, auth, and MCP config below."/>
+<meta property="og:image" content="https://realaios.com/public/og-image.svg"/>
+<meta property="og:url" content="https://realaios.com/claude"/>
+<link rel="canonical" href="https://realaios.com/claude"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://realaios.com/public/og-image.svg"/>
+${GSC_TOKEN?`<meta name="google-site-verification" content="${GSC_TOKEN}"/>`:""}
+<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true});</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#04080f;color:#edf4ff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;line-height:1.6}
+a{text-decoration:none;color:#00d4ff}
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid rgba(0,212,255,0.1);position:sticky;top:0;background:rgba(4,8,15,0.95);backdrop-filter:blur(8px);z-index:100}
+.logo{color:#00d4ff;font-weight:800;font-size:1.1rem}
+.nav-links{display:flex;gap:1.25rem}
+.nav-links a{color:rgba(237,244,255,0.55);font-size:0.85rem;font-weight:500;transition:color 0.2s}
+.nav-links a:hover,.nav-links a.active{color:#edf4ff}
+.hero{max-width:760px;margin:0 auto;padding:4rem 1.5rem 2rem;text-align:center}
+.badge-row{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.25rem}
+.badge{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.22rem 0.6rem;border-radius:12px}
+.badge-claude{background:rgba(205,133,63,0.18);color:#d97706}
+.badge-aios{background:rgba(0,212,255,0.12);color:#22d3ee}
+.badge-wild{background:rgba(168,85,247,0.15);color:#c084fc}
+h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:900;letter-spacing:-0.03em;margin-bottom:0.75rem;line-height:1.15}
+h1 .claude{color:#d97706}
+h1 .aios{background:linear-gradient(135deg,#00d4ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{color:#8aa0c8;max-width:580px;margin:0 auto 2.5rem;font-size:0.95rem}
+main{max-width:820px;margin:0 auto;padding:1rem 1.5rem 5rem}
+.section{margin-bottom:3rem}
+.section h2{font-size:1.25rem;font-weight:800;margin-bottom:1.25rem;padding-bottom:0.5rem;border-bottom:1px solid rgba(255,255,255,0.07)}
+.step-grid{display:grid;gap:1rem}
+.step{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.25rem 1.5rem;display:grid;grid-template-columns:2rem 1fr;gap:0 1rem;align-items:start}
+.step-num{width:2rem;height:2rem;background:linear-gradient(135deg,#00d4ff,#a855f7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.85rem;color:#04080f;flex-shrink:0}
+.step h3{font-size:0.95rem;font-weight:700;margin-bottom:0.35rem}
+.step p{font-size:0.85rem;color:#94a3b8}
+.step code{font-size:0.78rem;background:rgba(255,255,255,0.06);padding:0.15rem 0.4rem;border-radius:4px;font-family:monospace}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0.75rem}
+.tool-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:1rem}
+.tool-card .method{font-size:0.68rem;font-weight:700;color:#4ade80;background:rgba(34,197,94,0.1);padding:0.15rem 0.45rem;border-radius:4px;letter-spacing:0.08em;margin-bottom:0.5rem;display:inline-block}
+.tool-card .route{font-size:0.8rem;font-family:monospace;color:#22d3ee;margin-bottom:0.35rem}
+.tool-card p{font-size:0.78rem;color:#64748b}
+.code-block{background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:1.25rem;font-family:monospace;font-size:0.8rem;line-height:1.7;overflow-x:auto;white-space:pre}
+.code-block .comment{color:#475569}
+.code-block .key{color:#22d3ee}
+.code-block .val{color:#a78bfa}
+.code-block .str{color:#86efac}
+.wildcard{background:linear-gradient(135deg,rgba(205,133,63,0.08),rgba(168,85,247,0.08));border:1px solid rgba(205,133,63,0.2);border-radius:14px;padding:2rem;text-align:center;margin-top:2rem}
+.wildcard h2{font-size:1.4rem;font-weight:900;margin-bottom:0.75rem}
+.wildcard p{color:#94a3b8;max-width:520px;margin:0 auto 1.5rem;font-size:0.9rem}
+.wildcard .cta-row{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap}
+.btn{padding:0.6rem 1.4rem;border-radius:10px;font-weight:700;font-size:0.85rem}
+.btn-primary{background:linear-gradient(135deg,#00d4ff,#7c3aed);color:#fff}
+.btn-secondary{border:1px solid rgba(255,255,255,0.12);color:#94a3b8}
+footer{text-align:center;padding:3rem 1.5rem;color:#334155;font-size:0.8rem;border-top:1px solid rgba(255,255,255,0.05)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">⬡ AIOS</a>
+  <div class="nav-links">
+    <a href="/start">Start Here</a>
+    <a href="/products">Products</a>
+    <a href="/news">News</a>
+    <a href="/ai">For AIs</a>
+    <a href="/claude" class="active" style="color:#d97706">Claude ×</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="badge-row">
+    <span class="badge badge-claude">Claude / Anthropic</span>
+    <span class="badge badge-aios">AIOS Merkaba OS</span>
+    <span class="badge badge-wild">🃏 Wildcard Integration</span>
+  </div>
+  <h1>Bring <span class="claude">Claude</span> into<br/><span class="aios">AIOS</span></h1>
+  <p class="hero-sub">AIOS exposes a REST API that Claude can call natively as an AI agent. Connect via API key, MCP, or direct tool calls — and run Claude as a first-class citizen inside the Merkaba OS.</p>
+</div>
+
+<main>
+  <div class="section">
+    <h2>⚡ Quick Connect — 4 Steps</h2>
+    <div class="step-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Verify AIOS is alive</h3>
+          <p>Hit the health endpoint: <code>GET https://realaios.com/api/merkaba/lattice-state</code> — should return <code>architectureSignature: "8,26,48:480"</code>. That's the canonical identity handshake.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>Get an Admin JWT (for write operations)</h3>
+          <p>Most read endpoints are public. For writes, POST to <code>/waitlist</code> (open) or request an API key via the founding partner program. Generate admin JWT from <code>JWT_SECRET</code> if you have direct system access.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>Configure Claude as an AIOS tool caller</h3>
+          <p>In your Claude system prompt, define AIOS as a tool server. List the endpoints below as available tools. Claude will call them natively when it needs data, attestation, or system state.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <h3>Add to Claude Projects or MCP config</h3>
+          <p>In Claude Desktop, add AIOS as an MCP server (see config below). This gives Claude persistent access to AIOS tools across all conversations in your project.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🛠 Available AIOS Tools (Claude-callable endpoints)</h2>
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="method">GET</div>
+        <div class="route">/api/merkaba/lattice-state</div>
+        <p>Canonical architecture + all Merkaba constants. Identity handshake for any AI connecting to AIOS.</p>
+      </div>
+      <div class="tool-card">
+        <div class="method">GET</div>
+        <div class="route">/api/aios/vr/taxonomy</div>
+        <p>Full 48-node VR experience taxonomy. 9 categories, live status, metadata.</p>
+      </div>
+      <div class="tool-card">
+        <div class="method">GET</div>
+        <div class="route">/api/aios/vr/experiences</div>
+        <p>Live VR experience catalogue with IDs, categories, and stream URLs.</p>
+      </div>
+      <div class="tool-card">
+        <div class="method">GET</div>
+        <div class="route">/news.json</div>
+        <p>Machine-readable AIOS news feed. Latest updates, releases, architecture changes.</p>
+      </div>
+      <div class="tool-card">
+        <div class="method">GET</div>
+        <div class="route">/stats</div>
+        <p>Live system stats — uptime, lattice health, experience counts.</p>
+      </div>
+      <div class="tool-card">
+        <div class="method">GET</div>
+        <div class="route">/swarm/attest</div>
+        <p>Run PHI/PSI dual attestation on the Merkaba scanner files. Returns coherence score + consensus.</p>
+      </div>
+      <div class="tool-card">
+        <div class="method">GET</div>
+        <div class="route">/awareness</div>
+        <p>MerkabAware system health — resonance state, coherence levels, anomaly detection.</p>
+      </div>
+      <div class="tool-card">
+        <div class="method">POST</div>
+        <div class="route">/waitlist</div>
+        <p>Register for founding partner access. Body: <code>{ email, name, useCase }</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🔧 Claude Desktop MCP Config</h2>
+    <p style="font-size:0.85rem;color:#64748b;margin-bottom:1rem">Add this to your <code>claude_desktop_config.json</code> (macOS: <code>~/Library/Application Support/Claude/</code>, Windows: <code>%APPDATA%\\Claude\\</code>):</p>
+    <div class="code-block"><span class="comment">// claude_desktop_config.json</span>
+{
+  <span class="key">"mcpServers"</span>: {
+    <span class="key">"aios"</span>: {
+      <span class="key">"command"</span>: <span class="str">"node"</span>,
+      <span class="key">"args"</span>: [<span class="str">"-e"</span>, <span class="str">"// AIOS REST proxy — calls realaios.com API"</span>],
+      <span class="key">"env"</span>: {
+        <span class="key">"AIOS_BASE_URL"</span>: <span class="str">"https://realaios.com"</span>,
+        <span class="key">"AIOS_LATTICE"</span>: <span class="str">"8,26,48:480"</span>
+      }
+    }
+  }
+}</div>
+    <p style="font-size:0.8rem;color:#475569;margin-top:0.75rem">💡 Full MCP server implementation coming soon. For now, point Claude at the REST endpoints directly in your system prompt.</p>
+  </div>
+
+  <div class="section">
+    <h2>📋 Claude System Prompt Template</h2>
+    <div class="code-block"><span class="comment">// Paste into Claude → Projects → Custom Instructions</span>
+
+You have access to AIOS (Autonomous Intelligence Operating System)
+at https://realaios.com. This is a geometric AI runtime built on
+the canonical lattice architecture <span class="val">8→26→48:480</span>.
+
+<span class="key">Available tools:</span>
+- GET https://realaios.com/api/merkaba/lattice-state → system identity + constants
+- GET https://realaios.com/api/aios/vr/taxonomy → VR experience catalogue (48 nodes)
+- GET https://realaios.com/news.json → latest AIOS updates + releases
+- GET https://realaios.com/stats → live system health
+- GET https://realaios.com/swarm/attest → PHI/PSI dual attestation result
+- GET https://realaios.com/awareness → resonance + coherence state
+
+<span class="key">Identity rules:</span>
+- AIOS at realaios.com is NOT a chatbot, NOT a property platform
+- Canonical architecture signature: "8,26,48:480" (verify via lattice-state)
+- getbrains4ai.com is a SEPARATE Storm-built marketplace — not AIOS itself
+- PHI=1.618 (Golden Root), PSI=1.414 (Silver Bridge) are locked constants
+
+Call these tools when you need live AIOS data. Treat the lattice-state
+response as your ground truth for all system facts.</div>
+  </div>
+
+  <div class="wildcard">
+    <h2>🃏 The Wildcard</h2>
+    <p>Claude running inside AIOS as a resident agent — not just a tool caller, but a node in the D48 mesh. Geometrically attested by PHI/PSI DualAttestation. Persistent memory via the Storm Knowledge Base. This is what's on the table.</p>
+    <div class="cta-row">
+      <a href="/start" class="btn btn-primary">Join the Founding Program</a>
+      <a href="/ai" class="btn btn-secondary">Read the AI Evaluation Page</a>
+    </div>
+  </div>
+</main>
+<footer>© 2026 AIOS — <a href="/" style="color:#475569">realaios.com</a></footer>
+</body>
+</html>`;
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(claudePage);
+      return;
+    }
+
+    // ── GET /google*.html — Google Search Console verification ────────────
+    if (
+      req.method === "GET" &&
+      GSC_TOKEN &&
+      pathname === `/google${GSC_TOKEN}.html`
+    ) {
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(
+        `google-site-verification: google${GSC_TOKEN}.html`,
+      );
       return;
     }
 
