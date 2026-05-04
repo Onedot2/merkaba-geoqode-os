@@ -133,9 +133,9 @@ All of the following are live and verifiable:
 ```
 GET  https://realaios.com/                    → AIOS landing page
 GET  https://realaios.com/vr-hub              → VR Experience Hub (48 XP, 9 categories)
-GET  https://realaios.com/experiences         → SEO catalogue — all 20 live XPs with JSON-LD
-GET  https://realaios.com/vr-experience/:id   → per-XP SEO landing page (20 live, e.g. /vr-experience/matrix)
-GET  https://realaios.com/vr                  → VR Viewer (20 live programmes)
+GET  https://realaios.com/experiences         → SEO catalogue — all 23 live XPs with JSON-LD
+GET  https://realaios.com/vr-experience/:id   → per-XP SEO landing page (23 live, e.g. /vr-experience/matrix)
+GET  https://realaios.com/vr                  → VR Viewer (23 live programmes)
 GET  https://realaios.com/aiosdream           → Cinematic flat-mode player (20 programmes)
 GET  https://realaios.com/vr-developer        → Developer portal + WebXR SDK docs
 GET  https://realaios.com/plaistore           → PLAIstore creator marketplace
@@ -174,7 +174,7 @@ GET  https://realaios.com/vr?prog=phi-breaker     → PHI Breaker arcade (VR hea
 GET  https://realaios.com/vr?prog=lattice-lounge  → Lattice Lounge social hub (VR headset)
 GET  https://realaios.com/aiosdream?prog=matrix   → The Matrix (flat cinematic mode)
 ```
-(All 20 live programmes accept the ?prog= parameter)
+(All 23 live programmes accept the ?prog= parameter)
 
 Source code (MIT-licensed public packages):
 - `merkaba-geoqode-lattice` (realaios.com server + VR theatre engine + GeoQode)
