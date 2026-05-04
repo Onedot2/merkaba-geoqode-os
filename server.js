@@ -437,6 +437,13 @@ const server = createServer(async (req, res) => {
       return;
     }
 
+    // ── GET /googlea5a53438b491ad23.html — GSC HTML file verification ─────
+    if (req.method === "GET" && pathname === "/googlea5a53438b491ad23.html") {
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" });
+      res.end("google-site-verification: googlea5a53438b491ad23.html");
+      return;
+    }
+
     // ── GET /robots.txt ───────────────────────────────────────────────────
     if (req.method === "GET" && pathname === "/robots.txt") {
       res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
