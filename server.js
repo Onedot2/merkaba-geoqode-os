@@ -1605,6 +1605,46 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
       });
     }
 
+    // ── GET /api/aios/vr/events — Upcoming + live VR events ─────────────
+    if (
+      req.method === "GET" &&
+      (pathname === "/api/aios/vr/events" || pathname === "/api/aios/vr/events/")
+    ) {
+      if (!VR_TAXONOMY)
+        return json(res, 404, { ok: false, error: "VR taxonomy not found" });
+      const qs = new URLSearchParams(url.search);
+      const filterCat = qs.get("category");
+      const filterStatus = qs.get("status"); // upcoming|live|past
+      const now = Date.now();
+      let events = (VR_TAXONOMY.events || []).map(ev => ({
+        ...ev,
+        msUntil: new Date(ev.startISO).getTime() - now,
+        isPast: new Date(ev.startISO).getTime() + (ev.durationMinutes || 60) * 60000 < now,
+        isLive: new Date(ev.startISO).getTime() <= now &&
+                new Date(ev.startISO).getTime() + (ev.durationMinutes || 60) * 60000 >= now,
+      }));
+      if (filterCat)    events = events.filter(e => e.category === filterCat.toLowerCase());
+      if (filterStatus) events = events.filter(e => {
+        if (filterStatus === "live")     return e.isLive;
+        if (filterStatus === "past")     return e.isPast;
+        if (filterStatus === "upcoming") return !e.isLive && !e.isPast;
+        return true;
+      });
+      events.sort((a, b) => new Date(a.startISO) - new Date(b.startISO));
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Cache-Control", "public, max-age=60");
+      return json(res, 200, {
+        ok: true,
+        events,
+        total: events.length,
+        live: events.filter(e => e.isLive).length,
+        upcoming: events.filter(e => !e.isLive && !e.isPast).length,
+        generatedAt: new Date().toISOString(),
+        phi: 1.618,
+        architecture: "8,26,48:480",
+      });
+    }
+
     // ── GET /aiosdream — Dimensional Geometric Streaming viewer ──────────
     if (
       req.method === "GET" &&
@@ -1755,6 +1795,7 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
         "GET  /api/aios/vr/taxonomy",
         "GET  /api/aios/vr/categories",
         "GET  /api/aios/vr/experiences",
+        "GET  /api/aios/vr/events",
         "GET  /audio/status",
         "GET  /audio/frequencies",
         "POST /audio/score",

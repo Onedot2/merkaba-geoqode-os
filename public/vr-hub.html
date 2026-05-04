@@ -567,6 +567,86 @@
         .stats-bar { gap: 1.5rem; }
       }
 
+      /* ── EVENTS SECTION ──────────────────────────────────────────────── */
+      .events-section {
+        padding: 2.5rem 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .events-header {
+        display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+      }
+      .events-title {
+        font-size: 1.2rem; font-weight: 800;
+      }
+      .live-badge {
+        background: #ef4444; color: #fff; font-size: 0.7rem; font-weight: 800;
+        padding: 0.15rem 0.5rem; border-radius: 4px; letter-spacing: 0.08em;
+        animation: pulse-red 1.5s ease-in-out infinite;
+      }
+      @keyframes pulse-red {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.6; }
+      }
+      .events-scroll {
+        display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 0.5rem;
+        scrollbar-width: thin; scrollbar-color: rgba(0,212,255,0.2) transparent;
+      }
+      .event-card {
+        flex: 0 0 300px; min-width: 280px;
+        background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+        border-left: 4px solid var(--cyan);
+        padding: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem;
+        text-decoration: none; color: inherit; transition: border-color 0.2s, transform 0.15s;
+      }
+      .event-card:hover { transform: translateY(-2px); border-left-color: #fff; }
+      .event-card-top { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+      .event-type {
+        font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em;
+        color: var(--muted); font-weight: 600;
+      }
+      .event-status {
+        font-size: 0.68rem; font-weight: 700; padding: 0.1rem 0.4rem;
+        border-radius: 4px; text-transform: uppercase;
+      }
+      .event-status.live { background: rgba(239,68,68,0.2); color: #ef4444; }
+      .event-status.upcoming { background: rgba(0,212,255,0.1); color: var(--cyan); }
+      .event-title { font-size: 0.98rem; font-weight: 700; line-height: 1.3; }
+      .event-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; flex: 1; }
+      .event-countdown {
+        font-size: 0.78rem; font-family: monospace;
+        color: var(--cyan); font-weight: 700; background: rgba(0,212,255,0.08);
+        border-radius: 5px; padding: 0.3rem 0.6rem; display: inline-block;
+      }
+      .event-meta { display: flex; gap: 0.75rem; font-size: 0.75rem; color: var(--muted); flex-wrap: wrap; }
+      .event-enter-btn {
+        display: inline-block; padding: 0.4rem 0.9rem; border-radius: 6px;
+        background: var(--cyan); color: #000; font-weight: 700; font-size: 0.78rem;
+        text-decoration: none; align-self: flex-start; margin-top: 0.25rem;
+      }
+
+      /* ── SEARCH BAR ─────────────────────────────────────────────────── */
+      .search-bar-wrap {
+        padding: 0.5rem 2rem 0;
+        max-width: 1200px; margin: 0 auto;
+      }
+      .search-bar {
+        display: flex; gap: 0.75rem; align-items: center;
+        background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+        padding: 0.5rem 0.75rem;
+      }
+      .search-bar input {
+        flex: 1; background: none; border: none; outline: none;
+        color: var(--text); font-size: 0.9rem; font-family: inherit;
+      }
+      .search-bar input::placeholder { color: rgba(248,250,252,0.25); }
+      .search-clear {
+        background: none; border: none; color: var(--muted); cursor: pointer;
+        font-size: 1rem; padding: 0; line-height: 1;
+      }
+      .search-count { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+
       /* ── QUEST-SPECIFIC OVERRIDES ────────────────────────────────────── */
       /* Larger tap targets in Quest Browser (pointer = coarse or VR) */
       @media (pointer: coarse), (hover: none) {
@@ -637,6 +717,28 @@
       <div class="stat"><span class="stat-num">0</span><span class="stat-label">Downloads Required</span></div>
       <div class="stat"><span class="stat-num">2</span><span class="stat-label">Quest Generations</span></div>
       <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">AI Content Generation</span></div>
+    </div>
+
+    <!-- ── UPCOMING EVENTS ──────────────────────────────────────────────── -->
+    <div class="events-section" id="events">
+      <div class="events-header">
+        <div class="events-title">📅 Upcoming Events</div>
+        <span class="live-badge" id="live-now-badge" style="display:none;">🔴 LIVE NOW</span>
+      </div>
+      <div class="events-scroll" id="events-scroll">
+        <!-- JS-rendered from /api/aios/vr/taxonomy events -->
+        <div style="color:rgba(248,250,252,0.3);font-size:0.85rem;padding:1rem 0;">Loading events…</div>
+      </div>
+    </div>
+
+    <!-- ── SEARCH BAR ────────────────────────────────────────────────────── -->
+    <div class="search-bar-wrap">
+      <div class="search-bar">
+        <span style="color:rgba(248,250,252,0.3);font-size:0.95rem;">🔍</span>
+        <input type="text" id="xp-search" placeholder="Search experiences, categories, frequencies…" autocomplete="off" />
+        <span class="search-count" id="search-count"></span>
+        <button class="search-clear" id="search-clear" title="Clear search" style="display:none;">✕</button>
+      </div>
     </div>
 
     <!-- ── CATEGORY NAV PILLS ─────────────────────────────────────────────── -->
@@ -782,6 +884,22 @@
         </div>
       </div>
       <div class="xp-grid" id="social-grid"></div>
+      <!-- Lattice Lounge waitlist -->
+      <div style="margin-top:2rem;padding:1.75rem 2rem;background:linear-gradient(135deg,rgba(0,212,255,0.05),rgba(168,85,247,0.05));border:1px solid rgba(0,212,255,0.15);border-radius:14px;max-width:680px;">
+        <div style="font-size:1.05rem;font-weight:800;margin-bottom:0.4rem;">🏛️ Lattice Lounge — Grand Opening</div>
+        <div style="font-size:0.85rem;color:rgba(248,250,252,0.55);margin-bottom:1.1rem;line-height:1.5;">
+          The first persistent social VR space on realaios.com. Real-time presence, spatial voice, PHI-resonant architecture.
+          Opening June 1, 2026 — limited to 26 simultaneous visitors on launch night.
+        </div>
+        <div id="waitlist-form" style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <input id="waitlist-email" type="email" placeholder="your@email.com"
+            style="flex:1;min-width:200px;background:rgba(0,0,0,0.3);border:1px solid rgba(0,212,255,0.25);border-radius:7px;padding:0.6rem 0.9rem;color:#f8fafc;font-size:0.88rem;font-family:inherit;outline:none;" />
+          <button onclick="joinWaitlist()" style="background:#00d4ff;color:#000;border:none;border-radius:7px;padding:0.6rem 1.25rem;font-weight:700;font-size:0.88rem;cursor:pointer;white-space:nowrap;">
+            Join Waitlist →
+          </button>
+        </div>
+        <div id="waitlist-msg" style="display:none;font-size:0.82rem;color:#22c55e;margin-top:0.5rem;font-weight:600;"></div>
+      </div>
     </div>
 
     <!-- ── CREATOR ─────────────────────────────────────────────────────────── -->
@@ -1006,11 +1124,179 @@
           </div>`;
       }
 
-      // ── Stat: live XP count from PLAIstore API ───────────────────────────
-      fetch(`${API_BASE}/plai/apps?category=VR&limit=100&sort=downloads`)
+      // ── Lattice Lounge waitlist ───────────────────────────────────────────
+      window.joinWaitlist = function() {
+        const email = (document.getElementById("waitlist-email").value || "").trim();
+        if (!email || !email.includes("@")) {
+          document.getElementById("waitlist-email").style.borderColor = "#ef4444";
+          return;
+        }
+        document.getElementById("waitlist-email").style.borderColor = "";
+        fetch(`${API_BASE}/api/waitlist`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, source: "lattice-lounge-vr-hub", tags: ["social-vr","lattice-lounge"] })
+        })
+        .then(r => r.json())
+        .then(() => {
+          document.getElementById("waitlist-form").style.display = "none";
+          const msg = document.getElementById("waitlist-msg");
+          msg.style.display = "block";
+          msg.textContent = "✅ You're on the list! We'll email you 24h before launch.";
+        })
+        .catch(() => {
+          // Degrade gracefully — still show confirmation
+          document.getElementById("waitlist-form").style.display = "none";
+          const msg = document.getElementById("waitlist-msg");
+          msg.style.display = "block";
+          msg.textContent = "✅ Thanks! We'll be in touch before launch.";
+        });
+      };
+
+      // ── VR experience analytics ──────────────────────────────────────────
+      // Fires when user clicks "Enter VR" on any card
+      document.addEventListener("click", function(e) {
+        const link = e.target.closest("a[href]");
+        if (!link) return;
+        const href = link.getAttribute("href") || "";
+        if (!href.startsWith("/vr?prog=") && !href.startsWith("/aiosdream?prog=")) return;
+        const prog = new URLSearchParams(href.split("?")[1] || "").get("prog") || "unknown";
+        const mode = href.startsWith("/vr?") ? "vr" : "theatre";
+        // Fire-and-forget — no await, doesn't block navigation
+        fetch(`${API_BASE}/api/knowledge/aios-vr-analytics`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            data: {
+              event: "xp_enter",
+              prog,
+              mode,
+              ts: Date.now(),
+              ua: navigator.userAgent.substring(0, 80),
+              phi: 1.618,
+              architecture: "8,26,48:480"
+            }
+          })
+        }).catch(() => {});
+      }, { passive: true });
+
+      // ── Stat: live XP count from taxonomy (canonical) + PLAIstore ───────
+      fetch("/api/aios/vr/taxonomy")
         .then(r => r.ok ? r.json() : null)
-        .then(d => { if (d && d.total) document.getElementById("stat-xp").textContent = d.total + "+"; else if (d && d.apps) document.getElementById("stat-xp").textContent = d.apps.length + "+"; })
-        .catch(() => {});
+        .then(d => {
+          if (!d || !d.categories) return;
+          let total = 0;
+          d.categories.forEach(c => { total += (c.experiences || []).length; });
+          if (total) document.getElementById("stat-xp").textContent = total + "+";
+        })
+        .catch(() => {
+          // Fallback to PLAIstore
+          fetch(`${API_BASE}/plai/apps?category=VR&limit=100&sort=downloads`)
+            .then(r => r.ok ? r.json() : null)
+            .then(d => { if (d && d.total) document.getElementById("stat-xp").textContent = d.total + "+"; })
+            .catch(() => {});
+        });
+
+      // ── Events renderer ──────────────────────────────────────────────────
+      (function renderEvents() {
+        fetch("/api/aios/vr/events")
+          .then(r => r.ok ? r.json() : null)
+          .then(d => {
+            if (!d || !d.events || d.events.length === 0) {
+              document.getElementById("events-scroll").innerHTML =
+                '<p style="color:rgba(248,250,252,0.3);font-size:0.85rem;">No upcoming events — check back soon.</p>';
+              return;
+            }
+            if (d.live > 0) {
+              document.getElementById("live-now-badge").style.display = "inline-block";
+            }
+            const scroll = document.getElementById("events-scroll");
+            scroll.innerHTML = "";
+            d.events.forEach(ev => {
+              const card = document.createElement("div");
+              card.className = "event-card";
+              card.style.borderLeftColor = ev.accent || "#00d4ff";
+              const statusLabel = ev.isLive ? "🔴 LIVE" : "upcoming";
+              const statusClass = ev.isLive ? "live" : "upcoming";
+              const dateStr = new Date(ev.startISO).toLocaleDateString("en-US", { weekday:"short", month:"short", day:"numeric", hour:"2-digit", minute:"2-digit" });
+              card.innerHTML = `
+                <div class="event-card-top">
+                  <span class="event-type">${ev.type || "event"}</span>
+                  <span class="event-status ${statusClass}">${statusLabel}</span>
+                </div>
+                <div class="event-title">${ev.title}</div>
+                <div class="event-desc">${ev.description}</div>
+                <div class="event-countdown" id="cd-${ev.id}">${ev.isLive ? "🔴 LIVE NOW" : "…"}</div>
+                <div class="event-meta">
+                  <span>📅 ${dateStr}</span>
+                  <span>⏱ ${ev.durationMinutes || 60}min</span>
+                  <span>👥 ${ev.maxAttendees || "∞"} max</span>
+                </div>
+                ${ev.vrUrl ? `<a href="${ev.vrUrl}" class="event-enter-btn">🥽 ${ev.isLive ? "Join Now" : "View →"}</a>` : ""}
+              `;
+              scroll.appendChild(card);
+            });
+            // Countdown timers
+            function tickCountdowns() {
+              const now = Date.now();
+              d.events.forEach(ev => {
+                const el = document.getElementById("cd-" + ev.id);
+                if (!el) return;
+                const start = new Date(ev.startISO).getTime();
+                const end = start + (ev.durationMinutes || 60) * 60000;
+                if (now >= start && now < end) {
+                  el.textContent = "🔴 LIVE NOW";
+                } else if (now < start) {
+                  const diff = start - now;
+                  const d2 = Math.floor(diff / 86400000);
+                  const h = Math.floor((diff % 86400000) / 3600000);
+                  const m = Math.floor((diff % 3600000) / 60000);
+                  el.textContent = d2 > 0 ? `⏳ ${d2}d ${h}h ${m}m` : `⏳ ${h}h ${m}m`;
+                } else {
+                  el.textContent = "✅ Complete";
+                }
+              });
+            }
+            tickCountdowns();
+            setInterval(tickCountdowns, 30000);
+          })
+          .catch(() => {
+            document.getElementById("events-scroll").innerHTML =
+              '<p style="color:rgba(248,250,252,0.3);font-size:0.85rem;">Events unavailable.</p>';
+          });
+      })();
+
+      // ── Search filter ─────────────────────────────────────────────────────
+      (function initSearch() {
+        const input = document.getElementById("xp-search");
+        const clearBtn = document.getElementById("search-clear");
+        const countEl = document.getElementById("search-count");
+        if (!input) return;
+
+        // Collect all searchable XP cards after render
+        function getCards() {
+          return Array.from(document.querySelectorAll(".xp-card, .ent-card, .well-card"));
+        }
+        function doSearch(q) {
+          const term = q.trim().toLowerCase();
+          clearBtn.style.display = term ? "inline" : "none";
+          if (!term) {
+            countEl.textContent = "";
+            getCards().forEach(c => { c.style.display = ""; });
+            return;
+          }
+          let shown = 0;
+          getCards().forEach(c => {
+            const text = (c.textContent || "").toLowerCase();
+            const visible = text.includes(term);
+            c.style.display = visible ? "" : "none";
+            if (visible) shown++;
+          });
+          countEl.textContent = shown + " result" + (shown !== 1 ? "s" : "");
+        }
+        input.addEventListener("input", () => doSearch(input.value));
+        clearBtn.addEventListener("click", () => { input.value = ""; doSearch(""); input.focus(); });
+      })();
 
       // ── Category pill active state on scroll ─────────────────────────────
       const pills = document.querySelectorAll(".cat-pill");
