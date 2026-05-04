@@ -583,9 +583,9 @@
           depth (D8/D26/D48/D480)
         </li>
         <li>
-          <strong>Scene system:</strong> 6 programmes × 7-9 scenes each,
+          <strong>Scene system:</strong> 20 programmes × 5-9 scenes each,
           authored as geometric narrative with resonance frequency and semantic
-          type per scene
+          type per scene — all 9 VR categories represented
         </li>
         <li>
           <strong>Typewriter rendering:</strong> Scene text streams at
@@ -627,9 +627,14 @@
       <p>All of the following are publicly accessible and verifiable:</p>
 
       <pre><code>GET  https://realaios.com/                          → AIOS landing page
+GET  https://realaios.com/vr-hub                     → 48 XP hub, 9 categories
+GET  https://realaios.com/experiences               → all 20 live XPs, JSON-LD ItemList
+GET  https://realaios.com/vr-experience/:id         → per-XP page (e.g. /vr-experience/matrix)
+GET  https://realaios.com/vr                         → WebXR viewer (20 live programmes)
 GET  https://realaios.com/aiosdream                  → Dimensional streaming
 GET  https://realaios.com/plaistore                  → PLAIstore app distribution
 GET  https://realaios.com/api/merkaba/lattice-state  → Canonical architecture JSON
+GET  https://realaios.com/api/aios/vr/taxonomy       → Full 48-XP taxonomy JSON
 GET  https://api.getbrains4ai.com/api/ready          → System health
 GET  https://api.getbrains4ai.com/api/plai/apps      → PLAIstore apps
 GET  https://realaios.com/ai                         → This page

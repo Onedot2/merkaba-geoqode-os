@@ -8,7 +8,7 @@
   "psi": 1.414,
   "baseFrequencyHz": 72,
   "totalExperiences": 48,
-  "liveExperiences": 19,
+  "liveExperiences": 20,
   "categories": [
     {
       "id": "cinema",
@@ -545,21 +545,21 @@
         {
           "id": "lattice-lounge",
           "display": "Lattice Lounge — Social Hub",
-          "status": "coming",
-          "version": null,
-          "vrUrl": null,
-          "flatUrl": null,
+          "status": "live",
+          "version": "1.0.0",
+          "vrUrl": "/vr?prog=lattice-lounge",
+          "flatUrl": "/aiosdream?prog=lattice-lounge",
           "semanticType": "DIALOGUE",
           "frequencyHz": 639,
           "latticeNode": 4,
           "harmonicNode": 40,
-          "description": "Persistent social space for up to 16 users. Avatars, spatial voice, shared screens. The beating heart of realaios.com.",
-          "shortDesc": "Meet anyone in the lattice. 16-person capacity.",
-          "tags": ["social", "multiplayer", "voice", "persistent"],
+          "description": "Ambient social lounge anchored to the PHI lattice. Shared presence, spatial voice, 639 Hz DIALOGUE field. The gathering place of realaios.com.",
+          "shortDesc": "Meet anyone in the lattice. 639 Hz social field.",
+          "tags": ["social", "multiplayer", "voice", "persistent", "ambient"],
           "questCompatible": true,
-          "flatCompatible": false,
+          "flatCompatible": true,
           "estimatedDuration": "persistent",
-          "releaseDate": "2026-Q3"
+          "releaseDate": "2026-05-04"
         },
         {
           "id": "aios-live",
