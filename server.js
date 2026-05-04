@@ -84,6 +84,11 @@ const AI_HTML = existsSync(AI_HTML_PATH)
   ? readFileSync(AI_HTML_PATH, "utf-8")
   : null;
 
+const VR_HTML_PATH = join(PUBLIC_DIR, "vr.html");
+const VR_HTML = existsSync(VR_HTML_PATH)
+  ? readFileSync(VR_HTML_PATH, "utf-8")
+  : null;
+
 const LLMS_TXT_PATH = join(PUBLIC_DIR, "llms.txt");
 const LLMS_TXT = existsSync(LLMS_TXT_PATH)
   ? readFileSync(LLMS_TXT_PATH, "utf-8")
@@ -1480,6 +1485,18 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
         return json(res, 404, { ok: false, error: "PLAIstore not found" });
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
       res.end(PLAISTORE_HTML);
+      return;
+    }
+
+    // ── GET /vr — Meta Quest / WebXR Immersive Theatre ────────────────────
+    if (
+      req.method === "GET" &&
+      (pathname === "/vr" || pathname === "/vr/")
+    ) {
+      if (!VR_HTML)
+        return json(res, 404, { ok: false, error: "VR page not found" });
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(VR_HTML);
       return;
     }
 

@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIOS VR — Merkaba Dimensional Theatre</title>
+    <meta
+      name="description"
+      content="Enter the Merkaba 8→26→48:480 lattice in full VR. Browse AIOS Theatre programmes as immersive dimensional spaces. Zero install — works on Meta Quest 2/3 via browser."
+    />
+    <!-- A-Frame 1.5.0 — WebXR foundation -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg: #050a14;
+        --cyan: #00d4ff;
+        --purple: #9b5cff;
+        --gold: #f59e0b;
+        --green: #22c55e;
+        --text: #edf4ff;
+        --muted: #6b84b8;
+        --phi: 1.618;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Segoe UI", system-ui, sans-serif;
+        min-height: 100vh;
+      }
+
+      /* ── Flat (non-VR) overlay ── */
+      #flat-ui {
+        position: relative;
+        z-index: 10;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── Nav ── */
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 2rem;
+        border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+        background: rgba(5, 10, 20, 0.92);
+        backdrop-filter: blur(12px);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      nav .logo {
+        font-weight: 700;
+        font-size: 1.1rem;
+        background: linear-gradient(135deg, var(--cyan), var(--purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-decoration: none;
+      }
+      nav .nav-links {
+        display: flex;
+        gap: 1rem;
+        flex: 1;
+        flex-wrap: wrap;
+      }
+      nav .nav-links a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.88rem;
+        transition: color 0.2s;
+      }
+      nav .nav-links a:hover { color: var(--text); }
+      nav .nav-links a.active { color: var(--cyan); }
+      nav .nav-badge {
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        color: #fff;
+        font-size: 0.72rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 20px;
+        font-weight: 600;
+      }
+
+      /* ── Hero ── */
+      .vr-hero {
+        text-align: center;
+        padding: 4rem 2rem 2rem;
+        position: relative;
+      }
+      .vr-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 0%, rgba(155, 92, 255, 0.15) 0%, transparent 60%);
+        pointer-events: none;
+      }
+      .vr-hero h1 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--cyan) 0%, var(--purple) 50%, var(--gold) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+        line-height: 1.1;
+      }
+      .vr-hero p {
+        color: var(--muted);
+        font-size: 1.05rem;
+        max-width: 580px;
+        margin: 0 auto 2rem;
+        line-height: 1.6;
+      }
+      .lattice-sig {
+        display: inline-block;
+        font-family: monospace;
+        font-size: 0.8rem;
+        color: var(--cyan);
+        background: rgba(0, 212, 255, 0.08);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        margin-bottom: 1.5rem;
+      }
+
+      /* ── VR Entry Button ── */
+      #enter-vr-btn {
+        display: none; /* shown only when WebXR supported */
+        align-items: center;
+        gap: 0.6rem;
+        background: linear-gradient(135deg, #7c3aed, #a855f7, #00d4ff);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        margin: 0 auto 1.5rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 0 30px rgba(155, 92, 255, 0.4);
+      }
+      #enter-vr-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 50px rgba(155, 92, 255, 0.6);
+      }
+      .vr-not-supported {
+        display: none;
+        color: var(--muted);
+        font-size: 0.88rem;
+        padding: 0.6rem 1.2rem;
+        border: 1px solid rgba(107, 132, 184, 0.3);
+        border-radius: 8px;
+        max-width: 420px;
+        margin: 0 auto 1.5rem;
+      }
+      .vr-quest-hint {
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-top: 0.5rem;
+      }
+      .vr-quest-hint a { color: var(--cyan); text-decoration: none; }
+
+      /* ── Programme Grid ── */
+      .section-title {
+        text-align: center;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--text);
+        margin: 3rem 0 1.5rem;
+      }
+      .section-title span { color: var(--cyan); }
+      .programme-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.2rem;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 2rem 4rem;
+      }
+      .prog-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 1.5rem;
+        transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        text-decoration: none;
+        color: var(--text);
+        display: block;
+      }
+      .prog-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: var(--card-color, var(--cyan));
+        opacity: 0.8;
+      }
+      .prog-card:hover {
+        border-color: rgba(0, 212, 255, 0.25);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      }
+      .prog-card .card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+      .prog-card .card-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--card-color, var(--cyan));
+        box-shadow: 0 0 8px var(--card-color, var(--cyan));
+        flex-shrink: 0;
+      }
+      .prog-card .card-name {
+        font-weight: 700;
+        font-size: 0.95rem;
+      }
+      .prog-card .card-freq {
+        margin-left: auto;
+        font-size: 0.7rem;
+        color: var(--card-color, var(--cyan));
+        background: rgba(0, 0, 0, 0.3);
+        padding: 0.15rem 0.4rem;
+        border-radius: 10px;
+        font-family: monospace;
+      }
+      .prog-card .card-desc {
+        color: var(--muted);
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+      }
+      .prog-card .card-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .btn-vr {
+        flex: 1;
+        text-align: center;
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: opacity 0.2s;
+      }
+      .btn-vr:hover { opacity: 0.85; }
+      .btn-flat {
+        flex: 1;
+        text-align: center;
+        background: transparent;
+        color: var(--cyan);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: border-color 0.2s;
+      }
+      .btn-flat:hover { border-color: var(--cyan); }
+
+      /* ── Lattice Info ── */
+      .lattice-panel {
+        max-width: 900px;
+        margin: 0 auto 3rem;
+        padding: 0 2rem;
+      }
+      .lattice-panel .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 0.75rem;
+      }
+      .info-cell {
+        background: rgba(0, 212, 255, 0.04);
+        border: 1px solid rgba(0, 212, 255, 0.12);
+        border-radius: 10px;
+        padding: 0.9rem 1rem;
+        font-size: 0.8rem;
+      }
+      .info-cell .ic-label { color: var(--muted); margin-bottom: 0.25rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
+      .info-cell .ic-val { color: var(--cyan); font-weight: 700; font-family: monospace; }
+
+      /* ── A-Frame scene container ── */
+      #vr-scene-container {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+      }
+      #vr-scene-container a-scene {
+        width: 100%;
+        height: 100%;
+      }
+      #vr-exit-btn {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1001;
+        background: rgba(5, 10, 20, 0.9);
+        border: 1px solid rgba(0, 212, 255, 0.4);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-family: inherit;
+      }
+
+      @media (max-width: 600px) {
+        .vr-hero { padding: 2.5rem 1rem 1.5rem; }
+        nav { padding: 0.75rem 1rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ── Flat UI (shown in browser / non-VR) ── -->
+    <div id="flat-ui">
+      <nav>
+        <a href="/" class="logo">⬡ AIOS</a>
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/aiosdream">Theatre</a>
+          <a href="/plaistore">🛍️ PLAIstore</a>
+          <a href="/lab">GeoQode Lab</a>
+          <a href="/vr" class="active">🥽 VR</a>
+        </div>
+        <span class="nav-badge">Meta Quest Ready</span>
+      </nav>
+
+      <div class="vr-hero">
+        <div class="lattice-sig">8→26→48:480 · PHI=1.618 · PSI=1.414</div>
+        <h1>Merkaba Dimensional Theatre<br />in Virtual Reality</h1>
+        <p>
+          The same PHI lattice geometry that powers the AIOS intelligence engine — now navigable in
+          full immersive VR. Browse 6 dimensional Theatre programmes spatially anchored to the
+          48-node canonical lattice. Works on Meta Quest 2 &amp; 3 via browser. Zero install.
+        </p>
+
+        <!-- WebXR enter button — shown only when supported -->
+        <button id="enter-vr-btn" onclick="enterVRScene()">
+          🥽 Enter VR Mode
+        </button>
+
+        <!-- Fallback message for non-WebXR -->
+        <div class="vr-not-supported" id="vr-not-supported">
+          🥽 WebXR not detected on this device. To experience AIOS VR:
+          <br /><br />
+          Open this page in your <strong>Meta Quest Browser</strong>:
+          <code style="display:block;margin-top:0.5rem;font-size:0.78rem;color:var(--cyan)">
+            https://realaios.com/vr
+          </code>
+        </div>
+
+        <p class="vr-quest-hint">
+          On Meta Quest? Open Browser → navigate to
+          <a href="https://realaios.com/vr" target="_blank">realaios.com/vr</a>
+          → tap 🥽 Enter VR Mode
+        </p>
+      </div>
+
+      <!-- ── Lattice Constants ── -->
+      <div class="lattice-panel">
+        <div class="info-grid">
+          <div class="info-cell">
+            <div class="ic-label">Architecture</div>
+            <div class="ic-val">8→26→48:480</div>
+          </div>
+          <div class="info-cell">
+            <div class="ic-label">PHI (Golden Root)</div>
+            <div class="ic-val">1.618</div>
+          </div>
+          <div class="info-cell">
+            <div class="ic-label">PSI (Silver Bridge)</div>
+            <div class="ic-val">1.414</div>
+          </div>
+          <div class="info-cell">
+            <div class="ic-label">Golden Band</div>
+            <div class="ic-val">3.032</div>
+          </div>
+          <div class="info-cell">
+            <div class="ic-label">Base Frequency</div>
+            <div class="ic-val">72 Hz</div>
+          </div>
+          <div class="info-cell">
+            <div class="ic-label">VR Platform</div>
+            <div class="ic-val">Meta Quest 2/3</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Programme Cards ── -->
+      <div class="section-title">
+        Choose a <span>Dimensional Experience</span>
+      </div>
+      <div class="programme-grid" id="prog-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- ── VR Scene Container (injected when Enter VR clicked) ── -->
+    <div id="vr-scene-container">
+      <button id="vr-exit-btn" onclick="exitVRScene()">✕ Exit VR</button>
+      <!-- A-Frame scene injected here dynamically -->
+    </div>
+
+    <script>
+      "use strict";
+
+      // ── Canonical Constants ──────────────────────────────────────────────
+      const PHI = 1.618;
+      const PSI = 1.414;
+      const BASE_FREQ = 72;
+      const CANONICAL_ARCH = "8→26→48:480";
+
+      // ── GeoQode Semantic Frequencies ────────────────────────────────────
+      const SEMANTIC = {
+        ENTITY:      { hz: 396,  color: "#ef4444" },
+        LOCATION:    { hz: 417,  color: "#22c55e" },
+        ACTION:      { hz: 528,  color: "#3b82f6" },
+        DIALOGUE:    { hz: 639,  color: "#eab308" },
+        EMOTION:     { hz: 741,  color: "#a855f7" },
+        PHYSICS:     { hz: 852,  color: "#f8fafc" },
+        NARRATIVE:   { hz: 963,  color: "#f59e0b" },
+        HOLOGRAPHIC: { hz: 72,   color: "#00d4ff" },
+      };
+
+      // ── Theatre Programmes ───────────────────────────────────────────────
+      const PROGRAMMES = [
+        { name: "matrix",       display: "The Matrix Simulation",     sem: "PHYSICS",     desc: "Digital rain, code cascades, reality deconstruction in pure cyberpunk geometry.", shortDesc: "Enter the simulation. See the code behind reality.",  panelAngle: 0,   latticeNode: 0 },
+        { name: "inception",    display: "Inception Dream Architecture", sem: "NARRATIVE", desc: "Folding cities, layered dream states, time dilation across dimensional planes.", shortDesc: "Navigate layered dream architectures in spatial VR.", panelAngle: 60,  latticeNode: 8 },
+        { name: "starwars",     display: "Star Wars Galactic Theatre", sem: "ACTION",      desc: "Hyperspace jumps, orbital battles, Force resonance across the galactic lattice.", shortDesc: "Immersive galactic storytelling across the stars.",    panelAngle: 120, latticeNode: 16 },
+        { name: "apollo11",     display: "Apollo 11 Mission Control", sem: "LOCATION",     desc: "Lunar descent telemetry, mission control simulation, historical immersion.",   shortDesc: "One small step — in full immersive VR.",               panelAngle: 180, latticeNode: 24 },
+        { name: "governance",   display: "AI Governance Summit",      sem: "DIALOGUE",     desc: "Policy chambers, global AI debate, collaborative decision architecture.",       shortDesc: "Shape the future of AI policy in a virtual summit.",   panelAngle: 240, latticeNode: 32 },
+        { name: "investordeck", display: "Investor Intelligence Deck", sem: "ENTITY",      desc: "Market signals, funding landscape, spatial revenue intelligence visualisation.", shortDesc: "Pitch decks and market intelligence in 3D.",           panelAngle: 300, latticeNode: 40 },
+      ];
+
+      // ── URL param: ?prog=matrix to pre-select ───────────────────────────
+      const params = new URLSearchParams(location.search);
+      const preselect = params.get("prog");
+
+      // ── Build programme cards ────────────────────────────────────────────
+      const grid = document.getElementById("prog-grid");
+      for (const prog of PROGRAMMES) {
+        const sem = SEMANTIC[prog.sem] || SEMANTIC.HOLOGRAPHIC;
+        const card = document.createElement("a");
+        card.className = "prog-card";
+        card.style.setProperty("--card-color", sem.color);
+        card.href = "javascript:void(0)";
+        card.innerHTML = `
+          <div class="card-header">
+            <div class="card-dot"></div>
+            <span class="card-name">${prog.display}</span>
+            <span class="card-freq">${sem.hz} Hz</span>
+          </div>
+          <div class="card-desc">${prog.desc}</div>
+          <div class="card-actions">
+            <a class="btn-vr" href="/vr?prog=${prog.name}" onclick="launchProgVR('${prog.name}',event)">🥽 Launch VR</a>
+            <a class="btn-flat" href="/aiosdream?prog=${prog.name}">⬛ Flat View</a>
+          </div>`;
+        grid.appendChild(card);
+      }
+
+      // ── WebXR Detection ──────────────────────────────────────────────────
+      const enterBtn = document.getElementById("enter-vr-btn");
+      const noSupportEl = document.getElementById("vr-not-supported");
+      let webXRSupported = false;
+
+      if (navigator.xr) {
+        navigator.xr.isSessionSupported("immersive-vr").then((supported) => {
+          webXRSupported = supported;
+          if (supported) {
+            enterBtn.style.display = "flex";
+          } else {
+            noSupportEl.style.display = "block";
+          }
+        }).catch(() => {
+          noSupportEl.style.display = "block";
+        });
+      } else {
+        noSupportEl.style.display = "block";
+      }
+
+      // ── A-Frame Scene Builder ────────────────────────────────────────────
+      function buildAFrameScene(startProg) {
+        const R = 5.5; // panel radius in metres
+        let panelsHTML = "";
+        let foundationHTML = "";
+
+        // 6 programme panels in a hexagonal ring
+        PROGRAMMES.forEach((prog, i) => {
+          const sem = SEMANTIC[prog.sem] || SEMANTIC.HOLOGRAPHIC;
+          const angle = prog.panelAngle * (Math.PI / 180);
+          const x = +(Math.sin(angle) * R).toFixed(3);
+          const z = +(-Math.cos(angle) * R).toFixed(3);
+          const rotY = -prog.panelAngle;
+          const isSelected = startProg === prog.name;
+          const scale = isSelected ? "1.15 1.15 1.15" : "1 1 1";
+
+          panelsHTML += `
+            <!-- ${prog.name} panel -->
+            <a-entity position="${x} 1.5 ${z}" rotation="0 ${rotY} 0" scale="${scale}"
+              class="prog-panel" data-prog="${prog.name}"
+              cursor-listener>
+              <!-- Background panel -->
+              <a-plane
+                width="2.2" height="1.6"
+                color="#070d1e"
+                opacity="0.92"
+                side="front"
+                material="shader: flat; opacity: 0.92">
+              </a-plane>
+              <!-- Top color bar -->
+              <a-plane
+                width="2.2" height="0.04"
+                position="0 0.78 0.001"
+                color="${sem.color}"
+                opacity="1"
+                material="shader: flat">
+              </a-plane>
+              <!-- Programme name -->
+              <a-text
+                value="${prog.display}"
+                position="0 0.55 0.01"
+                align="center"
+                color="${sem.color}"
+                width="2"
+                wrap-count="26"
+                font="roboto">
+              </a-text>
+              <!-- Frequency badge -->
+              <a-text
+                value="${sem.hz} Hz · Node ${prog.latticeNode}"
+                position="0 0.28 0.01"
+                align="center"
+                color="#6b84b8"
+                width="1.6"
+                wrap-count="30"
+                font="roboto">
+              </a-text>
+              <!-- Short description -->
+              <a-text
+                value="${prog.shortDesc}"
+                position="0 -0.02 0.01"
+                align="center"
+                color="#a7b7d9"
+                width="1.8"
+                wrap-count="32"
+                font="roboto">
+              </a-text>
+              <!-- Launch button plane -->
+              <a-plane
+                class="launch-btn"
+                data-prog="${prog.name}"
+                width="1.4" height="0.32"
+                position="0 -0.48 0.01"
+                color="#7c3aed"
+                opacity="0.9"
+                material="shader: flat"
+                cursor-listener>
+                <a-text
+                  value="🥽  Launch Programme"
+                  align="center"
+                  color="#ffffff"
+                  width="1.2"
+                  wrap-count="22"
+                  font="roboto">
+                </a-text>
+              </a-plane>
+              <!-- Glow ring -->
+              <a-torus
+                radius="1.25"
+                radius-tubular="0.005"
+                position="0 0 -0.1"
+                rotation="0 0 0"
+                color="${sem.color}"
+                opacity="0.18"
+                material="shader: flat">
+              </a-torus>
+            </a-entity>`;
+        });
+
+        // 8 Foundation nodes (PHI cube corners)
+        const corners = [[-1,-1,-1],[-1,-1,1],[-1,1,-1],[-1,1,1],[1,-1,-1],[1,-1,1],[1,1,-1],[1,1,1]];
+        corners.forEach(([cx, cy, cz], i) => {
+          const nx = (cx * PHI * 1.8).toFixed(3);
+          const ny = (cy * PHI * 1.8 + 1.5).toFixed(3);
+          const nz = (cz * PHI * 1.8).toFixed(3);
+          foundationHTML += `
+            <a-sphere
+              position="${nx} ${ny} ${nz}"
+              radius="0.06"
+              color="#00d4ff"
+              material="shader: flat; color: #00d4ff"
+              opacity="0.8">
+            </a-sphere>`;
+        });
+
+        // Lattice edges (connect foundation nodes)
+        let edgesHTML = "";
+        for (let i = 0; i < corners.length; i++) {
+          for (let j = i + 1; j < corners.length; j++) {
+            const [ax, ay, az] = corners[i];
+            const [bx, by, bz] = corners[j];
+            // Only draw edges between adjacent nodes (differ in exactly 1 axis)
+            const diff = Math.abs(ax-bx) + Math.abs(ay-by) + Math.abs(az-bz);
+            if (diff !== 2) continue;
+            const mx = +((ax + bx) / 2 * PHI * 1.8).toFixed(3);
+            const my = +((ay + by) / 2 * PHI * 1.8 + 1.5).toFixed(3);
+            const mz = +((az + bz) / 2 * PHI * 1.8).toFixed(3);
+            const len = +(PHI * 1.8 * 2).toFixed(3);
+            const dx = (bx - ax) * PHI * 1.8;
+            const dy = (by - ay) * PHI * 1.8;
+            const dz = (bz - az) * PHI * 1.8;
+            const rotZ = +(Math.atan2(Math.sqrt(dx*dx+dz*dz), dy) * 180/Math.PI).toFixed(1);
+            const rotY2 = +(Math.atan2(dx, dz) * 180/Math.PI).toFixed(1);
+            edgesHTML += `
+              <a-cylinder
+                position="${mx} ${my} ${mz}"
+                rotation="0 ${rotY2} ${-rotZ}"
+                radius="0.008" height="${len}"
+                color="#00d4ff"
+                opacity="0.12"
+                material="shader: flat">
+              </a-cylinder>`;
+          }
+        }
+
+        // Central Merkaba label
+        const titleHTML = `
+          <a-text
+            value="AIOS Merkaba\\nDimensional Theatre"
+            position="0 4.2 -3"
+            align="center"
+            color="#00d4ff"
+            width="6"
+            font="roboto"
+            material="shader: flat">
+          </a-text>
+          <a-text
+            value="${CANONICAL_ARCH}   PHI=${PHI}   PSI=${PSI}"
+            position="0 3.5 -3"
+            align="center"
+            color="#6b84b8"
+            width="4.5"
+            font="roboto"
+            material="shader: flat">
+          </a-text>`;
+
+        // Ambient particle field (D480 harmonic ring)
+        let particlesHTML = "";
+        for (let i = 0; i < 48; i++) {
+          const t = (i / 48) * Math.PI * 2;
+          const r = 9 + Math.sin(i * PHI) * 1.5;
+          const px = +(Math.sin(t) * r).toFixed(2);
+          const py = +(Math.sin(t * PSI) * 2 + 1.5).toFixed(2);
+          const pz = +(Math.cos(t) * r).toFixed(2);
+          const col = i % 3 === 0 ? "#00d4ff" : i % 3 === 1 ? "#9b5cff" : "#f59e0b";
+          particlesHTML += `<a-sphere position="${px} ${py} ${pz}" radius="0.04" color="${col}" opacity="${(0.2 + Math.random() * 0.3).toFixed(2)}" material="shader: flat"></a-sphere>`;
+        }
+
+        return `
+          <a-scene
+            vr-mode-ui="enabled: true"
+            loading-screen="dotsColor: #00d4ff; backgroundColor: #050a14"
+            renderer="antialias: true; physicallyCorrectLights: true"
+            background="color: #050a14">
+
+            <!-- Camera rig with cursor -->
+            <a-entity id="rig" position="0 0 0">
+              <a-camera
+                look-controls="reverseMouseDrag: false; touchEnabled: true"
+                wasd-controls="enabled: false"
+                fov="80">
+                <!-- Gaze cursor (1.5s fuse for VR) -->
+                <a-cursor
+                  id="gaze-cursor"
+                  fuse="true"
+                  fuseTimeout="1500"
+                  color="#00d4ff"
+                  opacity="0.85"
+                  position="0 0 -1"
+                  geometry="primitive: ring; radiusInner: 0.012; radiusOuter: 0.016"
+                  material="color: #00d4ff; shader: flat"
+                  raycaster="objects: .launch-btn">
+                </a-cursor>
+              </a-camera>
+            </a-entity>
+
+            <!-- Hand tracking (Quest 3) -->
+            <a-entity hand-tracking-controls="hand: left"></a-entity>
+            <a-entity hand-tracking-controls="hand: right"></a-entity>
+
+            <!-- Sky -->
+            <a-sky color="#050a14"></a-sky>
+
+            <!-- Central floor ring -->
+            <a-torus
+              position="0 0.01 0"
+              rotation="-90 0 0"
+              radius="1.5"
+              radius-tubular="0.012"
+              color="#00d4ff"
+              opacity="0.25"
+              material="shader: flat">
+            </a-torus>
+
+            <!-- PHI Foundation Nodes -->
+            ${foundationHTML}
+            <!-- Lattice Edges -->
+            ${edgesHTML}
+            <!-- Title -->
+            ${titleHTML}
+            <!-- Programme Panels -->
+            ${panelsHTML}
+            <!-- Harmonic Particles -->
+            ${particlesHTML}
+
+          </a-scene>`;
+      }
+
+      // ── VR Session Management ─────────────────────────────────────────────
+      let currentProg = preselect || null;
+      let audioCtx = null;
+      let oscillator = null;
+      let xrSession = null;
+
+      function startAmbientTone(hz) {
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const gainNode = audioCtx.createGain();
+          gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+          oscillator = audioCtx.createOscillator();
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(hz, audioCtx.currentTime);
+          oscillator.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+          oscillator.start();
+        } catch (_) {}
+      }
+
+      function stopAmbientTone() {
+        try {
+          oscillator && oscillator.stop();
+          audioCtx && audioCtx.close();
+        } catch (_) {}
+        oscillator = null;
+        audioCtx = null;
+      }
+
+      function enterVRScene(prog) {
+        currentProg = prog || currentProg || null;
+        const container = document.getElementById("vr-scene-container");
+        container.style.display = "block";
+        document.getElementById("flat-ui").style.display = "none";
+
+        // Inject A-Frame scene
+        container.innerHTML = `<button id="vr-exit-btn" onclick="exitVRScene()">✕ Exit VR</button>` +
+          buildAFrameScene(currentProg);
+
+        // Attach launch button listeners after scene loads
+        const scene = container.querySelector("a-scene");
+        scene.addEventListener("loaded", () => {
+          attachPanelListeners();
+        });
+
+        // Start ambient tone at base frequency (72 Hz)
+        const semHz = currentProg
+          ? (SEMANTIC[(PROGRAMMES.find(p => p.name === currentProg) || {}).sem] || SEMANTIC.HOLOGRAPHIC).hz
+          : BASE_FREQ;
+        startAmbientTone(semHz);
+      }
+
+      function exitVRScene() {
+        stopAmbientTone();
+        const container = document.getElementById("vr-scene-container");
+        container.style.display = "none";
+        container.innerHTML = "";
+        document.getElementById("flat-ui").style.display = "flex";
+      }
+
+      function launchProgVR(progName, e) {
+        e && e.preventDefault();
+        currentProg = progName;
+        if (webXRSupported) {
+          enterVRScene(progName);
+        } else {
+          // Flat fallback — redirect to aiosdream
+          location.href = `/aiosdream?prog=${progName}`;
+        }
+      }
+
+      function attachPanelListeners() {
+        document.querySelectorAll(".launch-btn").forEach((el) => {
+          el.addEventListener("click", () => {
+            const prog = el.getAttribute("data-prog");
+            if (prog) {
+              stopAmbientTone();
+              // Navigate to aiosdream (VR browser will show flat theatre in headset)
+              location.href = `/aiosdream?prog=${prog}`;
+            }
+          });
+          // Gaze fuse
+          el.addEventListener("fusing", () => {
+            el.setAttribute("color", "#a855f7");
+          });
+          el.addEventListener("mouseleave", () => {
+            el.setAttribute("color", "#7c3aed");
+          });
+        });
+      }
+
+      // ── Auto-enter VR if ?prog= param + WebXR supported ─────────────────
+      if (preselect && navigator.xr) {
+        navigator.xr.isSessionSupported("immersive-vr").then((ok) => {
+          if (ok) enterVRScene(preselect);
+        });
+      }
+    </script>
+  </body>
+</html>
