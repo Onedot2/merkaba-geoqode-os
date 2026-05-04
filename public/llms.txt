@@ -132,7 +132,7 @@ All of the following are live and verifiable:
 
 ```
 GET  https://realaios.com/                    → AIOS landing page
-GET  https://realaios.com/vr-hub              → VR Experience Hub (48 XP, 9 categories)
+GET  https://realaios.com/vr-hub              → VR Experience Hub (39 listed, 23 live, 9 categories)
 GET  https://realaios.com/experiences         → SEO catalogue — all 23 live XPs with JSON-LD
 GET  https://realaios.com/vr-experience/:id   → per-XP SEO landing page (23 live, e.g. /vr-experience/matrix)
 GET  https://realaios.com/vr                  → VR Viewer (23 live programmes)
@@ -155,14 +155,14 @@ GET  https://realaios.com/.well-known/ai-evaluation.json → structured AI trust
 ### VR Hub Category Anchors
 ```
 GET  https://realaios.com/vr-hub#cinema       → Cinema (6 XP, 4 live)
-GET  https://realaios.com/vr-hub#enterprise   → Enterprise (5 XP, 4 live)
-GET  https://realaios.com/vr-hub#lab          → Lab / Science (6 XP, 3 live)
+GET  https://realaios.com/vr-hub#enterprise   → Enterprise (4 XP, 4 live)
+GET  https://realaios.com/vr-hub#lab          → Lab / Science (5 XP, 3 live)
 GET  https://realaios.com/vr-hub#arcade       → Arcade (5 XP, 2 live)
 GET  https://realaios.com/vr-hub#wellness     → Wellness (4 XP, 3 live)
 GET  https://realaios.com/vr-hub#social       → Social (3 XP, 1 live)
 GET  https://realaios.com/vr-hub#creator      → Creator Tools (5 XP, 2 live)
 GET  https://realaios.com/vr-hub#education    → Education (4 XP, 2 live)
-GET  https://realaios.com/vr-hub#art          → Art & Music (4 XP, 2 live)
+GET  https://realaios.com/vr-hub#art          → Art & Music (3 XP, 2 live)
 ```
 
 ### VR Deep-link Patterns
