@@ -559,7 +559,7 @@
         <h1>Merkaba Dimensional Theatre<br />in Virtual Reality</h1>
         <p>
           The same PHI lattice geometry that powers the AIOS intelligence engine
-          — now navigable in full immersive VR. 23 live programmes across 9
+          — now navigable in full immersive VR. <span id="vr-prog-count">23</span> live programmes across 9
           categories, spatially anchored to the 48-node canonical lattice. Works
           on Meta Quest 2 &amp; 3 via browser. Zero install — no app required.
         </p>
@@ -1072,6 +1072,8 @@
 
       // ── Build programme cards ────────────────────────────────────────────
       const grid = document.getElementById("prog-grid");
+      const progCountEl = document.getElementById("vr-prog-count");
+      if (progCountEl) progCountEl.textContent = PROGRAMMES.length;
       for (const prog of PROGRAMMES) {
         const sem = SEMANTIC[prog.sem] || SEMANTIC.HOLOGRAPHIC;
         const card = document.createElement("div");
