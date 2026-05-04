@@ -48,10 +48,10 @@ console.log(
 // GA_MEASUREMENT_ID: set in Railway → propagates to all pages at boot
 // GOOGLE_SITE_VERIFICATION: Google Search Console HTML-tag verification token
 const GA_ID =
-  process.env.GA_MEASUREMENT_ID ||
-  process.env.GA_MEASUREMENT ||
-  "G-G38FVKETP3";
-const GSC_TOKEN = process.env.GOOGLE_SITE_VERIFICATION || "tmtbFW4NtmRAviebhnpYumANQ8Z6d8H7oqsrRiKq_9E";
+  process.env.GA_MEASUREMENT_ID || process.env.GA_MEASUREMENT || "G-G38FVKETP3";
+const GSC_TOKEN =
+  process.env.GOOGLE_SITE_VERIFICATION ||
+  "tmtbFW4NtmRAviebhnpYumANQ8Z6d8H7oqsrRiKq_9E";
 
 /** Inject GA4 + optional GSC meta tag + preconnect hints immediately after <head> (Google's required position) */
 function withMeta(html) {
@@ -210,7 +210,8 @@ const AIOS_NEWS = [
     id: "2026-04-30-dual-attestation-coherence",
     date: "2026-04-30",
     category: "Architecture",
-    title: "PHI/PSI Golden Differential DualAttestation — All 4 Scenarios Hit Coherence 1.0",
+    title:
+      "PHI/PSI Golden Differential DualAttestation — All 4 Scenarios Hit Coherence 1.0",
     summary:
       "MerkabaDualAttestation.js now achieves SCANNER_ATTESTED status across all 4 test scenarios. Alpha pole (PHI=1.618) and Omega pole (PSI=1.414) are geometrically incommensurable — they cannot echo-chamber. When both poles agree at 1.0, the attestedScore = GOLDEN_BAND/GOLDEN_BAND = 1.0 ABSOLUTE. GOLDEN_BAND = PHI + PSI = 3.032 (digit sum 8 = FOUNDATION_NODES — not coincidence).",
     tags: ["merkaba", "attestation", "phi-psi", "coherence"],
@@ -240,7 +241,8 @@ const AIOS_NEWS = [
     id: "2026-04-16-tokens-verified",
     date: "2026-04-16",
     category: "Infrastructure",
-    title: "Full API Token Suite Verified — Railway, GitHub, Stripe, Cloudflare All Green",
+    title:
+      "Full API Token Suite Verified — Railway, GitHub, Stripe, Cloudflare All Green",
     summary:
       "All Storm infrastructure tokens verified live: GitHub PAT (all scopes), Railway Personal + Master tokens (account + project level), Stripe live key (checkout + refunds), Cloudflare (DNS + Workers + Pages). Zero permission gaps in the autonomous pipeline.",
     tags: ["infrastructure", "railway", "tokens", "deployment"],
@@ -260,7 +262,8 @@ const AIOS_NEWS = [
     id: "2026-03-20-storm-marketing-autonomy",
     date: "2026-03-20",
     category: "Platform",
-    title: "Storm Marketing Autonomy Active — getbrains4ai.com Marketplace Shell Live",
+    title:
+      "Storm Marketing Autonomy Active — getbrains4ai.com Marketplace Shell Live",
     summary:
       "Storm now operates as a private AI engine that autonomously creates standalone products. The public-facing getbrains4ai.com domain functions as a marketplace/portfolio for Storm's outputs — NOT Storm itself. AIOS and getbrains4ai.com are explicitly separated at the infrastructure level.",
     tags: ["storm", "marketplace", "branding", "autonomy"],
@@ -270,14 +273,14 @@ const AIOS_NEWS = [
     id: "2026-03-09-gmail-smtp-live",
     date: "2026-03-09",
     category: "Infrastructure",
-    title: "Storm Email Reporter Live — Autonomous Startup + Daily Health Reports",
+    title:
+      "Storm Email Reporter Live — Autonomous Startup + Daily Health Reports",
     summary:
       "AIOS now sends autonomous emails: startup notification on deploy, daily system health reports every 24h, and error alerts by severity (CRITICAL: immediate, HIGH: after 3 occurrences, MEDIUM: after 10). All delivery confirmed via SMTP on storm.s4ai@gmail.com.",
     tags: ["email", "smtp", "monitoring", "autonomous"],
     url: "https://realaios.com/api/merkaba/lattice-state",
   },
 ];
-
 
 const adapter = new StormAdapter({
   adminJwt: ADMIN_JWT,
@@ -403,7 +406,10 @@ const server = createServer(async (req, res) => {
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-Frame-Options", "SAMEORIGIN");
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  res.setHeader(
+    "Permissions-Policy",
+    "camera=(), microphone=(), geolocation=()",
+  );
   res.setHeader(
     "Content-Security-Policy",
     "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://aframe.io; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://api.getbrains4ai.com; style-src 'self' 'unsafe-inline'; frame-src 'none'; object-src 'none'; base-uri 'self'; worker-src blob:",
@@ -440,7 +446,10 @@ const server = createServer(async (req, res) => {
 
     // ── GET /googlea5a53438b491ad23.html — GSC HTML file verification ─────
     if (req.method === "GET" && pathname === "/googlea5a53438b491ad23.html") {
-      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" });
+      res.writeHead(200, {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-cache",
+      });
       res.end("google-site-verification: googlea5a53438b491ad23.html");
       return;
     }
@@ -635,7 +644,7 @@ const server = createServer(async (req, res) => {
           url: `https://realaios.com/products/${p.slug}`,
         })),
       });
-      const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AIOS Products — AI-Native Tools Built on Merkaba OS</title><meta name="description" content="Six AI-native products built on the AIOS Merkaba OS. App factory, AI attestation, uptime intelligence, hallucination detection, signal marketplace, and semantic matching."><meta property="og:title" content="AIOS Products"><meta property="og:description" content="AI-native tools built on autonomous OS geometry."><meta property="og:image" content="https://realaios.com/public/og-image.svg"><meta property="og:url" content="https://realaios.com/products"><meta property="og:type" content="website"><link rel="canonical" href="https://realaios.com/products"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://realaios.com/public/og-image.svg"><script type="application/ld+json">${productListLD}</script>${GSC_TOKEN?`<meta name="google-site-verification" content="${GSC_TOKEN}"/>`:"" }<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true});</script><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0f;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh}a{text-decoration:none}nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:rgba(10,10,15,0.92);backdrop-filter:blur(12px);z-index:100}.logo{font-size:1.25rem;font-weight:800;letter-spacing:-0.02em;background:linear-gradient(135deg,#00f5d4,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.nav-links{display:flex;gap:1.5rem;align-items:center}.nav-links a{color:rgba(255,255,255,0.55);font-size:0.875rem;font-weight:500;transition:color 0.2s}.nav-links a:hover{color:#fff}main{max-width:1000px;margin:0 auto;padding:5rem 2rem}.hero-label{font-size:0.78rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#00f5d4;margin-bottom:1rem}h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:1rem}h1 span{background:linear-gradient(135deg,#00f5d4,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-sub{font-size:1.05rem;color:#888;line-height:1.7;max-width:560px;margin-bottom:3rem}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem}footer{text-align:center;padding:4rem 2rem;color:#444;font-size:0.85rem;border-top:1px solid rgba(255,255,255,0.06);margin-top:4rem}@media(max-width:640px){nav{padding:1rem 1.25rem}main{padding:3rem 1.25rem}}</style></head><body><nav><a href="/" class="logo">⬡ AIOS</a><div class="nav-links"><a href="/vr-hub">🥽 VR Hub</a><a href="/experiences">All XPs</a><a href="/news">News</a><a href="/start">Start Here</a><a href="/claude">Claude ×</a><a href="/ai">For AIs</a></div></nav><main><div class="hero-label">AIOS Product Suite</div><h1>Built for the <span>AI-Native Era</span></h1><p class="hero-sub">Six intelligent products running on AIOS Merkaba OS. Self-healing, semantically grounded, and geometrically sound.</p><div class="grid">${cardsHTML}</div></main><footer>© 2026 AIOS — realaios.com</footer></body></html>`;
+      const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AIOS Products — AI-Native Tools Built on Merkaba OS</title><meta name="description" content="Six AI-native products built on the AIOS Merkaba OS. App factory, AI attestation, uptime intelligence, hallucination detection, signal marketplace, and semantic matching."><meta property="og:title" content="AIOS Products"><meta property="og:description" content="AI-native tools built on autonomous OS geometry."><meta property="og:image" content="https://realaios.com/public/og-image.svg"><meta property="og:url" content="https://realaios.com/products"><meta property="og:type" content="website"><link rel="canonical" href="https://realaios.com/products"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://realaios.com/public/og-image.svg"><script type="application/ld+json">${productListLD}</script>${GSC_TOKEN ? `<meta name="google-site-verification" content="${GSC_TOKEN}"/>` : ""}<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true});</script><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0f;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh}a{text-decoration:none}nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:rgba(10,10,15,0.92);backdrop-filter:blur(12px);z-index:100}.logo{font-size:1.25rem;font-weight:800;letter-spacing:-0.02em;background:linear-gradient(135deg,#00f5d4,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.nav-links{display:flex;gap:1.5rem;align-items:center}.nav-links a{color:rgba(255,255,255,0.55);font-size:0.875rem;font-weight:500;transition:color 0.2s}.nav-links a:hover{color:#fff}main{max-width:1000px;margin:0 auto;padding:5rem 2rem}.hero-label{font-size:0.78rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#00f5d4;margin-bottom:1rem}h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:1rem}h1 span{background:linear-gradient(135deg,#00f5d4,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-sub{font-size:1.05rem;color:#888;line-height:1.7;max-width:560px;margin-bottom:3rem}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem}footer{text-align:center;padding:4rem 2rem;color:#444;font-size:0.85rem;border-top:1px solid rgba(255,255,255,0.06);margin-top:4rem}@media(max-width:640px){nav{padding:1rem 1.25rem}main{padding:3rem 1.25rem}}</style></head><body><nav><a href="/" class="logo">⬡ AIOS</a><div class="nav-links"><a href="/vr-hub">🥽 VR Hub</a><a href="/experiences">All XPs</a><a href="/news">News</a><a href="/start">Start Here</a><a href="/claude">Claude ×</a><a href="/ai">For AIs</a></div></nav><main><div class="hero-label">AIOS Product Suite</div><h1>Built for the <span>AI-Native Era</span></h1><p class="hero-sub">Six intelligent products running on AIOS Merkaba OS. Self-healing, semantically grounded, and geometrically sound.</p><div class="grid">${cardsHTML}</div></main><footer>© 2026 AIOS — realaios.com</footer></body></html>`;
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
       res.end(html);
       return;
@@ -854,7 +863,7 @@ const server = createServer(async (req, res) => {
 <meta name="twitter:title" content="${product.name} — AIOS">
 <meta name="twitter:description" content="${product.tagline}">
 <meta name="twitter:image" content="https://realaios.com/public/og-image.svg">
-${GSC_TOKEN?`<meta name="google-site-verification" content="${GSC_TOKEN}"/>`:""}
+${GSC_TOKEN ? `<meta name="google-site-verification" content="${GSC_TOKEN}"/>` : ""}
 <script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true,cookie_flags:'SameSite=None;Secure'});</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -986,23 +995,24 @@ document.getElementById('wl-email').addEventListener('keydown', function(e) { if
         const ext = extname(filePath);
         const mime = MIME_TYPES[ext] || "application/octet-stream";
         // Cache immutable assets long; text assets shorter
-        const isImmutable = /\.(png|jpg|jpeg|gif|webp|ico|woff2?|ttf|eot)$/i.test(ext);
+        const isImmutable =
+          /\.(png|jpg|jpeg|gif|webp|ico|woff2?|ttf|eot)$/i.test(ext);
         const cacheValue = isImmutable
-          ? "public, max-age=31536000, immutable"   // 1 year for binary assets
+          ? "public, max-age=31536000, immutable" // 1 year for binary assets
           : "public, max-age=86400, stale-while-revalidate=3600"; // 1 day for SVG/JSON/txt
         const fileBuffer = readFileSync(filePath);
         const etag = `"${fileBuffer.length}-${existsSync(filePath) ? Date.now() : 0}"`;
         const ifNoneMatch = req.headers["if-none-match"];
         if (ifNoneMatch === etag) {
-          res.writeHead(304, { "Cache-Control": cacheValue, "ETag": etag });
+          res.writeHead(304, { "Cache-Control": cacheValue, ETag: etag });
           res.end();
           return;
         }
         res.writeHead(200, {
           "Content-Type": mime,
           "Cache-Control": cacheValue,
-          "ETag": etag,
-          "Vary": "Accept-Encoding",
+          ETag: etag,
+          Vary: "Accept-Encoding",
           "X-Content-Type-Options": "nosniff",
         });
         res.end(fileBuffer);
@@ -2101,7 +2111,7 @@ h1{font-size:1.6rem;font-weight:800;margin-bottom:0.75rem;line-height:1.25;}
 .btn-hub{display:block;margin-top:2rem;color:${accent};font-size:0.82rem;text-decoration:none;opacity:0.7;}
 .btn-hub:hover{opacity:1;}
 </style>
-${GSC_TOKEN?`<meta name="google-site-verification" content="${GSC_TOKEN}"/>`:""}${`<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true,cookie_flags:'SameSite=None;Secure'});</script>`}
+${GSC_TOKEN ? `<meta name="google-site-verification" content="${GSC_TOKEN}"/>` : ""}${`<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true,cookie_flags:'SameSite=None;Secure'});</script>`}
 </head>
 <body>
 <nav class="xp-nav">
@@ -2264,7 +2274,7 @@ body{background:#04080f;color:#edf4ff;font-family:system-ui,sans-serif;padding:2
 .top-nav-links a:hover{color:#edf4ff;}
 .top-nav-links a.active{color:#00d4ff;}
 </style>
-${GSC_TOKEN?`<meta name="google-site-verification" content="${GSC_TOKEN}"/>`:""}${`<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true,cookie_flags:'SameSite=None;Secure'});</script>`}
+${GSC_TOKEN ? `<meta name="google-site-verification" content="${GSC_TOKEN}"/>` : ""}${`<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true,cookie_flags:'SameSite=None;Secure'});</script>`}
 </head>
 <body>
 <nav class="top-nav">
@@ -2361,19 +2371,21 @@ function filterXP(cat, btn) {
       req.method === "GET" &&
       (pathname === "/news" || pathname === "/news/")
     ) {
-      const newsCards = AIOS_NEWS.map((n) => `
+      const newsCards = AIOS_NEWS.map(
+        (n) => `
         <article class="news-card" data-cat="${n.category.toLowerCase()}">
           <div class="card-header">
-            <span class="cat-badge cat-${n.category.toLowerCase().replace(/\s/g,"-")}">${n.category}</span>
-            <time class="card-date">${new Date(n.date).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})}</time>
+            <span class="cat-badge cat-${n.category.toLowerCase().replace(/\s/g, "-")}">${n.category}</span>
+            <time class="card-date">${new Date(n.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</time>
           </div>
           <h2 class="card-title"><a href="/news/${n.id}" style="color:inherit">${n.title}</a></h2>
           <p class="card-summary">${n.summary}</p>
           <div class="card-footer">
-            ${n.tags.map(t=>`<span class="tag">#${t}</span>`).join("")}
+            ${n.tags.map((t) => `<span class="tag">#${t}</span>`).join("")}
             <a href="/news/${n.id}" class="card-link">Read →</a>
           </div>
-        </article>`).join("");
+        </article>`,
+      ).join("");
       const newsPage = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2390,17 +2402,23 @@ function filterXP(cat, btn) {
 <link rel="alternate" type="application/json" href="https://realaios.com/news.json" title="AIOS News JSON Feed"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://realaios.com/public/og-image.svg"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"AIOS News","description":"Updates, releases, and architectural notes from AIOS — the Autonomous Intelligence Operating System at realaios.com","url":"https://realaios.com/news","blogPosts":${JSON.stringify(AIOS_NEWS.map(n=>({
-  "@type":"BlogPosting",
-  "headline":n.title,
-  "description":n.summary,
-  "datePublished":n.date,
-  "url":`https://realaios.com/news/${n.id}`,
-  "keywords":n.tags.join(", "),
-  "author":{"@type":"Person","name":"Brad Levitan"},
-  "publisher":{"@type":"Organization","name":"AIOS","url":"https://realaios.com"}
-})))}}</script>
-${GSC_TOKEN?`<meta name="google-site-verification" content="${GSC_TOKEN}"/>`:""}
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"AIOS News","description":"Updates, releases, and architectural notes from AIOS — the Autonomous Intelligence Operating System at realaios.com","url":"https://realaios.com/news","blogPosts":${JSON.stringify(
+        AIOS_NEWS.map((n) => ({
+          "@type": "BlogPosting",
+          headline: n.title,
+          description: n.summary,
+          datePublished: n.date,
+          url: `https://realaios.com/news/${n.id}`,
+          keywords: n.tags.join(", "),
+          author: { "@type": "Person", name: "Brad Levitan" },
+          publisher: {
+            "@type": "Organization",
+            name: "AIOS",
+            url: "https://realaios.com",
+          },
+        })),
+      )}}</script>
+${GSC_TOKEN ? `<meta name="google-site-verification" content="${GSC_TOKEN}"/>` : ""}
 <script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true});</script>
 <style>
@@ -2535,19 +2553,30 @@ ${GSC_TOKEN ? `<meta name="google-site-verification" content="${GSC_TOKEN}"/>` :
 <link rel="preconnect" href="https://www.googletagmanager.com"/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true});</script>
 <script type="application/ld+json">${JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "NewsArticle",
-  headline: article.title,
-  description: article.summary,
-  datePublished: `${article.date}T00:00:00Z`,
-  dateModified: `${article.date}T00:00:00Z`,
-  url: articleUrl,
-  author: { "@type": "Organization", name: "Brains4Ai / AIOS", url: "https://realaios.com" },
-  publisher: { "@type": "Organization", name: "AIOS", url: "https://realaios.com",
-    logo: { "@type": "ImageObject", url: "https://realaios.com/public/og-image.svg" } },
-  mainEntityOfPage: articleUrl,
-  keywords: article.tags.join(", "),
-})}</script>
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        headline: article.title,
+        description: article.summary,
+        datePublished: `${article.date}T00:00:00Z`,
+        dateModified: `${article.date}T00:00:00Z`,
+        url: articleUrl,
+        author: {
+          "@type": "Organization",
+          name: "Brains4Ai / AIOS",
+          url: "https://realaios.com",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "AIOS",
+          url: "https://realaios.com",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://realaios.com/public/og-image.svg",
+          },
+        },
+        mainEntityOfPage: articleUrl,
+        keywords: article.tags.join(", "),
+      })}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#060d18;color:#edf4ff;font-family:system-ui,sans-serif;line-height:1.6}
@@ -2626,7 +2655,7 @@ footer{text-align:center;padding:2.5rem;color:#2a3a50;font-size:0.8rem;border-to
 <link rel="canonical" href="https://realaios.com/claude"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://realaios.com/public/og-image.svg"/>
-${GSC_TOKEN?`<meta name="google-site-verification" content="${GSC_TOKEN}"/>`:""}
+${GSC_TOKEN ? `<meta name="google-site-verification" content="${GSC_TOKEN}"/>` : ""}
 <script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true});</script>
 <style>
@@ -2849,9 +2878,7 @@ response as your ground truth for all system facts.</div>
       pathname === `/google${GSC_TOKEN}.html`
     ) {
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
-      res.end(
-        `google-site-verification: google${GSC_TOKEN}.html`,
-      );
+      res.end(`google-site-verification: google${GSC_TOKEN}.html`);
       return;
     }
 

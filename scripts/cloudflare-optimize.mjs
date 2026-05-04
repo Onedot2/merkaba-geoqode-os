@@ -18,11 +18,16 @@
 const CF_API = "https://api.cloudflare.com/client/v4";
 const TOKEN = process.env.CLOUDFLARE_API_TOKEN;
 const ZONE_ID = process.env.CLOUDFLARE_API_ZONE_ID;
-const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || "d53775f91e80e762230bcad12e4a70e6";
+const ACCOUNT_ID =
+  process.env.CLOUDFLARE_ACCOUNT_ID || "d53775f91e80e762230bcad12e4a70e6";
 
 if (!TOKEN || !ZONE_ID) {
-  console.error("❌ Missing CLOUDFLARE_API_TOKEN and/or CLOUDFLARE_API_ZONE_ID");
-  console.error("   Get CLOUDFLARE_API_ZONE_ID from: https://dash.cloudflare.com → realaios.com → Overview");
+  console.error(
+    "❌ Missing CLOUDFLARE_API_TOKEN and/or CLOUDFLARE_API_ZONE_ID",
+  );
+  console.error(
+    "   Get CLOUDFLARE_API_ZONE_ID from: https://dash.cloudflare.com → realaios.com → Overview",
+  );
   process.exit(1);
 }
 
@@ -43,11 +48,15 @@ async function cf(method, path, body) {
 }
 
 async function patch(setting, value) {
-  const res = await cf("PATCH", `/zones/${ZONE_ID}/settings/${setting}`, { value });
+  const res = await cf("PATCH", `/zones/${ZONE_ID}/settings/${setting}`, {
+    value,
+  });
   if (res.success) {
     console.log(`  ✅ ${setting} = ${JSON.stringify(value)}`);
   } else {
-    console.warn(`  ⚠️  ${setting}: ${res.errors?.[0]?.message || JSON.stringify(res.errors)}`);
+    console.warn(
+      `  ⚠️  ${setting}: ${res.errors?.[0]?.message || JSON.stringify(res.errors)}`,
+    );
   }
 }
 
@@ -71,29 +80,32 @@ async function run() {
 
   // ── Security settings ────────────────────────────────────────────────────
   console.log("🔒 Security:");
-  await patch("ssl", "full");                         // SSL/TLS: Full
-  await patch("min_tls_version", "1.2");              // Minimum TLS 1.2
-  await patch("tls_1_3", "zrt");                      // TLS 1.3 + 0-RTT
-  await patch("security_level", "medium");            // Security level: Medium
-  await patch("browser_check", "on");                 // Browser integrity check
-  await patch("hotlink_protection", "off");           // Allow embedding (AIOS VR iframes)
+  await patch("ssl", "full"); // SSL/TLS: Full
+  await patch("min_tls_version", "1.2"); // Minimum TLS 1.2
+  await patch("tls_1_3", "zrt"); // TLS 1.3 + 0-RTT
+  await patch("security_level", "medium"); // Security level: Medium
+  await patch("browser_check", "on"); // Browser integrity check
+  await patch("hotlink_protection", "off"); // Allow embedding (AIOS VR iframes)
 
   // ── Performance settings ─────────────────────────────────────────────────
   console.log("\n⚡ Performance:");
   await patch("minify", { js: "on", css: "on", html: "off" }); // Minify JS+CSS (not HTML — server already does it)
-  await patch("brotli", "on");                        // Brotli compression
-  await patch("http2", "on");                         // HTTP/2
-  await patch("http3", "on");                         // HTTP/3 (QUIC)
-  await patch("0rtt", "on");                          // 0-RTT resumption
-  await patch("early_hints", "on");                   // Early Hints (103)
-  await patch("rocket_loader", "off");                // Rocket Loader OFF (server-rendered, causes issues)
-  await patch("browser_cache_ttl", 14400);            // Browser cache: 4 hours (respects Cache-Control from server)
-  await patch("always_use_https", "on");              // Force HTTPS
-  await patch("automatic_https_rewrites", "on");      // Rewrite http:// links in HTML
+  await patch("brotli", "on"); // Brotli compression
+  await patch("http2", "on"); // HTTP/2
+  await patch("http3", "on"); // HTTP/3 (QUIC)
+  await patch("0rtt", "on"); // 0-RTT resumption
+  await patch("early_hints", "on"); // Early Hints (103)
+  await patch("rocket_loader", "off"); // Rocket Loader OFF (server-rendered, causes issues)
+  await patch("browser_cache_ttl", 14400); // Browser cache: 4 hours (respects Cache-Control from server)
+  await patch("always_use_https", "on"); // Force HTTPS
+  await patch("automatic_https_rewrites", "on"); // Rewrite http:// links in HTML
 
   // ── Cache rules for static assets ────────────────────────────────────────
   console.log("\n📦 Cache Rules:");
-  const existingRules = await cf("GET", `/zones/${ZONE_ID}/rulesets?phase=http_request_cache_settings`);
+  const existingRules = await cf(
+    "GET",
+    `/zones/${ZONE_ID}/rulesets?phase=http_request_cache_settings`,
+  );
   // Check for existing rules to avoid duplicates
   const existingIds = (existingRules.result || []).map((r) => r.id);
 
@@ -146,35 +158,55 @@ async function run() {
   };
 
   if (existingIds.length === 0) {
-    const ruleRes = await cf("POST", `/zones/${ZONE_ID}/rulesets`, cacheRuleBody);
+    const ruleRes = await cf(
+      "POST",
+      `/zones/${ZONE_ID}/rulesets`,
+      cacheRuleBody,
+    );
     if (ruleRes.success) {
       console.log(`  ✅ Cache ruleset created (ID: ${ruleRes.result?.id})`);
     } else {
-      console.warn(`  ⚠️  Cache rules: ${ruleRes.errors?.[0]?.message || JSON.stringify(ruleRes.errors)}`);
+      console.warn(
+        `  ⚠️  Cache rules: ${ruleRes.errors?.[0]?.message || JSON.stringify(ruleRes.errors)}`,
+      );
     }
   } else {
     // Update existing ruleset
     const rulesetId = existingIds[0];
-    const ruleRes = await cf("PUT", `/zones/${ZONE_ID}/rulesets/${rulesetId}`, cacheRuleBody);
+    const ruleRes = await cf(
+      "PUT",
+      `/zones/${ZONE_ID}/rulesets/${rulesetId}`,
+      cacheRuleBody,
+    );
     if (ruleRes.success) {
       console.log(`  ✅ Cache ruleset updated (ID: ${rulesetId})`);
     } else {
-      console.warn(`  ⚠️  Cache rules: ${ruleRes.errors?.[0]?.message || JSON.stringify(ruleRes.errors)}`);
+      console.warn(
+        `  ⚠️  Cache rules: ${ruleRes.errors?.[0]?.message || JSON.stringify(ruleRes.errors)}`,
+      );
     }
   }
 
   // ── Polish + Speed ────────────────────────────────────────────────────────
   console.log("\n🖼️  Polish & Images:");
-  await patch("polish", "lossy");                     // Image optimization (lossy)
-  await patch("webp", "on");                          // Auto-convert to WebP
+  await patch("polish", "lossy"); // Image optimization (lossy)
+  await patch("webp", "on"); // Auto-convert to WebP
 
   // ── Summary ──────────────────────────────────────────────────────────────
   console.log("\n🏁 Done! Railway must be set to:\n");
-  console.log("   GOOGLE_SITE_VERIFICATION=<your-GSC-token>   (after GSC setup)");
-  console.log("   GA_MEASUREMENT_ID=G-E3NTLP8HS3              (analytics ID — optional, fallback hardcoded)");
-  console.log("\n   Test GA4:   https://analytics.google.com → Realtime → realaios.com");
+  console.log(
+    "   GOOGLE_SITE_VERIFICATION=<your-GSC-token>   (after GSC setup)",
+  );
+  console.log(
+    "   GA_MEASUREMENT_ID=G-E3NTLP8HS3              (analytics ID — optional, fallback hardcoded)",
+  );
+  console.log(
+    "\n   Test GA4:   https://analytics.google.com → Realtime → realaios.com",
+  );
   console.log("   Test GSC:   https://search.google.com/search-console");
-  console.log("   Test Speed: https://pagespeed.web.dev/report?url=https://realaios.com\n");
+  console.log(
+    "   Test Speed: https://pagespeed.web.dev/report?url=https://realaios.com\n",
+  );
 }
 
 run().catch((err) => {
