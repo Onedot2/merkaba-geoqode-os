@@ -51,7 +51,7 @@ const GA_ID =
   process.env.GA_MEASUREMENT_ID ||
   process.env.GA_MEASUREMENT ||
   "G-G38FVKETP3";
-const GSC_TOKEN = process.env.GOOGLE_SITE_VERIFICATION || "";
+const GSC_TOKEN = process.env.GOOGLE_SITE_VERIFICATION || "tmtbFW4NtmRAviebhnpYumANQ8Z6d8H7oqsrRiKq_9E";
 
 /** Inject GA4 + optional GSC meta tag + preconnect hints into any HTML string before </head> */
 function withMeta(html) {
